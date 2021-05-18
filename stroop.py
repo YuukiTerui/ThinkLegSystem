@@ -14,7 +14,7 @@ class StroopFrame(tk.Frame):
         self.task = self.tasks[self.task_num]
         self.colors = dict(zip(['green', 'blue', 'red', 'black', 'yellow'],
                                 ['みどり', 'あ　お', 'あ　か', 'く　ろ', 'きいろ']))
-        self.fname = fname
+        self.fname = fname if fname else datetime.now().isoformat()
         self.fpath = path
 
         self.master.config(bg='light gray')
