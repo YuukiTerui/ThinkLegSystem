@@ -16,12 +16,14 @@ class StroopFrame(tk.Frame):
                                 ['みどり', 'あ　お', 'あ　か', 'く　ろ', 'きいろ']))
         self.fname = fname
         self.fpath = path
+
+        self.master.config(bg='light gray')
         self.create_widgets()
         self.pack(anchor=tk.CENTER)
 
     def create_widgets(self):
-        self.color_label = tk.Label(text='label', font=('MS ゴシック', '25', 'bold'))
-        self.color_patchs = [tk.Button(width=20, height=3, command=self.task)
+        self.color_label = tk.Label(text='', width=10, height=2, bg='light gray', font=('MS ゴシック', '25', 'bold'))
+        self.color_patchs = [tk.Button(width=10, height=2, command=self.task, font=('MS ゴシック', '15', 'bold'))
                             for _ in range(5)]
         self.task()
     
@@ -33,28 +35,42 @@ class StroopFrame(tk.Frame):
         self.color_label['fg'] = 'black'
         self.color_label['text'] = random.choice(list(self.colors.values()))
         self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
-        for panel, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
-            panel['bg'] = c
-            panel.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
+            patch['bg'] = c
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
 
     def task2(self):
         '''
         逆ストループ課題
         色・色名不一致語の単語が意味する色をその右側の色パッチの中から選ぶ．
         '''
+        self.color_label['fg'] = random.choice(list(self.colors.keys()))
+        self.color_label['text'] = random.choice(list(self.colors.values()))
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
+            patch['bg'] = c
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
 
     def task3(self):
         '''
         ストループ統制課題
         色パッチのインクの色に対する色名語を選ぶ．
         '''
+        self.color_label['bg'] = random.choice(list(self.colors.keys()))
+        self.color_label['text'] = ''
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
+            patch['bg'] = 'light gray'
+            patch['fg'] = 'black'
+            patch['text'] = self.colors[c]
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
 
     def task4(self):
         '''
         ストループ課題
         色・色名不一致語のインクの色に対する色名語を選ぶ
         '''
-        
+
 
 
     def save(self):
@@ -69,11 +85,14 @@ class StroopFrame(tk.Frame):
 def main():
     width = 1200
     height = 800
-    root = tk.Tk()
-    root.title = "Stroop"
-    root.geometry(f"{width}x{height}")
-    app = StroopFrame(1, master=root,fname='stroop_test')
-    app.mainloop()
+    
+    task = 1
+    for task in range(1, 5):
+        root = tk.Tk()
+        root.title = "Stroop"
+        root.geometry(f"{width}x{height}")
+        app = StroopFrame(task, master=root,fname='stroop_test')
+        app.mainloop()
 
 
 if __name__ == "__main__":
