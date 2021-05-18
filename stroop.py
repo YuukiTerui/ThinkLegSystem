@@ -138,8 +138,11 @@ class Stroop(tk.Frame):
 
     def save(self):
         print(*self.output_data, sep='\n')
-        #TODO to_csv file
         #TODO Decide the directory for writing csv files
+        fname = f'task{self.task_num}.csv'
+        with open(self.fpath+fname, 'w') as f:
+            writer = csv.writer(f, delimiter=',')
+            writer.writerows(self.output_data)
 
     def finish(self):
         self.save()
