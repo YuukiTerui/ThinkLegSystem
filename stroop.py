@@ -22,11 +22,23 @@ class StroopFrame(tk.Frame):
         self.pack(anchor=tk.CENTER)
 
     def create_widgets(self):
-        self.color_label = tk.Label(text='', width=10, height=2, bg='light gray', font=('MS ゴシック', '25', 'bold'))
-        self.color_patchs = [tk.Button(width=10, height=2, command=self.task, font=('MS ゴシック', '15', 'bold'))
-                            for _ in range(5)]
+        self.color_label = tk.Label(
+            text='', width=10, height=2, borderwidth=2, relief=tk.SOLID,
+            bg='light gray', font=('MS ゴシック', '25', 'bold')
+        )
+        self.color_patchs = [tk.Button(width=10, height=2, borderwidth=2, relief=tk.SOLID,
+            font=('MS ゴシック', '15', 'bold')) for _ in range(5)]
+        for i, patch in enumerate(self.color_patchs):
+            func = self.patch_clicked(patch, i)
+            patch.config(command=func)
         self.task()
-    
+
+    def patch_clicked(self, button, num):
+        def process():
+            print(num)
+            self.task()
+        return process
+
     def task1(self):
         '''
         逆ストループ統制課題
@@ -34,10 +46,10 @@ class StroopFrame(tk.Frame):
         '''
         self.color_label['fg'] = 'black'
         self.color_label['text'] = random.choice(list(self.colors.values()))
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
-        for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+        for patch, c in zip(self.color_patchs, random.sample(list(self.colors.keys()), len(self.colors))):
             patch['bg'] = c
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
 
     def task2(self):
         '''
@@ -70,7 +82,15 @@ class StroopFrame(tk.Frame):
         ストループ課題
         色・色名不一致語のインクの色に対する色名語を選ぶ
         '''
-
+        self.color_label['bg'] = 'light gray'
+        self.color_label['fg'] = random.choice(list(self.colors.keys()))
+        self.color_label['text'] = random.choice(list(self.colors.values()))
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
+            patch['bg'] = 'light gray'
+            patch['fg'] = 'black'
+            patch['text'] = self.colors[c]
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
 
 
     def save(self):
@@ -87,7 +107,7 @@ def main():
     height = 800
     
     task = 1
-    for task in range(1, 5):
+    for task in range(1, 2):
         root = tk.Tk()
         root.title = "Stroop"
         root.geometry(f"{width}x{height}")
