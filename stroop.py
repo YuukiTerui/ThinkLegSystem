@@ -35,7 +35,9 @@ class StroopFrame(tk.Frame):
 
     def patch_clicked(self, button, num):
         def process():
-            print(num)
+            label = self.color_label.cget('bg')
+            colors = [p for p in self.color_patchs]
+            print(f'{label}:{colors}:{num}')
             self.task()
         return process
 
@@ -106,8 +108,8 @@ def main():
     width = 1200
     height = 800
     
-    task = 1
-    for task in range(1, 2):
+    task = 4
+    for task in range(1, task+1):
         root = tk.Tk()
         root.title = "Stroop"
         root.geometry(f"{width}x{height}")
