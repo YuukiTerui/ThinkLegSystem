@@ -1,25 +1,46 @@
+import dataclasses
 import tkinter as tk
-from tkinter import ttk 
+from tkinter import ttk
 import csv
 import random
+import time
+from dataclasses import dataclass
 from datetime import datetime
+from tkinter.constants import NUMERIC
 random.seed(0)
 
-class StroopFrame(tk.Frame):
+class Stroop(tk.Frame):
+    @dataclass
+    class TaskData:
+        correct: str
+        choices: list
+        
+        def __call__(self):
+            return self.correct, self.choices
+
     def __init__(self, task, master=None, fname=None, path=r'./'):
         super().__init__(master)
         self.master = master
+        self.master.config(bg='light gray')
+        self.master.protocol("WM_DELETE_WINDOW", self.finish)
+
         self.task_num = task-1
         self.tasks = [self.task1, self.task2, self.task3, self.task4]
         self.task = self.tasks[self.task_num]
         self.colors = dict(zip(['green', 'blue', 'red', 'black', 'yellow'],
-                                ['みどり', 'あ　お', 'あ　か', 'く　ろ', 'きいろ']))
-        self.fname = fname if fname else datetime.now().isoformat()
-        self.fpath = path
+                                ['みどり', 'あ お', 'あ か', 'く ろ', 'きいろ']))
 
-        self.master.config(bg='light gray')
+        self.fpath = path
+        self.fname = fname if fname else datetime.now().isoformat()
+        self.cnt = 0
+        self.output_data = []
+        self.column = ['correct', 'time', 'choice0', 'choice1', 'choice2', 'choice3', 'choice4', 'answer', 'result', 'answer_time']
+        self.stream_data = None
+
         self.create_widgets()
         self.pack(anchor=tk.CENTER)
+        self.start_time = time.time()
+        self.dt = 0
 
     def create_widgets(self):
         self.color_label = tk.Label(
@@ -29,15 +50,20 @@ class StroopFrame(tk.Frame):
         self.color_patchs = [tk.Button(width=10, height=2, borderwidth=2, relief=tk.SOLID,
             font=('MS ゴシック', '15', 'bold')) for _ in range(5)]
         for i, patch in enumerate(self.color_patchs):
-            func = self.patch_clicked(patch, i)
+            func = self.patch_clicked(i)
             patch.config(command=func)
         self.task()
 
-    def patch_clicked(self, button, num):
+    def patch_clicked(self, num):
         def process():
-            label = self.color_label.cget('bg')
-            colors = [p for p in self.color_patchs]
-            print(f'{label}:{colors}:{num}')
+            t = time.time()
+            self.t = t - self.start_time
+            self.cnt += 1
+            correct, choice = self.stream_data()
+            answer = choice[num]
+            #result = 1 if correct == answer else 0
+            self.output_data.append([self.cnt, self.t, correct, answer] + choice)
+            
             self.task()
         return process
 
@@ -53,6 +79,10 @@ class StroopFrame(tk.Frame):
             patch['bg'] = c
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
 
+        correct = [k for k, v in self.colors.items() if self.color_label.cget('text') == v][0]
+        choices = [p.cget('bg') for p in self.color_patchs]
+        self.stream_data = Stroop.TaskData(correct, choices)
+
     def task2(self):
         '''
         逆ストループ課題
@@ -64,6 +94,10 @@ class StroopFrame(tk.Frame):
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = c
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+
+        correct = self.color_label.cget('text')
+        choices = [p.cget('bg') for p in self.color_patchs]
+        self.stream_data = Stroop.TaskData(correct, choices)
 
     def task3(self):
         '''
@@ -78,6 +112,10 @@ class StroopFrame(tk.Frame):
             patch['fg'] = 'black'
             patch['text'] = self.colors[c]
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        
+        correct = self.color_label.cget('bg')
+        choices = [p.cget('text') for p in self.color_patchs]
+        self.stream_data = Stroop.TaskData(correct, choices)
 
     def task4(self):
         '''
@@ -94,11 +132,17 @@ class StroopFrame(tk.Frame):
             patch['text'] = self.colors[c]
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
 
+        correct = self.color_label.cget('fg')
+        choices = [p.cget('text') for p in self.color_patchs]
+        self.stream_data = Stroop.TaskData(correct, choices)
 
     def save(self):
-        pass
+        print(*self.output_data, sep='\n')
+        #TODO to_csv file
+        #TODO Decide the directory for writing csv files
 
     def finish(self):
+        self.save()
         print("good bye")
         self.master.destroy()
 
@@ -113,7 +157,8 @@ def main():
         root = tk.Tk()
         root.title = "Stroop"
         root.geometry(f"{width}x{height}")
-        app = StroopFrame(task, master=root,fname='stroop_test')
+
+        app = Stroop(task, master=root,fname='stroop_test')
         app.mainloop()
 
 
