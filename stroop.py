@@ -36,12 +36,6 @@ class StroopFrame(tk.Frame):
         for panel, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             panel['bg'] = c
             panel.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
-        
-    def panel_clicked(self):
-        self.update()
-
-    def update(self):
-        pass
 
     def task2(self):
         '''
@@ -50,10 +44,17 @@ class StroopFrame(tk.Frame):
         '''
 
     def task3(self):
-        pass
+        '''
+        ストループ統制課題
+        色パッチのインクの色に対する色名語を選ぶ．
+        '''
 
     def task4(self):
-        pass
+        '''
+        ストループ課題
+        色・色名不一致語のインクの色に対する色名語を選ぶ
+        '''
+        
 
 
     def save(self):
