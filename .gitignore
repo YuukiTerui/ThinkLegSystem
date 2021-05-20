@@ -132,3 +132,4 @@ dmypy.json
 # my environment
 /raw/
 /.idea/
+/data/raw/
