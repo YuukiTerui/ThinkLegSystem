@@ -133,3 +133,4 @@ dmypy.json
 /raw/
 /.idea/
 /data/raw/
+/notebook/data/
