@@ -1,4 +1,3 @@
-import dataclasses
 from os import linesep
 import tkinter as tk
 from tkinter import ttk
@@ -10,7 +9,9 @@ from datetime import datetime
 from tkinter.constants import NUMERIC
 random.seed(0)
 
-class Stroop(tk.Frame):
+from baseapp import BaseFrame
+
+class Stroop(BaseFrame):
     @dataclass
     class TaskData:
         correct: str
@@ -19,9 +20,8 @@ class Stroop(tk.Frame):
         def __call__(self):
             return self.correct, self.choices
 
-    def __init__(self, task, master=None, fname=None, path=r'./', limit_cnt=None, limit_second=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, task, fname=None, path=r'./', limit_cnt=None, limit_second=None):
+        super().__init__()
         self.master.config(bg='light gray')
         self.master.protocol("WM_DELETE_WINDOW", self.finish)
 
