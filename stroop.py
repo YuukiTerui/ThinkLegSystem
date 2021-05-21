@@ -177,16 +177,9 @@ class Stroop(BaseFrame):
 
 
 def main():
-    width = 1200
-    height = 800
-    
     task = 4
     for task in range(1, task+1):
-        root = tk.Tk()
-        root.title = "Stroop"
-        root.geometry(f"{width}x{height}")
-
-        app = Stroop(task, master=root,fname='stroop_test', limit_cnt=5, limit_second=10)
+        app = Stroop(task, fname='stroop_test', limit_cnt=5, limit_second=10)
         app.mainloop()
 
 
