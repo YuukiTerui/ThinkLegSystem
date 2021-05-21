@@ -170,9 +170,9 @@ class Stroop(BaseFrame):
             writer.writerows(self.output_data)
 
     def finish(self):
-        self.save()
+        #self.save()
         print("good bye")
-        self.master.destroy()
+        self.master.quit_app('event')
 
 
 
