@@ -36,9 +36,10 @@ class BaseApp(tk.Tk):
 
 
 class BaseFrame(tk.Frame):
-    def __init__(self, master=BaseApp()):
-        super().__init__(master=master)
-        self.master = master
+    def __init__(self):
+        self.master = BaseApp()
+        super().__init__(master=self.master)
+        
 
 
 if __name__ == '__main__':
