@@ -3,16 +3,16 @@ from tkinter import ttk
 import csv
 from datetime import datetime
 
+from baseapp import BaseFrame
 
-class VasFrame(tk.Frame):
-    def __init__(self, master=None, fname=None, path=r'./'):
-        super().__init__(master)
-        self.master = master
+class VasFrame(BaseFrame):
+    def __init__(self, fname=None, path=r'./'):
+        super().__init__()
         self.fname = fname
         self.fpath = path
-        self.val = tk.IntVar(master, 50)
+        self.val = tk.IntVar(self.master, 50)
         self.create_widgets()
-        self.pack(pady=10)
+        #self.pack(pady=10)
 
     def create_widgets(self):
         font = [("MSゴシック", "15", "bold"), ("MSゴシック", "10", "bold"), ("MSゴシック", "5", "bold")]
@@ -60,17 +60,12 @@ class VasFrame(tk.Frame):
 
     def finish(self):
         print("good bye")
-        self.master.destroy()
+        self.destroy()
 
 
 
 def main():
-    width = 1200
-    height = 800
-    root = tk.Tk()
-    root.title = "VAS"
-    root.geometry(f"{width}x{height}")
-    app = VasFrame(root, fname='vas_test')
+    app = VasFrame(fname='vas_test')
     app.mainloop()
 
 
