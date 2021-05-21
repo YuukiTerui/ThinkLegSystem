@@ -12,7 +12,7 @@ class VasFrame(BaseFrame):
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
         self.create_widgets()
-        #self.pack(pady=10)
+        self.pack(pady=10)
 
     def create_widgets(self):
         font = [("MSゴシック", "15", "bold"), ("MSゴシック", "10", "bold"), ("MSゴシック", "5", "bold")]
