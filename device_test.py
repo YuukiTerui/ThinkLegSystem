@@ -57,7 +57,7 @@ def main(args):
     run_time = args.time
     sleep_time = 1 / args.hz
 
-    dir_ = r'./raw/'
+    dir_ = r'./data/raw/'
     f = open(dir_+args.name+'.csv', 'a', newline='')
     writer = csv.writer(f)
     try:
