@@ -11,7 +11,7 @@ class BaseApp(tk.Tk):
         self.height = 800
         self.geometry(f'{self.width}x{self.height}')
 
-        self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else 'posix'    # nt -> windows, posix -> mac or linux
+        self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
         self.fullscreen_state = False
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
