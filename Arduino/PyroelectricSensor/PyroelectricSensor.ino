@@ -1,8 +1,14 @@
+int data;
+int INPUTPIN = A0;
+int OUTPUTPIN = 6;
+
 void setup() {
-  
+  Serial.begin(115200);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  data = analogRead(INPUTPIN);
+  Serial.print(data);
+  analogWrite(OUTPUTPIN, data);
+  delay(20);
 }
