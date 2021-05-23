@@ -1,4 +1,5 @@
 import os
+import time
 import serial
 
 
@@ -16,6 +17,8 @@ class Arduino:
 
         self.fname = fname
         self.path = path
+
+        print(self.serial)
         
     def init_serial(self):
         ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout, dsrdtr=True)
@@ -25,16 +28,17 @@ class Arduino:
 
     def get_data(self):
         data = self.serial.readline()
-        print(data)
         return data
 
 
 def main():
     arduino = Arduino()
 
-    for _ in range(10):
-        arduino.get_data()
-        
+    while True:
+        data = arduino.get_data()
+        print(data)
+        time.sleep(1)
+
 
 
 
