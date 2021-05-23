@@ -39,6 +39,7 @@ class BaseFrame(tk.Frame):
     def __init__(self):
         self.master = BaseApp()
         super().__init__(master=self.master)
+        self.config(bg='light gray')
         
 
 
