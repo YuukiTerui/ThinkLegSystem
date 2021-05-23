@@ -18,13 +18,14 @@ class Calc(BaseFrame):
         
 
     def create_widget(self):
+        
 
         self.question_label = tk.Label(self, text='Ready?', relief=tk.RAISED)
-        self.question_label['font'] = ('MSゴシック', 40, 'bold')
-        self.question_label.pack(anchor=tk.CENTER, padx=30)
+        self.question_label['font'] = ('MSゴシック', 60, 'bold')
+        self.question_label.pack(expand=True)
 
         self.config(bg='light gray')
-        self.pack(fill=tk.BOTH)
+        self.pack(fill=tk.BOTH, expand=True)
 
     
     def _init_bind(self):
