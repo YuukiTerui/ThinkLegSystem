@@ -24,7 +24,6 @@ class Calc(BaseFrame):
         self.question_label['font'] = ('MSゴシック', 60, 'bold')
         self.question_label.pack(expand=True)
 
-        self.config(bg='light gray')
         self.pack(fill=tk.BOTH, expand=True)
 
     
