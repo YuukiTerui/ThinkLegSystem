@@ -10,5 +10,15 @@ void setup() {
 
 void loop() {
   data = analogRead(INPUT_PIN);
-  Serial.println(data);
+  delay(50);
+}
+
+void serialEvent() {
+  char c;
+  if(Serial.availabel() > 0) {
+    s = Serial.read();
+    if(s==byte('d')) {
+      Serial.println(data);
+    }
+  }
 }
