@@ -10,6 +10,15 @@ void setup() {
 void loop() {
   data = analogRead(INPUT_PIN);
   cnt++;
+  String s = String(cnt) + "," + String(data);
+  Serial.println(s);
+  delay(50);
+}
+
+/* stream
+void loop() {
+  data = analogRead(INPUT_PIN);
+  cnt++;
   delay(10);
 }
 
@@ -26,3 +35,4 @@ void serialEvent() {
     }
   }
 }
+*/
