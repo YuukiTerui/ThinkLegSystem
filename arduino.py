@@ -38,7 +38,11 @@ def main():
 
     while True:
         data = arduino.get_data()
-        print(data.decode('utf-8'))
+        try:
+            print(data.decode('utf-8'))
+        except Exception as e:
+            print(e)
+            print(data)
         time.sleep(0.02)
 
 
