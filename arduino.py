@@ -28,7 +28,6 @@ class Arduino:
         return ser
 
     def get_data(self):
-        self.serial.write(b'd')
         data = self.serial.readline()
         return data
 
