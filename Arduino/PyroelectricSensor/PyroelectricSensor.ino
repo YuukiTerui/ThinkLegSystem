@@ -10,7 +10,7 @@ void setup() {
 void loop() {
   data = analogRead(INPUT_PIN);
   cnt++;
-  String s = String(cnt) + "," + String(data);
+  String s = String(float(millis())/1000) + "," + String(data);
   Serial.println(s);
   delay(20);
 }
