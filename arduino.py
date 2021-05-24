@@ -19,7 +19,6 @@ class Arduino:
         self.path = path
 
         print(self.serial)
-        self.serial.write(b'0')
         
     def init_serial(self):
         ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout, dsrdtr=True)
@@ -36,14 +35,19 @@ def main():
     arduino = Arduino()
     arduino.serial.write(b'0')
 
-    while True:
-        data = arduino.get_data()
-        try:
-            print(data.decode('utf-8'))
-        except Exception as e:
-            print(e)
-            print(data)
-        time.sleep(0.02)
+    try:
+        while True:
+            data = arduino.get_data()
+            try:
+                print(data.decode('utf-8'))
+            except Exception as e:
+                print(e)
+                print(data)
+            time.sleep(0.02)
+    except KeyboardInterrupt as e:
+        print('finish with Cntl-C')
+        arduino.serial.close()
+
 
 
 
