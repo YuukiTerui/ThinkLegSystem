@@ -34,11 +34,12 @@ class Arduino:
 
 def main():
     arduino = Arduino()
+    arduino.serial.write(b'0')
 
     while True:
         data = arduino.get_data()
         print(data.decode('utf-8'))
-        time.sleep(1)
+        time.sleep(0.02)
 
 
 
