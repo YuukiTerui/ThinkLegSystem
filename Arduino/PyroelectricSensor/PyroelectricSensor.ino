@@ -4,13 +4,17 @@ int INPUT_PIN = A0;
 
 void setup() {
   Serial.begin(9600);
+  Serial.write(byte('0'));
   while(Serial.read() != (byte)'0');
 }
 
 void loop() {
   data = analogRead(INPUT_PIN);
   cnt++;
-  String s = String(float(millis())/1000) + "," + String(data);
+  String s = String(float(millis())/1000);
+  s += ",";
+  s += String(data);
+  s += ";";
   Serial.println(s);
   delay(20);
 }

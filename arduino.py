@@ -19,9 +19,11 @@ class Arduino:
         self.path = path
 
         print(self.serial)
+        while self.serial.read() != b'0':
+            pass
         
     def init_serial(self):
-        ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout, dsrdtr=True)
+        ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
         ser.reset_output_buffer()
         ser.reset_input_buffer()
         return ser
