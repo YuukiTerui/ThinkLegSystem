@@ -15,9 +15,9 @@ void loop() {
 
 void serialEvent() {
   char c;
-  if(Serial.availabel() > 0) {
-    s = Serial.read();
-    if(s==byte('d')) {
+  if(Serial.available() > 0) {
+    c = Serial.read();
+    if(c==byte('d')) {
       Serial.println(data);
     }
   }
