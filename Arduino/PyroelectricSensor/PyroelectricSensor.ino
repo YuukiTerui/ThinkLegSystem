@@ -12,7 +12,7 @@ void loop() {
   cnt++;
   String s = String(cnt) + "," + String(data);
   Serial.println(s);
-  delay(50);
+  delay(20);
 }
 void serialEvent() {
   if(Serial.available() > 0) {
