@@ -45,6 +45,7 @@ def main():
             except Exception as e:
                 print(e)
                 print(data)
+                return
             time.sleep(0.02)
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
