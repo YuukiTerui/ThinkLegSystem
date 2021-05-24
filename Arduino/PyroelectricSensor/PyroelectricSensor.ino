@@ -14,6 +14,15 @@ void loop() {
   Serial.println(s);
   delay(50);
 }
+void serialEvent() {
+  if(Serial.available() > 0) {
+    char c = Serial.read();
+    if(c == byte('0')) {
+      cnt = 0;
+    }
+  }
+}
+
 
 /* stream
 void loop() {
