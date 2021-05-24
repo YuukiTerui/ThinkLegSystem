@@ -19,6 +19,7 @@ class Arduino:
         self.path = path
 
         print(self.serial)
+        self.serial.write(b'0')
         
     def init_serial(self):
         ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout, dsrdtr=True)
@@ -27,6 +28,7 @@ class Arduino:
         return ser
 
     def get_data(self):
+        self.serial.write(b'd')
         data = self.serial.readline()
         return data
 
@@ -36,7 +38,7 @@ def main():
 
     while True:
         data = arduino.get_data()
-        print(data)
+        print(data.decode('utf-8'))
         time.sleep(1)
 
 
