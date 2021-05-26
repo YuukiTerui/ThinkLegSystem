@@ -1,51 +1,42 @@
-int time = 0;
+#define INPUT_PIN A0
+
+unsigned long time_ = 0;
 int data = 0;
-int INPUT_PIN = A0;
+bool send_flag = false;
+
 
 void setup() {
-  Serial.begin(9600);
-  Serial.write(byte('0'));
-  while(Serial.read() != (byte)'0');
+  Serial.begin(115200);
+  while(Serial.available()) Serial.read();
+  Serial.print("arduino is avairable\n");
+}
+
+void send_data() {
+  time_ = millis();
+  data = analogRead(INPUT_PIN);
+  String s = String(time_);
+  s += ",";
+  s += String(data);
+  s += '\n';
+  Serial.print(s);
 }
 
 void loop() {
-  time = millis();
-  data = analogRead(INPUT_PIN);
-  String s = String(time);
-  s += ",";
-  s += String(data);
-  s += ";";
-  Serial.println(s);
+  if (send_flag) {
+    send_data();
+  }
   delay(20);
 }
 void serialEvent() {
-  if(Serial.available() > 0) {
+  if(Serial.available() > 0) { // 内部でloop毎にSerial.available()>0の時呼ばれる関数なはずだから要らないのかもしれない．
     char c = Serial.read();
-    if(c == byte('0')) {
-      cnt = 0;
+    switch (c) {
+      case '0':
+        send_flag = false;
+        break;
+      case '1':
+        send_flag = true;
+      // default:
     }
   }
 }
-
-
-/* stream
-void loop() {
-  data = analogRead(INPUT_PIN);
-  cnt++;
-  delay(10);
-}
-
-void serialEvent() {
-  String s = String(cnt);
-  s += ",";
-  if(Serial.available() > 0) {
-    char c = Serial.read();
-    if(c == byte('d')) {
-      s += String(data);
-      Serial.println(s);
-    } else if(c == byte('0')) {
-      cnt = 0;
-    }
-  }
-}
-*/
