@@ -1,5 +1,5 @@
+int time = 0;
 int data = 0;
-int cnt = 0;
 int INPUT_PIN = A0;
 
 void setup() {
@@ -9,9 +9,9 @@ void setup() {
 }
 
 void loop() {
+  time = millis();
   data = analogRead(INPUT_PIN);
-  cnt++;
-  String s = String(float(millis())/1000);
+  String s = String(time);
   s += ",";
   s += String(data);
   s += ";";
