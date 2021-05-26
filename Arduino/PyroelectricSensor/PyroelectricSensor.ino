@@ -1,3 +1,4 @@
+
 #define INPUT_PIN A0
 
 unsigned long time_ = 0;
@@ -21,6 +22,8 @@ void send_data() {
   Serial.print(s);
 }
 
+void(* resetFunc) (void) = 0;
+
 void loop() {
   if (send_flag) {
     send_data();
@@ -36,7 +39,11 @@ void serialEvent() {
         break;
       case '1':
         send_flag = true;
+        break;
       // default:
+      case '9':
+        resetFunc();
+        break;
     }
   }
 }
