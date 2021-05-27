@@ -45,7 +45,7 @@ class BaseFrame(tk.Frame):
         self.bg = 'light gray'
         self.config(bg=self.bg)
 
-        self.pack()
+        self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         
     def finish(self):
         self.master.destroy()

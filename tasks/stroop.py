@@ -42,16 +42,14 @@ class Stroop(BaseFrame):
         self.stream_data = None
 
         self.create_widgets()
-        self.pack(anchor=tk.CENTER)
-        
         self.dt = 0
 
     def create_widgets(self):
-        self.color_label = tk.Label(
+        self.color_label = tk.Label(self,
             text='', width=10, height=2, borderwidth=2, relief=tk.SOLID,
             bg='light gray', font=('MS ゴシック', '25', 'bold')
         )
-        self.color_patchs = [tk.Button(width=10, height=2, borderwidth=2, relief=tk.SOLID,
+        self.color_patchs = [tk.Button(self, width=10, height=2, borderwidth=2, relief=tk.SOLID,
             font=('MS ゴシック', '15', 'bold')) for _ in range(5)]
         for i, patch in enumerate(self.color_patchs):
             func = self.patch_clicked(i)
@@ -145,6 +143,7 @@ class Stroop(BaseFrame):
         色・色名不一致語のインクの色に対する色名語を選ぶ
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['bg'] = 'light gray'
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
@@ -168,12 +167,6 @@ class Stroop(BaseFrame):
             writer = csv.writer(f, delimiter=',')
             writer.writerow(self.column)
             writer.writerows(self.output_data)
-
-    def finish(self):
-        #self.save()
-        print("good bye")
-        self.master.quit_app('event')
-
 
 
 def main():

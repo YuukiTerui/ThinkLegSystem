@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import ttk 
 import csv
 from datetime import datetime
-from typing import Sized
 
 from baseapp import BaseFrame
+
 
 class VasFrame(BaseFrame):
     def __init__(self, fname=None, path=r'./'):
@@ -13,7 +13,6 @@ class VasFrame(BaseFrame):
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
         self.create_widgets()
-        self.pack(fill=tk.BOTH, expand=True)
 
     def create_widgets(self):
         font = [("MSゴシック", "15", "bold"), ("MSゴシック", "10", "bold"), ("MSゴシック", "5", "bold")]
