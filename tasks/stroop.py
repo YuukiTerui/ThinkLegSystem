@@ -6,7 +6,6 @@ import random
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from tkinter.constants import NUMERIC
 random.seed(0)
 
 from baseapp import BaseFrame
@@ -49,11 +48,14 @@ class Stroop(BaseFrame):
             text='', width=10, height=2, borderwidth=2, relief=tk.SOLID,
             bg='light gray', font=('MS ゴシック', '25', 'bold')
         )
+
         self.color_patchs = [tk.Button(self, width=10, height=2, borderwidth=2, relief=tk.SOLID,
             font=('MS ゴシック', '15', 'bold')) for _ in range(5)]
+
         for i, patch in enumerate(self.color_patchs):
             func = self.patch_clicked(i)
             patch.config(command=func)
+
         self.task()
 
     def patch_clicked(self, num):
@@ -91,6 +93,7 @@ class Stroop(BaseFrame):
         self.color_label['fg'] = 'black'
         self.color_label['text'] = random.choice(list(self.colors.values()))
         self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors.keys()), len(self.colors))):
             patch['bg'] = c
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
@@ -109,6 +112,7 @@ class Stroop(BaseFrame):
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = random.choice(list(self.colors.values()))
         self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = c
             patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
@@ -127,6 +131,7 @@ class Stroop(BaseFrame):
         self.color_label['bg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = ''
         self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = 'light gray'
             patch['fg'] = 'black'
@@ -149,6 +154,7 @@ class Stroop(BaseFrame):
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = random.choice(list(self.colors.values()))
         self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = 'light gray'
             patch['fg'] = 'black'
@@ -171,8 +177,8 @@ class Stroop(BaseFrame):
 
 def main():
     task = 4
-    for task in range(1, task+1):
-        app = Stroop(task, fname='stroop_test', limit_cnt=5, limit_second=10)
+    for t in range(1, task+1):
+        app = Stroop(t, fname='stroop_test', limit_cnt=5, limit_second=10)
         app.mainloop()
 
 
