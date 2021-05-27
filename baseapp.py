@@ -32,6 +32,9 @@ class BaseApp(tk.Tk):
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
     def quit_app(self, event):
+        self.finish()
+
+    def finish(self):
         self.destroy()
 
 
@@ -39,8 +42,13 @@ class BaseFrame(tk.Frame):
     def __init__(self):
         self.master = BaseApp()
         super().__init__(master=self.master)
-        self.config(bg='light gray')
+        self.bg = 'light gray'
+        self.config(bg=self.bg)
+
+        self.pack()
         
+    def finish(self):
+        self.master.destroy()
 
 
 if __name__ == '__main__':
