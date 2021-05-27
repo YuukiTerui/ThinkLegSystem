@@ -9,6 +9,7 @@ class Arduino:
         self.path = path
         self.fname = fname
         self.data_cnt = 0
+        self.columns = ['time', 'voltage']
         self.datas = [[0, 0]]
         self.start_time = None
         self.running = False
@@ -33,7 +34,7 @@ class Arduino:
     def __serve(self):
         data = self.serial.readline()
         try:
-            data = data.decode('utf-8').replace('\n', '').split(',')
+            data = list(map(int, data.decode('utf-8').replace('\n', '').split(',')))
         except Exception as e:
             print(data, e)
             data = None
