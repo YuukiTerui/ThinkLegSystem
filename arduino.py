@@ -55,6 +55,7 @@ class Arduino:
     def start(self):
         self.serial.write(b'1')
         self.running = True
+        self.run()
 
     def stop(self):
         self.serial.write(b'0')
@@ -75,16 +76,11 @@ class Arduino:
 
 def main():
     ard = Arduino()
+    ard.start()
     try:
         while True:
             data = ard.data
-            try:
-                data
-            except Exception as e:
-                print(e)
-                print(data)
-                return
-            time.sleep(0.02)
+            print(data)
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
         ard.close()
