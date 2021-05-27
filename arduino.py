@@ -1,6 +1,7 @@
 import os
 import csv
 import time
+from typing import Sequence
 import serial
 
 
@@ -77,7 +78,7 @@ class Arduino:
 
 def main():
     ard = Arduino()
-    
+
     try:
         ard.start()
     except KeyboardInterrupt as e:
