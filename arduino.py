@@ -6,37 +6,41 @@ import serial
 class Arduino:
     def __init__(self, fname='arduino', path='./') -> None:
         self.datas = None
-        self.data = None
         self.start_time = None
         self.data_cnt = 0
-
+        self.fname = fname
+        self.path = path
+        
         self.port = 'COM6' if os.name == 'nt' else '/dev/ttyACM0'
         self.baudrate = 115200
         self.timeout = 0.5
-        self.serial = self.init_serial()
-
-        self.fname = fname
-        self.path = path
-
-        print(self.serial)
-        while self.serial.read() != b'0':
-            pass
+        self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
+        self.flush_buffer()
         
-    def init_serial(self):
-        ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
-        ser.reset_output_buffer()
-        ser.reset_input_buffer()
-        return ser
+        print(self.serial)
 
-    def get_data(self):
-        data = self.serial.readline()
+    @property
+    def data(self):
+        data = self.serial.readline().decode('utf-8')
         return data
+        
+    def flush_buffer(self):
+        self.serial.reset_output_buffer()
+        self.serial.reset_input_buffer()
+
+    def start(self):
+        self.serial.write(b'1')
+
+    def stop(self):
+        self.serial.write(b'0')
+
+    def reset(self):
+        self.serial.write(b'9')
+    
 
 
 def main():
     arduino = Arduino()
-    arduino.serial.write(b'0')
-
     try:
         while True:
             data = arduino.get_data()
