@@ -64,6 +64,9 @@ class Arduino:
         self.serial.write(b'9')
         self.running = False
 
+    def close(self):
+        self.serial.close()
+
     def save(self):
         with open(f'{self.path}{self.fname}.csv', 'w') as f:
             weiter = csv.writer(f)
@@ -71,10 +74,10 @@ class Arduino:
 
 
 def main():
-    arduino = Arduino()
+    ard = Arduino()
     try:
         while True:
-            data = arduino.data
+            data = ard.data
             try:
                 data
             except Exception as e:
@@ -84,7 +87,7 @@ def main():
             time.sleep(0.02)
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
-        arduino.serial.close()
+        ard.close()
     
 
 
