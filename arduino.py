@@ -44,6 +44,7 @@ class Arduino:
                 data = self.__serve()
                 if data:
                     self.datas.append(data)
+                    print(self.data)
 
         except:
             pass
@@ -76,11 +77,9 @@ class Arduino:
 
 def main():
     ard = Arduino()
-    ard.start()
+    
     try:
-        while True:
-            data = ard.data
-            print(data)
+        ard.start()
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
         ard.close()
