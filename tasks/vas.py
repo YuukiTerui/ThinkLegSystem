@@ -58,13 +58,10 @@ class VasFrame(BaseFrame):
         print(f"save value: {self.val.get()}")
         if not self.fname:
             self.fname = fr"{datetime.now().isoformat()}.csv"
-        with open(self.fpath + self.fname, 'aw') as f:
+        with open(f'{self.fpath}{self.fname}.csv', 'a', newline='\n') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
 
-    def finish(self):
-        print("good bye")
-        self.destroy()
 
 
 
