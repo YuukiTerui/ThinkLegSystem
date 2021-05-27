@@ -1,25 +1,29 @@
 import os
 import csv
 import time
-from typing import Sequence
 import serial
-
+import threading
 
 class Arduino:
-    def __init__(self, path='./', fname='arduino') -> None:
+    def __init__(self, path='./', fname='ard_data') -> None:
         self.path = path
         self.fname = fname
         self.data_cnt = 0
-        self.datas = []
+        self.datas = [[0, 0]]
         self.start_time = None
         self.running = False
+        self.thread = None
         
         self.port = 'COM6' if os.name == 'nt' else '/dev/ttyACM0'
         self.baudrate = 115200
         self.timeout = 0.5
         self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
-        self.flush_buffer()
-        
+        #self.flush_buffer()
+        while True:
+            tmp = self.serial.readlines()
+            print(tmp)
+            if tmp == [b'arduino is avairable\n']:
+                break
         print(self.serial)
 
     @property
@@ -31,7 +35,7 @@ class Arduino:
         try:
             data = data.decode('utf-8').replace('\n', '').split(',')
         except Exception as e:
-            print(data)
+            print(data, e)
             data = None
         return data
 
@@ -45,7 +49,6 @@ class Arduino:
                 data = self.__serve()
                 if data:
                     self.datas.append(data)
-                    print(self.data)
 
         except:
             pass
@@ -57,21 +60,25 @@ class Arduino:
     def start(self):
         self.serial.write(b'1')
         self.running = True
-        self.run()
+        t, v = self.__serve()
+        self.start_time = int(t)
+        self.thread = threading.Thread(target=self.run)
+        self.thread.start()
 
     def stop(self):
+        self.running = False
         self.serial.write(b'0')
-        self.running = False
-
+        self.thread.join()
+        
     def reset(self):
-        self.serial.write(b'9')
         self.running = False
+        self.serial.write(b'9')
 
     def close(self):
         self.serial.close()
 
     def save(self):
-        with open(f'{self.path}{self.fname}.csv', 'w') as f:
+        with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
             weiter = csv.writer(f)
             weiter.writerows(self.datas)
 
@@ -81,9 +88,14 @@ def main():
 
     try:
         ard.start()
+        while True:
+            print(ard.data)
+            time.sleep(0.1)
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
+        ard.stop()
         ard.close()
+        ard.save()
     
 
 
