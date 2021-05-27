@@ -8,7 +8,7 @@ bool send_flag = false;
 
 void setup() {
   Serial.begin(115200);
-  while(Serial.available()) Serial.read();
+  //while(Serial.available()) Serial.read();
   Serial.print("arduino is avairable\n");
 }
 
@@ -34,14 +34,14 @@ void serialEvent() {
   if(Serial.available() > 0) { // 内部でloop毎にSerial.available()>0の時呼ばれる関数なはずだから要らないのかもしれない．
     char c = Serial.read();
     switch (c) {
-      case '0':
+      case byte('0'):
         send_flag = false;
         break;
-      case '1':
+      case byte('1'):
         send_flag = true;
         break;
       // default:
-      case '9':
+      case byte('9'):
         resetFunc();
         break;
     }
