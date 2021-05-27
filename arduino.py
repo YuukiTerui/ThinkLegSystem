@@ -90,7 +90,7 @@ def main():
         ard.start()
         while True:
             print(ard.data)
-            time.sleep(0.1)
+            time.sleep(0.02)
     except KeyboardInterrupt as e:
         print('finish with Cntl-C')
         ard.stop()
