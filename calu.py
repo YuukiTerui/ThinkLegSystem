@@ -9,7 +9,7 @@ from baseapp import BaseFrame
 class Calc(BaseFrame):
     def __init__(self, fname=None, path='./', question_num=5):
         super().__init__()
-        self._init_bind()
+        self._init_bind(self)
         self.is_run = False
         self.cnt = 0
         self.question_num = question_num
@@ -21,14 +21,16 @@ class Calc(BaseFrame):
 
     def create_widget(self):
         self.question_label = tk.Label(self, text='Ready?', relief=tk.RAISED)
-        self.question_label['font'] = ('MSゴシック', 60, 'bold')
-        self.question_label.pack(expand=True)
+        self.question_label['font'] = ('MSゴシック', 80, 'bold')
+        self.question_label.config(bg=self.bg)
+        self._init_bind(self.question_label)
+        self.question_label.pack(expand=True, fill=tk.BOTH)
 
         self.pack(fill=tk.BOTH, expand=True)
     
-    def _init_bind(self):
-        self.bind('<Button-1>', self.mouse_clicked)
-        self.bind('<Button-3>', self.mouse_clicked)
+    def _init_bind(self, obj):
+        obj.bind('<Button-1>', self.mouse_clicked)
+        obj.bind('<Button-3>', self.mouse_clicked)
 
     def mouse_clicked(self, event):
         if not self.is_run:
@@ -41,7 +43,8 @@ class Calc(BaseFrame):
             self.cnt += 1
             if self.cnt == self.question_num:
                 self.save()
-                
+                self.finish()
+                return
         
         self.create_question()
         self.update_label()
