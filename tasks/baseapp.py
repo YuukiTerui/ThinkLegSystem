@@ -49,7 +49,7 @@ class BaseFrame(tk.Frame):
         self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         
     def finish(self):
-        self.master.destroy()
+        self.master.finish()
 
 
 if __name__ == '__main__':
