@@ -1,3 +1,4 @@
+# coding: utf-8
 from os import sep
 import time
 import tkinter as tk
