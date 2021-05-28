@@ -93,11 +93,11 @@ class Stroop(BaseFrame):
 
         self.color_label['fg'] = 'black'
         self.color_label['text'] = random.choice(list(self.colors.values()))
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x', expand=True)
 
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors.keys()), len(self.colors))):
             patch['bg'] = c
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x', expand=True)
 
         correct = [k for k, v in self.colors.items() if self.color_label.cget('text') == v][0]
         choices = [p.cget('bg') for p in self.color_patchs]
