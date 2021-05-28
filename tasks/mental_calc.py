@@ -4,8 +4,10 @@ import os
 import time
 from mpyg321.mpyg321 import MPyg321Player
 
+from baseapp import BaseFrame
 
-class MentalCalc:
+
+class MentalCalc(BaseFrame):
     def __init__(self):
         self.sounds_path = './sounds/'
         self.sounds = sorted(os.listdir(self.sounds_path))
