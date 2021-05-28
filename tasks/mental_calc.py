@@ -3,7 +3,6 @@
 import os
 import random
 import time
-import schedule
 import tkinter as tk
 from random import choices
 from mpyg321.mpyg321 import MPyg321Player
