@@ -93,6 +93,7 @@ class Stroop(BaseFrame):
         黒インクで書かれた単語が意味する色をその右側の5種の色パッチの中から選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
 
         self.color_label['fg'] = 'black'
@@ -113,6 +114,7 @@ class Stroop(BaseFrame):
         色・色名不一致語の単語が意味する色をその右側の色パッチの中から選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = random.choice(list(self.colors.values()))
@@ -132,6 +134,7 @@ class Stroop(BaseFrame):
         色パッチのインクの色に対する色名語を選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['bg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = ''
@@ -174,7 +177,7 @@ class Stroop(BaseFrame):
         print(*self.output_data, sep='\n')
         #TODO Decide the directory for writing csv files
         fname = f'task{self.task_num+1}.csv'
-        with open(self.fpath+fname, 'w', newline='') as f:
+        with open(self.fpath+fname, 'w', newline='', encoding='utf8') as f:
             writer = csv.writer(f, delimiter=',')
             writer.writerow(self.column)
             writer.writerows(self.output_data)
