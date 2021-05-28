@@ -16,8 +16,15 @@ class MentalCalc(BaseFrame):
         super().__init__()
         self.sounds_path = './sounds/'
         self.sounds = sorted(os.listdir(self.sounds_path))
-        self.player = MPyg321Player()
+        self.sound_player = MPyg321Player()
+        self.inTask = False
         self.datas = []
+        self.bind('<Button-1>', self.mouse_clicked)
+
+    def mouse_clicked(self, event):
+        if self.inTask:
+            return 
+        self.task()
 
     def sound_test(self):
         for i in range(10):
@@ -26,9 +33,10 @@ class MentalCalc(BaseFrame):
 
     def play(self, i):
         print(f'play {self.sounds_path}{self.sounds[i]}')
-        self.player.play_song(f'{self.sounds_path}{self.sounds[i]}')
+        self.sound_player.play_song(f'{self.sounds_path}{self.sounds[i]}')
 
     def task(self):
+        self.inTask = True
         nums = choices(list(range(10)), k=4)
         print(nums)
         correct_num = sum(nums)
@@ -44,13 +52,15 @@ class MentalCalc(BaseFrame):
         def result():
             pass
 
-        def process(qnum=len(nums), interval=4):
+        def process(qnum=len(nums), interval=1):
             for i in range(qnum):
                 time.sleep(interval)
                 question(nums[i])
             answer()
 
-        process()
+        process() # TODO: process is executed in thread
+        self.inTask = False
+
 
 
 def main():
