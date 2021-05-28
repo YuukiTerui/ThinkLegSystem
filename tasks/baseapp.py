@@ -39,8 +39,8 @@ class BaseApp(tk.Tk):
         self.destroy()
 
 
-class BaseFrame(tk.Frame, master=None):
-    def __init__(self):
+class BaseFrame(tk.Frame):
+    def __init__(self, master=None):
         self.master = BaseApp() if master == None else master
         super().__init__(master=self.master)
         self.bg = 'light gray'
