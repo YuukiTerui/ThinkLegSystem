@@ -55,9 +55,9 @@ class VasFrame(BaseFrame):
         self.finish()
 
     def save(self):
-        print(f"save value: {self.val.get()}")
+        print(f'save value: {self.val.get()}')
         if not self.fname:
-            self.fname = fr'{datetime.now().isoformat()}.csv'
+            self.fname = f'{datetime.now().isoformat()}.csv'
         with open(f'{self.fpath}{self.fname}', 'a', newline='\n') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
@@ -66,7 +66,7 @@ class VasFrame(BaseFrame):
 
 
 def main():
-    app = VasFrame(fname='vas_test')
+    app = VasFrame(fname='vas_test.csv')
     app.mainloop()
 
 
