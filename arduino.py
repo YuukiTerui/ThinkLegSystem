@@ -4,9 +4,12 @@ import csv
 import time
 import serial
 import threading
+import logging.config
+logging.config.fileConfig('./config/logging.conf', disable_existing_loggers=False)
 
 class Arduino:
     def __init__(self, path='./', fname='ard_data') -> None:
+        self.logger = logging.getLogger('data')
         self.path = path
         self.fname = fname
         self.data_cnt = 0
