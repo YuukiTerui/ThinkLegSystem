@@ -1,0 +1,42 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "filters": {},
+
+    "formatters": {
+        "main_formatter": {
+            "format": "%(asctime)s %(filename)s:%(lineno)s %(funcName)s %(module)s [%(levelname)s]: %(message)s"
+        },
+        "print": {
+            "format": "%(msg)s"
+        }
+    },
+
+    "handlers": {
+        "logFileHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "main_formatter",
+            "filename": "./logs/__main__.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        },
+        "printHandler": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "print"
+        }
+    },
+
+    "loggers": {
+        "__main__": {
+            "level": "DEBUG",
+            "handlers": ["logFileHandler", "printHandler"],
+            "propagate": false
+        }
+    },
+
+    "root": {
+        "level": "INFO"
+    }
+}
