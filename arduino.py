@@ -39,7 +39,7 @@ class Arduino:
         return self.datas[-1]
 
     def __serve(self):
-        self.logger.debug('in')
+        self.logger.debug('')
         data = self.serial.readline()
         try:
             data = list(map(int, data.decode('utf-8').replace('\n', '').split(',')))
@@ -49,12 +49,12 @@ class Arduino:
         return data
 
     def flush_buffer(self):
-        self.logger.debug('in')
+        self.logger.debug('')
         self.serial.reset_output_buffer()
         self.serial.reset_input_buffer()
 
     def run(self):
-        self.logger.debug('in')
+        self.logger.debug('')
         try:
             while self.running:
                 data = self.__serve()
@@ -69,6 +69,7 @@ class Arduino:
             pass
 
     def start(self):
+        self.logger.debug('')
         self.serial.write(b'1')
         self.running = True
         t, v = self.__serve()
@@ -89,6 +90,7 @@ class Arduino:
         self.serial.close()
 
     def save(self):
+        self.logger.info('save arduino data')
         with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(self.columns)
@@ -103,7 +105,7 @@ def main():
             ard.logger.info(ard.data)
             time.sleep(0.02)
     except KeyboardInterrupt as e:
-        print('finish with Cntl-C')
+        ard.logger.info('finish with Cntl-C')
         ard.stop()
         ard.close()
         ard.save()
