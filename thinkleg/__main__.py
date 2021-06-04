@@ -16,11 +16,14 @@ class MainApp(BaseApp):
         self.first_frame = BaseFrame(self)
         self.first_frame.pack()
 
-        self.title_label = tk.Label(self.frame, text='Think Leg System')
+        self.title_label = tk.Label(self.first_frame, text='Think Leg System')
         self.title_label.pack()
 
-        self.vas_button = tk.Button(self.frame, text='vas', command=lambda:self.change_frame('vas'))
+        self.vas_button = tk.Button(self.first_frame, text='vas', command=lambda:self.change_frame('vas'))
         self.vas_button.pack()
+
+        self.calc_button = tk.Button(self.first_frame, text='calc', command=lambda:self.change_frame('calc'))
+        self.calc_button.pack()
 
     def create_vas(self):
         self.frame = VasFrame(self, path='./', fname='vas.csv')
