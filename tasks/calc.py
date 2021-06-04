@@ -9,7 +9,7 @@ from datetime import datetime
 
 from baseapp import BaseFrame
 
-class Calc(BaseFrame):
+class CalcFrame(BaseFrame):
     def __init__(self, fname=None, path='./', question_num=5):
         super().__init__()
         self._init_bind(self)

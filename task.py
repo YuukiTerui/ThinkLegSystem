@@ -1,6 +1,7 @@
 import tkinter as tk
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
+from tasks.calc import CalcFrame
 
 
 class MainApp(BaseApp):
