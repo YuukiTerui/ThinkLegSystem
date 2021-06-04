@@ -71,18 +71,18 @@ class Calc(BaseFrame):
     
     def save(self):
         data = [q + a for q, a in zip(self.questions, self.answers)]
-        print(*data, sep='\n')
+        print(data, sep='\n')
         if not self.fname:
             self.fname = f'{datetime.now().isoformat()}.csv'
-        with open(f'{self.path}{self.fname}', 'a', newline='\n') as f:
-            writer = csv.writer(f, lineterminator=',')
-            writer.writerow(data)
+        with open(f'{self.path}{self.fname}', 'a', newline='') as f:
+            writer = csv.writer(f, lineterminator='\n')
+            writer.writerows(data)
 
 
 
 
 def main():
-    app = Calc()
+    app = Calc(fname='calc.csv')
     app.mainloop()
 
 
