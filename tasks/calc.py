@@ -7,11 +7,11 @@ import numpy as np
 from numpy.random import randint, normal, choice
 from datetime import datetime
 
-from baseapp import BaseFrame
+from tasks.baseapp import BaseFrame
 
 class CalcFrame(BaseFrame):
-    def __init__(self, fname=None, path='./', question_num=5):
-        super().__init__()
+    def __init__(self, master=None, fname=None, path='./', question_num=5):
+        super().__init__(master)
         self._init_bind(self)
         self.path = path
         self.fname = fname
