@@ -4,6 +4,7 @@ import time
 import tkinter as tk
 import numpy as np
 from numpy.random import randint, normal, choice
+from datetime import datetime
 
 from baseapp import BaseFrame
 
@@ -11,6 +12,8 @@ class Calc(BaseFrame):
     def __init__(self, fname=None, path='./', question_num=5):
         super().__init__()
         self._init_bind(self)
+        self.path = path
+        self.fname = fname
         self.is_run = False
         self.cnt = 0
         self.question_num = question_num
@@ -68,6 +71,9 @@ class Calc(BaseFrame):
     def save(self):
         data = [q + a for q, a in zip(self.questions, self.answers)]
         print(*data, sep='\n')
+        if not self.fname:
+            self.fname = f'{datetime.now().isoformat()}.csv'
+        with open(f'{self.path}{self.fname}')
 
 
 
