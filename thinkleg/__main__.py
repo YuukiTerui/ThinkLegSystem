@@ -16,7 +16,7 @@ class MainApp(BaseApp):
 
     def create_widgets(self):
         self.first_frame = BaseFrame(self)
-        self.first_frame.pack()
+        self.first_frame.grid(row=0, column=0, sticky="nsew")
 
         self.title_label = tk.Label(self.first_frame, text='Think Leg System')
         self.title_label.pack()
@@ -29,14 +29,14 @@ class MainApp(BaseApp):
 
     def create_vas(self):
         self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
-        self.frame.pack()
+        self.frame.grid(row=0, column=0, sticky="nsew")
 
     def create_calc(self):
         self.frame = CalcFrame(self, path=self.datapath, fname='calc.csv')
-        self.frame.pack()
+        self.frame.grid(row=0, column=0, sticky="nsew")
 
     def change_frame(self, to):
-        self.first_frame.pack_forget()
+        #self.first_frame.pack_forget()
         if self.frame:
             self.frame.destroy()
         if to == 'vas':
