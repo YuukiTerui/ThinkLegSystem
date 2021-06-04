@@ -11,6 +11,8 @@ class BaseApp(tk.Tk):
         self.width = 1200
         self.height = 800
         self.geometry(f'{self.width}x{self.height}')
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
         self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
         self.fullscreen_state = False
@@ -46,7 +48,8 @@ class BaseFrame(tk.Frame):
         self.bg = 'light gray'
         self.config(bg=self.bg)
 
-        self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
+        #self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
+        self.grid(row=0, column=0, sticky="nsew")
         
     def finish(self):
         self.destroy()
