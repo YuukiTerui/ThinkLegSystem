@@ -21,7 +21,13 @@ class MainApp(BaseApp):
         self.vas_button.pack()
 
     def create_vas(self):
-        pass
+        self.frame = VasFrame(self)
+        self.frame.pack()
+
+
+    def change_frame(self, to):
+        if self.frame:
+            self.frame.destroy()
 
 
 
