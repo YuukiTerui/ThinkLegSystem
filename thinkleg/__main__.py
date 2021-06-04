@@ -1,4 +1,5 @@
-from os import path
+import os
+from datetime import datetime
 import tkinter as tk
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
@@ -6,8 +7,9 @@ from tasks.calc import CalcFrame
 
 
 class MainApp(BaseApp):
-    def __init__(self):
+    def __init__(self, datapath):
         super().__init__()
+        self.datapath = datapath
         self.state = 0
         self.frame = None
         self.create_widgets()
@@ -26,14 +28,15 @@ class MainApp(BaseApp):
         self.calc_button.pack()
 
     def create_vas(self):
-        self.frame = VasFrame(self, path='./', fname='vas.csv')
+        self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         self.frame.pack()
 
     def create_calc(self):
-        self.frame = CalcFrame(self, path=self.path, fname='calc.csv')
+        self.frame = CalcFrame(self, path=self.datapath, fname='calc.csv')
         self.frame.pack()
 
     def change_frame(self, to):
+        self.first_frame.pack_forget()
         if self.frame:
             self.frame.destroy()
         if to == 'vas':
@@ -46,7 +49,11 @@ class MainApp(BaseApp):
 
 
 def main():
-    app = MainApp()
+    datapath = f'./data/{datetime.now().strftime("%Y%m%d/%H-%M-%S")}/'
+    print(datapath)
+    os.makedirs(datapath, exist_ok=True)
+
+    app = MainApp(datapath)
     app.mainloop()
 
 
