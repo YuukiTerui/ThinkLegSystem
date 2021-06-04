@@ -4,7 +4,7 @@ from tkinter import ttk
 import csv
 from datetime import datetime
 
-from baseapp import BaseFrame
+from tasks.baseapp import BaseFrame
 
 
 class VasFrame(BaseFrame):
