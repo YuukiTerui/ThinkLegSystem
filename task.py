@@ -1,14 +1,14 @@
 import tkinter as tk
 from tasks.baseapp import BaseApp, BaseFrame
-from tasks.vas import VasFrame
-from tasks.stroop import Stroop
-from tasks.calu import Calc
+
 
 
 class MainApp(BaseApp):
     def __init__(self):
         super().__init__()
         self.state = 0
+        
+        self.create_widgets()
 
     def create_widgets(self):
         self.first_frame = BaseFrame(self)
