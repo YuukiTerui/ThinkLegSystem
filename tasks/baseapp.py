@@ -1,3 +1,4 @@
+# coding: utf-8
 import os
 import time
 import tkinter as tk
@@ -11,7 +12,7 @@ class BaseApp(tk.Tk):
         self.height = 800
         self.geometry(f'{self.width}x{self.height}')
 
-        self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else 'posix'    # nt -> windows, posix -> mac or linux
+        self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
         self.fullscreen_state = False
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
@@ -32,13 +33,23 @@ class BaseApp(tk.Tk):
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
     def quit_app(self, event):
+        self.finish()
+
+    def finish(self):
         self.destroy()
 
 
 class BaseFrame(tk.Frame):
-    def __init__(self, master=BaseApp()):
-        super().__init__(master=master)
-        self.master = master
+    def __init__(self, master=None):
+        self.master = BaseApp() if master == None else master
+        super().__init__(master=self.master)
+        self.bg = 'light gray'
+        self.config(bg=self.bg)
+
+        self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
+        
+    def finish(self):
+        self.master.finish()
 
 
 if __name__ == '__main__':

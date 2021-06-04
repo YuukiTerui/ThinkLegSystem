@@ -1,35 +1,37 @@
+# coding: utf-8
 import tkinter as tk
 from tkinter import ttk 
 import csv
 from datetime import datetime
 
+from baseapp import BaseFrame
 
-class VasFrame(tk.Frame):
-    def __init__(self, master=None, fname=None, path=r'./'):
-        super().__init__(master)
-        self.master = master
+
+class VasFrame(BaseFrame):
+    def __init__(self, fname=None, path=r'./'):
+        super().__init__()
         self.fname = fname
         self.fpath = path
-        self.val = tk.IntVar(master, 50)
+        self.val = tk.IntVar(self.master, 50)
         self.create_widgets()
-        self.pack(pady=10)
 
     def create_widgets(self):
         font = [("MSゴシック", "15", "bold"), ("MSゴシック", "10", "bold"), ("MSゴシック", "5", "bold")]
         question = "今現在のあなたの疲労感について，適当な場所にマーカーを動かしてください．"
-        self.question_label = tk.Label(self.master, 
+        self.question_label = tk.Label(self, 
             text=question, font=font[0],
-        )
-        self.question_label.pack(pady=50)
 
-        self.scale_frame = tk.Frame(self.master, relief=tk.RAISED)
+        )
+        self.question_label.pack(pady=30, fill=tk.X, expand=True)
+
+        self.scale_frame = tk.Frame(self, relief=tk.RAISED)
         self.scale_label_min = tk.Label(self.scale_frame,
-            text='疲労感はない', font=font[1]
+            text='疲労感はない', font=font[1],
         )
         self.scale_label_min.pack(side=tk.LEFT)
 
         self.scale = tk.Scale(self.scale_frame,
-            variable=self.val, orient=tk.HORIZONTAL, length=500,
+            variable=self.val, orient=tk.HORIZONTAL, length=800, width=30,
             from_=0, to=100, showvalue=False,
             command=lambda e: print(f"val:{self.val.get():4}")
         )
@@ -39,12 +41,14 @@ class VasFrame(tk.Frame):
             text='想像しうる\n最大の疲労感', font=font[1]
         )
         self.scale_label_max.pack(side=tk.LEFT)
-        self.scale_frame.pack(pady=50)
+
+        self.scale_frame.pack(pady=20, expand=True)
 
         self.submit_button = tk.Button(
-            self, text="Submit", command=self.submit, font=font[1]
+            self, text=" Submit ", command=self.submit, font=font[0],
+            padx=50, pady=30,
         )
-        self.submit_button.pack(anchor=tk.SE, side=tk.RIGHT)
+        self.submit_button.pack(anchor=tk.SE, side=tk.RIGHT, fill=tk.X, padx=30, pady=30)
 
     def submit(self):
         self.save()
@@ -54,23 +58,15 @@ class VasFrame(tk.Frame):
         print(f"save value: {self.val.get()}")
         if not self.fname:
             self.fname = fr"{datetime.now().isoformat()}.csv"
-        with open(self.fpath + self.fname, 'aw') as f:
+        with open(f'{self.fpath}{self.fname}.csv', 'a', newline='\n') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
 
-    def finish(self):
-        print("good bye")
-        self.master.destroy()
 
 
 
 def main():
-    width = 1200
-    height = 800
-    root = tk.Tk()
-    root.title = "VAS"
-    root.geometry(f"{width}x{height}")
-    app = VasFrame(root, fname='vas_test')
+    app = VasFrame(fname='vas_test')
     app.mainloop()
 
 

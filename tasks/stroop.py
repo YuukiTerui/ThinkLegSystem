@@ -1,4 +1,4 @@
-import dataclasses
+# coding: utf-8
 from os import linesep
 import tkinter as tk
 from tkinter import ttk
@@ -7,10 +7,11 @@ import random
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from tkinter.constants import NUMERIC
 random.seed(0)
 
-class Stroop(tk.Frame):
+from baseapp import BaseFrame
+
+class Stroop(BaseFrame):
     @dataclass
     class TaskData:
         correct: str
@@ -19,9 +20,8 @@ class Stroop(tk.Frame):
         def __call__(self):
             return self.correct, self.choices
 
-    def __init__(self, task, master=None, fname=None, path=r'./', limit_cnt=None, limit_second=None):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, task, fname=None, path=r'./', limit_cnt=None, limit_second=None):
+        super().__init__()
         self.master.config(bg='light gray')
         self.master.protocol("WM_DELETE_WINDOW", self.finish)
 
@@ -42,20 +42,25 @@ class Stroop(tk.Frame):
         self.stream_data = None
 
         self.create_widgets()
-        self.pack(anchor=tk.CENTER)
-        
         self.dt = 0
 
     def create_widgets(self):
-        self.color_label = tk.Label(
+        self.patchs_frame = tk.Frame(self, relief=tk.RAISED)
+        
+        self.color_label = tk.Label(self.patchs_frame,
             text='', width=10, height=2, borderwidth=2, relief=tk.SOLID,
             bg='light gray', font=('MS ゴシック', '25', 'bold')
         )
-        self.color_patchs = [tk.Button(width=10, height=2, borderwidth=2, relief=tk.SOLID,
+
+        self.color_patchs = [tk.Button(self.patchs_frame, width=10, height=2, borderwidth=2, relief=tk.SOLID,
             font=('MS ゴシック', '15', 'bold')) for _ in range(5)]
+
         for i, patch in enumerate(self.color_patchs):
             func = self.patch_clicked(i)
             patch.config(command=func)
+            
+        self.patchs_frame.pack(fill=tk.Y, expand=True)
+
         self.task()
 
     def patch_clicked(self, num):
@@ -88,14 +93,16 @@ class Stroop(tk.Frame):
         黒インクで書かれた単語が意味する色をその右側の5種の色パッチの中から選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
 
         self.color_label['fg'] = 'black'
         self.color_label['text'] = random.choice(list(self.colors.values()))
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors.keys()), len(self.colors))):
             patch['bg'] = c
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, fill='x')
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
 
         correct = [k for k, v in self.colors.items() if self.color_label.cget('text') == v][0]
         choices = [p.cget('bg') for p in self.color_patchs]
@@ -107,13 +114,15 @@ class Stroop(tk.Frame):
         色・色名不一致語の単語が意味する色をその右側の色パッチの中から選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = random.choice(list(self.colors.values()))
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = c
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
 
         correct = self.color_label.cget('text')
         choices = [p.cget('bg') for p in self.color_patchs]
@@ -125,15 +134,17 @@ class Stroop(tk.Frame):
         色パッチのインクの色に対する色名語を選ぶ．
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['bg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = ''
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
+
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = 'light gray'
             patch['fg'] = 'black'
             patch['text'] = self.colors[c]
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
         
         correct = self.color_label.cget('bg')
         choices = [p.cget('text') for p in self.color_patchs]
@@ -145,16 +156,18 @@ class Stroop(tk.Frame):
         色・色名不一致語のインクの色に対する色名語を選ぶ
         '''
         if self.over_limit():
+            self.save()
             self.finish()
         self.color_label['bg'] = 'light gray'
         self.color_label['fg'] = random.choice(list(self.colors.keys()))
         self.color_label['text'] = random.choice(list(self.colors.values()))
-        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+        self.color_label.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
+        
         for patch, c in zip(self.color_patchs, random.sample(list(self.colors), len(self.colors))):
             patch['bg'] = 'light gray'
             patch['fg'] = 'black'
             patch['text'] = self.colors[c]
-            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER)
+            patch.pack(side=tk.LEFT, padx=10, anchor=tk.CENTER, expand=True)#, fill='x')
 
         correct = self.color_label.cget('fg')
         choices = [p.cget('text') for p in self.color_patchs]
@@ -164,29 +177,16 @@ class Stroop(tk.Frame):
         print(*self.output_data, sep='\n')
         #TODO Decide the directory for writing csv files
         fname = f'task{self.task_num+1}.csv'
-        with open(self.fpath+fname, 'w', newline='') as f:
+        with open(self.fpath+fname, 'w', newline='', encoding='utf8') as f:
             writer = csv.writer(f, delimiter=',')
             writer.writerow(self.column)
             writer.writerows(self.output_data)
 
-    def finish(self):
-        self.save()
-        print("good bye")
-        self.master.destroy()
-
-
 
 def main():
-    width = 1200
-    height = 800
-    
     task = 4
-    for task in range(1, task+1):
-        root = tk.Tk()
-        root.title = "Stroop"
-        root.geometry(f"{width}x{height}")
-
-        app = Stroop(task, master=root,fname='stroop_test', limit_cnt=5, limit_second=10)
+    for t in range(1, task+1):
+        app = Stroop(t, fname='stroop_test', limit_cnt=5, limit_second=10)
         app.mainloop()
 
 
