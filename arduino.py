@@ -16,8 +16,8 @@ class Arduino:
         self.path = path
         self.fname = fname
         self.data_cnt = 0
-        self.columns = ['time', 'voltage']
-        self.datas = []
+        self.columns = ['msec', 'voltage']
+        self.datas = [[0, 0]]
         self.start_time = None
         self.running = False
         self.thread = None
@@ -90,8 +90,9 @@ class Arduino:
 
     def save(self):
         with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
-            weiter = csv.writer(f)
-            weiter.writerows(self.datas)
+            writer = csv.writer(f)
+            writer.writerow(self.columns)
+            writer.writerows(self.datas)
 
 
 def main():
