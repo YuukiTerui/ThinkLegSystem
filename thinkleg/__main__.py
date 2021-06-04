@@ -21,7 +21,7 @@ class MainApp(BaseApp):
         self.vas_button.pack()
 
     def create_vas(self):
-        self.frame = VasFrame(self)
+        self.frame = VasFrame(self, 'vas.csv', './')
         self.frame.pack()
 
 
