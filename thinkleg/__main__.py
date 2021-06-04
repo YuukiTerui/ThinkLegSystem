@@ -1,6 +1,8 @@
+from os import path
 import tkinter as tk
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
+from tasks.calc import CalcFrame
 
 
 class MainApp(BaseApp):
@@ -21,15 +23,21 @@ class MainApp(BaseApp):
         self.vas_button.pack()
 
     def create_vas(self):
-        self.frame = VasFrame(self, 'vas.csv', './')
+        self.frame = VasFrame(self, path='./', fname='vas.csv')
         self.frame.pack()
 
+    def create_calc(self):
+        self.frame = CalcFrame(self, path=self.path, fname='calc.csv')
+        self.frame.pack()
 
     def change_frame(self, to):
         if self.frame:
             self.frame.destroy()
         if to == 'vas':
             self.create_vas()
+        elif to == 'calc':
+            self.create_calc()
+            
 
 
 
