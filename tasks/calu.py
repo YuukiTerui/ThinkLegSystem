@@ -1,5 +1,6 @@
 # coding: utf-8
 from os import sep
+import csv
 import time
 import tkinter as tk
 import numpy as np
@@ -73,7 +74,9 @@ class Calc(BaseFrame):
         print(*data, sep='\n')
         if not self.fname:
             self.fname = f'{datetime.now().isoformat()}.csv'
-        with open(f'{self.path}{self.fname}')
+        with open(f'{self.path}{self.fname}', 'a', newline='\n') as f:
+            writer = csv.writer(f, lineterminator=',')
+            writer.writerow(data)
 
 
 
