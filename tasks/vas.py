@@ -8,7 +8,7 @@ from tasks.baseapp import BaseFrame
 
 
 class VasFrame(BaseFrame):
-    def __init__(self, master=None, fname=None, path=r'./'):
+    def __init__(self, master=None, fname=None, path='./'):
         super().__init__(master)
         self.fname = fname
         self.fpath = path
