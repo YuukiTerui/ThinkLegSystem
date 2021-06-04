@@ -8,8 +8,8 @@ from baseapp import BaseFrame
 
 
 class VasFrame(BaseFrame):
-    def __init__(self, fname=None, path=r'./'):
-        super().__init__()
+    def __init__(self, master=None, fname=None, path=r'./'):
+        super().__init__(master)
         self.fname = fname
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
