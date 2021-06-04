@@ -17,7 +17,7 @@ class MainApp(BaseApp):
         self.title_label = tk.Label(self.frame, text='Think Leg System')
         self.title_label.pack()
 
-        self.vas_button = tk.Button(self.frame, text='vas', command=self.create_vas)
+        self.vas_button = tk.Button(self.frame, text='vas', command=lambda:self.change_frame('vas'))
         self.vas_button.pack()
 
     def create_vas(self):
@@ -28,6 +28,8 @@ class MainApp(BaseApp):
     def change_frame(self, to):
         if self.frame:
             self.frame.destroy()
+        if to == 'vas':
+            self.create_vas()
 
 
 
