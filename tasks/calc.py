@@ -82,7 +82,7 @@ class CalcFrame(BaseFrame):
 
 
 def main():
-    app = Calc(fname='calc.csv')
+    app = CalcFrame(fname='calc.csv')
     app.mainloop()
 
 
