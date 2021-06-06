@@ -38,7 +38,7 @@
             "class": "logging.FileHandler",
             "level": "DEBUG",
             "formatter": "mainFormatter",
-            "filename": "./logs/guis.log",
+            "filename": "./logs/gui.log",
             "mode": "a",
             "encoding": "utf-8"
         }
