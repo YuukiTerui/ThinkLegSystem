@@ -29,7 +29,10 @@
         "arduinoHandler": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
-            "formatter": "mainFormatter"
+            "formatter": "mainFormatter",
+            "filename": "./logs/arduino.log",
+            "mode": "a",
+            "encoding": "utf-8"
         }
     },
 
