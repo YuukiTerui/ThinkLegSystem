@@ -33,6 +33,14 @@
             "filename": "./logs/arduino.log",
             "mode": "a",
             "encoding": "utf-8"
+        },
+        "guiHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/guis.log",
+            "mode": "a",
+            "encoding": "utf-8"
         }
     },
 
@@ -45,6 +53,11 @@
         "arduino": {
             "level": "DEBUG",
             "handlers": ["arduinoHandler"],
+            "propagate": false
+        },
+        "gui": {
+            "level": "DEBUG",
+            "handler": ["guiHandler", "printHandler"],
             "propagate": false
         }
     },
