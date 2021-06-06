@@ -24,7 +24,7 @@
         },
         "printHandler": {
             "class": "logging.StreamHandler",
-            "level": "INFO",
+            "level": "DEBUG",
             "formatter": "print",
             "stream": "ext://sys.stdout"
         },
@@ -69,7 +69,7 @@
         },
         "gui.frame": {
             "level": "DEBUG",
-            "handler": ["printHandler", "guiHandler"],
+            "handler": ["printHandler"],
             "propagate": true
         }
     },
