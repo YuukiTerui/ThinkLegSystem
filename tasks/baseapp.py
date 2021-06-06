@@ -58,7 +58,6 @@ class BaseFrame(tk.Frame):
         super().__init__(master=self.master)
         self.bg = 'light gray'
         self.config(bg=self.bg)
-
         #self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         self.grid(row=0, column=0, sticky="nsew")
         self.logger.debug("BaseFrame is initialized.")
