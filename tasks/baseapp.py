@@ -2,11 +2,16 @@
 import os
 import time
 import tkinter as tk
+from json import load
+from logging import config, getLogger
+with open('./config/log_conf.json', 'r') as f:
+    config.dictConfig(load(f))
 
 
 class BaseApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.logger = getLogger('gui')
         self.title('BaseApp')
         self.width = 1200
         self.height = 800
@@ -19,30 +24,36 @@ class BaseApp(tk.Tk):
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
         self._init_key_binds()
-
+        self.logger.debug("BaseApp is initialized.")
 
     def _init_key_binds(self):
         self.bind('<F11>', self.toggle_fullscreen)
         self.bind('<F12>', self.quit_app)
         self.bind('<Escape>', self.quit_fullscreen)
+        self.logger.debug("key binds are initialized.")
 
     def toggle_fullscreen(self, event):
         self.fullscreen_state = not self.fullscreen_state
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
+        self.info("toggle_fullscreen is called.")
 
     def quit_fullscreen(self, enent):
         self.fullscreen_state = False
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
+        self.info("quit_fullscreen is called.")
 
     def quit_app(self, event):
         self.finish()
+        self.info("quit_app is called.")
 
     def finish(self):
         self.destroy()
+        self.info("BaseApp is finished.")
 
 
 class BaseFrame(tk.Frame):
     def __init__(self, master=None):
+        self.logger = getLogger("gui")
         self.master = BaseApp() if master == None else master
         super().__init__(master=self.master)
         self.bg = 'light gray'
@@ -50,9 +61,11 @@ class BaseFrame(tk.Frame):
 
         #self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         self.grid(row=0, column=0, sticky="nsew")
-        
+        self.logger.debug("BaseFrame is initialized.")
+
     def finish(self):
         self.destroy()
+        self.logger.debug("frame is destroied.")
 
 
 if __name__ == '__main__':
