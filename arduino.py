@@ -12,7 +12,7 @@ with open('./config/log_conf.json', 'r') as f:
 
 class Arduino:
     def __init__(self, path='./', fname='ard_data') -> None:
-        self.logger = getLogger(__name__)
+        self.logger = getLogger('arduino')
         self.path = path
         self.fname = fname
         self.data_cnt = 0
