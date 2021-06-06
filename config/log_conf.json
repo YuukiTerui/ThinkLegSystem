@@ -8,7 +8,7 @@
             "format": "%(asctime)s %(filename)s:%(lineno)s %(funcName)s %(module)s [%(levelname)s]: %(message)s"
         },
         "print": {
-            "format": "[%(levelname)s]\t%(message)s"
+            "format": "%(asctime)s[%(levelname)s]\t%(message)s"
         }
     },
 
@@ -24,7 +24,8 @@
         "printHandler": {
             "class": "logging.StreamHandler",
             "level": "INFO",
-            "formatter": "print"
+            "formatter": "print",
+            "stream": "ext://sys.stdout"
         },
         "arduinoHandler": {
             "class": "logging.FileHandler",
@@ -52,17 +53,28 @@
         },
         "arduino": {
             "level": "DEBUG",
-            "handlers": ["arduinoHandler"],
+            "handlers": ["arduinoHandler", "printHandler"],
             "propagate": false
         },
         "gui": {
             "level": "DEBUG",
-            "handler": ["guiHandler", "printHandler"],
+            "handler": ["guiHandler"],
             "propagate": false
+        },
+        "gui.app": {
+            "level": "DEBUG",
+            "handler": ["printHandler"],
+            "propagate": true
+        },
+        "gui.frame": {
+            "level": "DEBUG",
+            "handler": ["printHandler"],
+            "propagate": true
         }
     },
 
     "root": {
-        "level": "INFO"
+        "level": "DEBUG",
+        "handler": ["logFileHandler"]
     }
 }
