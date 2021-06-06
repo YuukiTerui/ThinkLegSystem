@@ -11,7 +11,7 @@ with open('./config/log_conf.json', 'r') as f:
 class BaseApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.logger = getLogger('gui')
+        self.logger = getLogger('gui.app')
         self.title('BaseApp')
         self.width = 1200
         self.height = 800
@@ -53,14 +53,14 @@ class BaseApp(tk.Tk):
 
 class BaseFrame(tk.Frame):
     def __init__(self, master=None):
-        self.logger = getLogger("gui")
+        self.logger = getLogger("gui.frame")
         self.master = BaseApp() if master == None else master
         super().__init__(master=self.master)
         self.bg = 'light gray'
         self.config(bg=self.bg)
         #self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         self.grid(row=0, column=0, sticky="nsew")
-        self.logger.debug("BaseFrame is initialized.")
+        self.logger.info("BaseFrame is initialized.")
 
     def finish(self):
         self.destroy()
@@ -69,4 +69,5 @@ class BaseFrame(tk.Frame):
 
 if __name__ == '__main__':
     app = BaseFrame()
+    app.logger.info("app is running")
     app.mainloop()
