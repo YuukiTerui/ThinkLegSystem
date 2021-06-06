@@ -25,6 +25,11 @@
             "class": "logging.StreamHandler",
             "level": "INFO",
             "formatter": "print"
+        },
+        "arduinoHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter"
         }
     },
 
@@ -32,6 +37,11 @@
         "__main__": {
             "level": "DEBUG",
             "handlers": ["logFileHandler", "printHandler"],
+            "propagate": false
+        },
+        "arduino": {
+            "level": "DEBUG",
+            "handlers": ["arduinoHandler"],
             "propagate": false
         }
     },
