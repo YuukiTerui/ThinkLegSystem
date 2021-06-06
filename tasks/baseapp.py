@@ -35,20 +35,20 @@ class BaseApp(tk.Tk):
     def toggle_fullscreen(self, event):
         self.fullscreen_state = not self.fullscreen_state
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
-        self.info("toggle_fullscreen is called.")
+        self.logger.info("toggle_fullscreen is called.")
 
     def quit_fullscreen(self, enent):
         self.fullscreen_state = False
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
-        self.info("quit_fullscreen is called.")
+        self.logger.info("quit_fullscreen is called.")
 
     def quit_app(self, event):
         self.finish()
-        self.info("quit_app is called.")
+        self.logger.info("quit_app is called.")
 
     def finish(self):
         self.destroy()
-        self.info("BaseApp is finished.")
+        self.logger.info("BaseApp is finished.")
 
 
 class BaseFrame(tk.Frame):
