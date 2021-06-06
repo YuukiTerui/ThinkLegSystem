@@ -24,7 +24,7 @@ class BaseApp(tk.Tk):
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
         self._init_key_binds()
-        self.logger.info("BaseApp is initialized.")
+        self.logger.warning("BaseApp is initialized.")
 
     def _init_key_binds(self):
         self.bind('<F11>', self.toggle_fullscreen)
@@ -60,7 +60,7 @@ class BaseFrame(tk.Frame):
         self.config(bg=self.bg)
         #self.pack(fill=tk.BOTH, expand=True, anchor=tk.CENTER)
         self.grid(row=0, column=0, sticky="nsew")
-        self.logger.info("BaseFrame is initialized.")
+        self.logger.debug("%sFrame is initialized.", self.__class__)
 
     def finish(self):
         self.destroy()
