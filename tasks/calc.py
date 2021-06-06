@@ -29,16 +29,21 @@ class CalcFrame(BaseFrame):
         self.question_label.config(bg=self.bg)
         self._init_bind(self.question_label)
         self.question_label.pack(expand=True, fill=tk.BOTH)
+        self.logger.debug("widgets are created.")
     
     def _init_bind(self, obj):
         obj.bind('<Button-1>', self.mouse_clicked)
         obj.bind('<Button-3>', self.mouse_clicked)
+        self.logger.debug("binds are initilized.")
 
     def mouse_clicked(self, event):
+        self.logger.debug("mouse clicked. %s", event)
         if not self.is_run:
+            self.logger.debug("is_run == %s", self.is_run)
             self.start_time = time.time()
             self.is_run = True
         else:
+            self.logger.debug("is_run == %s", self.is_run)
             ans = 1 if event.num == 1 else 0
             t = time.time() - self.start_time
             self.record_answer(ans, t)
@@ -55,6 +60,7 @@ class CalcFrame(BaseFrame):
         q = self.questions[-1]
         result = (q[-1]==q[-2]) == ans
         self.answers.append([ans, result, t])
+        self.logger.debug("answer is recorded.")
 
     def create_question(self):
         num1 = randint(low=10, high=99, size=None, dtype='I')
@@ -64,19 +70,21 @@ class CalcFrame(BaseFrame):
         val = int(normal(loc=correct, scale=0.5, size=None))
         q = [num1, symbol, num2, '=', val, correct]
         self.questions.append(q)
+        self.logger.debug("question is created.")
     
     def update_label(self):
         text = ' '.join([str(x) for x in self.questions[-1][:-1]])
         self.question_label['text'] = text
+        self.logger.debug("label is updated.")
     
     def save(self):
         data = [q + a for q, a in zip(self.questions, self.answers)]
-        print(data, sep='\n')
         if not self.fname:
             self.fname = f'{datetime.now().isoformat()}.csv'
         with open(f'{self.path}{self.fname}', 'a', newline='') as f:
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(data)
+        self.logger.info("data is saved %s", self.fname)
 
 
 
