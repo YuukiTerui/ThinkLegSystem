@@ -4,7 +4,7 @@
     "filters": {},
 
     "formatters": {
-        "main_formatter": {
+        "mainFormatter": {
             "format": "%(asctime)s %(filename)s:%(lineno)s %(funcName)s %(module)s [%(levelname)s]: %(message)s"
         },
         "print": {
@@ -16,7 +16,7 @@
         "logFileHandler": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
-            "formatter": "main_formatter",
+            "formatter": "mainFormatter",
             "filename": "./logs/__main__.log",
             "mode": "a",
             "encoding": "utf-8"
