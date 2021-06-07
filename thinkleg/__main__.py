@@ -62,7 +62,6 @@ class ThinkLegApp(BaseApp):
 
 def main():
     datapath = f'./data/{datetime.now().strftime("%Y%m%d/%H-%M-%S")}/'
-    print(datapath)
     os.makedirs(datapath, exist_ok=True)
 
     app = ThinkLegApp(datapath)
