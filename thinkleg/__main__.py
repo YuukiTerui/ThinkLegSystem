@@ -1,6 +1,11 @@
 import os
 from datetime import datetime
 import tkinter as tk
+from json import load
+from logging import config, getLogger
+with open('./config/log_conf.json', 'r') as f:
+    config.dictConfig(load(f))
+    
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
 from tasks.calc import CalcFrame
