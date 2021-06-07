@@ -1,4 +1,5 @@
 import os
+import threading
 from datetime import datetime
 import tkinter as tk
 from json import load
@@ -9,6 +10,7 @@ with open('./config/log_conf.json', 'r') as f:
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
 from tasks.calc import CalcFrame
+from server import ThinkLegServer
 
 
 class ThinkLegApp(BaseApp):
@@ -17,6 +19,10 @@ class ThinkLegApp(BaseApp):
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
         self.state = 0
+        self.server = ThinkLegServer(host='localhost', port=12345)
+        self.thread_server = threading.Thread(target=self.server.run, daemon=True)
+        self.thread_server.start()
+
         self.frame = None
         self.create_widgets()
         self.logger.debug('ThinkLegApp is initialized.')
