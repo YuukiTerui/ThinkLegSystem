@@ -21,9 +21,9 @@ class CalcFrame(BaseFrame):
         self.questions = [['num_l1', '+or-', 'num_l2', '=', 'val', 'correct']]
         self.answers = [['answer', 'result', 'time']]
         
-        self.create_widget()
+        self.create_widgets()
         
-    def create_widget(self):
+    def create_widgets(self):
         self.question_label = tk.Label(self, text='Ready?', relief=tk.RAISED)
         self.question_label['font'] = ('MSゴシック', 80, 'bold')
         self.question_label.config(bg=self.bg)
