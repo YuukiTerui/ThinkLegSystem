@@ -43,6 +43,14 @@
             "filename": "./logs/gui.log",
             "mode": "a",
             "encoding": "utf-8"
+        },
+        "thinklegHandler": {
+            "class": "logging.FileHandler",
+            "level":"DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/thinkleg.log",
+            "mode": "a",
+            "encoding":"utf-8"
         }
     },
 
@@ -70,6 +78,11 @@
         "gui.frame": {
             "level": "DEBUG",
             "handlers": ["guiHandler", "printHandler"],
+            "propagate": false
+        },
+        "thinkleg": {
+            "level":"DEBUG",
+            "handlers": ["thinklegHandler", "printHandler"],
             "propagate": false
         }
     },
