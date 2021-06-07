@@ -72,23 +72,25 @@
         },
         "gui.app": {
             "level": "DEBUG",
-            "handlers": ["guiHandler", "printHandler"],
-            "propagate": false
+            "handlers": ["printHandler"],
+            "propagate": true
         },
         "gui.frame": {
             "level": "DEBUG",
-            "handlers": ["guiHandler", "printHandler"],
-            "propagate": false
+            "handlers": ["printHandler"],
+            "propagate": true
         },
         "thinkleg": {
             "level":"DEBUG",
-            "handlers": ["thinklegHandler", "printHandler"],
+            "handlers": ["thinklegHandler"],
             "propagate": false
         },
         "thinkleg.server": {
-            "level":"DEBUG",
-            "handlers": ["thinklegSocketHandler", "printHandler"],
+            "level":"INFO",
+            "handlers": ["printHandler"],
             "propagate": true
+        }
+        
     },
 
     "root": {
