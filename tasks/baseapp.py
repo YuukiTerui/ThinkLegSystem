@@ -62,6 +62,9 @@ class BaseFrame(tk.Frame):
         self.grid(row=0, column=0, sticky="nsew")
         self.logger.debug("%sFrame is initialized.", self.__class__)
 
+    def create_widgets(self):
+        pass
+    
     def finish(self):
         self.destroy()
         self.logger.debug("frame is destroied.")
