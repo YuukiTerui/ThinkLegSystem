@@ -51,6 +51,14 @@
             "filename": "./logs/thinkleg.log",
             "mode": "a",
             "encoding":"utf-8"
+        },
+        "thinklegServerHandler": {
+            "class": "logging.FileHandler",
+            "level":"DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/thinkleg_server.log",
+            "mode": "a",
+            "encoding":"utf-8"
         }
     },
 
@@ -87,10 +95,10 @@
         },
         "thinkleg.server": {
             "level":"INFO",
-            "handlers": ["printHandler"],
+            "handlers": ["thinklegServerHandler", "printHandler"],
             "propagate": true
         }
-        
+
     },
 
     "root": {
