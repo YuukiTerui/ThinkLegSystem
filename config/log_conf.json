@@ -59,18 +59,18 @@
         },
         "gui": {
             "level": "DEBUG",
-            "handler": ["guiHandler"],
+            "handlers": ["guiHandler"],
             "propagate": false
         },
         "gui.app": {
             "level": "DEBUG",
-            "handler": ["printHandler"],
-            "propagate": true
+            "handlers": ["guiHandler", "printHandler"],
+            "propagate": false
         },
         "gui.frame": {
             "level": "DEBUG",
-            "handler": ["printHandler"],
-            "propagate": true
+            "handlers": ["guiHandler", "printHandler"],
+            "propagate": false
         }
     },
 
