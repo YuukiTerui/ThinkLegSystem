@@ -60,7 +60,6 @@ class Stroop(BaseFrame):
             patch.config(command=func)
             
         self.patchs_frame.pack(fill=tk.Y, expand=True)
-
         self.task()
 
     def patch_clicked(self, num):
