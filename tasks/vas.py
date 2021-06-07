@@ -4,12 +4,12 @@ from tkinter import ttk
 import csv
 from datetime import datetime
 
-from baseapp import BaseFrame
+from tasks.baseapp import BaseFrame
 
 
 class VasFrame(BaseFrame):
-    def __init__(self, fname=None, path=r'./'):
-        super().__init__()
+    def __init__(self, master=None, fname=None, path='./'):
+        super().__init__(master)
         self.fname = fname
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
@@ -55,10 +55,10 @@ class VasFrame(BaseFrame):
         self.finish()
 
     def save(self):
-        print(f"save value: {self.val.get()}")
+        print(f'save value: {self.val.get()}')
         if not self.fname:
-            self.fname = fr"{datetime.now().isoformat()}.csv"
-        with open(f'{self.fpath}{self.fname}.csv', 'a', newline='\n') as f:
+            self.fname = f'{datetime.now().isoformat()}.csv'
+        with open(f'{self.fpath}{self.fname}', 'a', newline='\n') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
 
@@ -66,7 +66,7 @@ class VasFrame(BaseFrame):
 
 
 def main():
-    app = VasFrame(fname='vas_test')
+    app = VasFrame(fname='vas_test.csv')
     app.mainloop()
 
 

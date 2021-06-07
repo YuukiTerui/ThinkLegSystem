@@ -4,13 +4,19 @@ import csv
 import time
 import serial
 import threading
+from json import load
+from logging import config, getLogger
+with open('./config/log_conf.json', 'r') as f:
+    config.dictConfig(load(f))
+
 
 class Arduino:
     def __init__(self, path='./', fname='ard_data') -> None:
+        self.logger = getLogger('arduino')
         self.path = path
         self.fname = fname
         self.data_cnt = 0
-        self.columns = ['time', 'voltage']
+        self.columns = ['msec', 'voltage']
         self.datas = [[0, 0]]
         self.start_time = None
         self.running = False
@@ -23,29 +29,32 @@ class Arduino:
         #self.flush_buffer()
         while True:
             tmp = self.serial.readlines()
-            print(tmp)
+            self.logger.debug(tmp)
             if tmp == [b'arduino is avairable\n']:
                 break
-        print(self.serial)
+        self.logger.info(self.serial)
 
     @property
     def data(self):
         return self.datas[-1]
 
     def __serve(self):
+        self.logger.debug('')
         data = self.serial.readline()
         try:
             data = list(map(int, data.decode('utf-8').replace('\n', '').split(',')))
         except Exception as e:
-            print(data, e)
+            self.logger.warning('%s %s', data, e)
             data = None
         return data
 
     def flush_buffer(self):
+        self.logger.debug('')
         self.serial.reset_output_buffer()
         self.serial.reset_input_buffer()
 
     def run(self):
+        self.logger.debug('')
         try:
             while self.running:
                 data = self.__serve()
@@ -60,6 +69,7 @@ class Arduino:
             pass
 
     def start(self):
+        self.logger.debug('')
         self.serial.write(b'1')
         self.running = True
         t, v = self.__serve()
@@ -80,21 +90,22 @@ class Arduino:
         self.serial.close()
 
     def save(self):
+        self.logger.info('save arduino data')
         with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
-            weiter = csv.writer(f)
-            weiter.writerows(self.datas)
+            writer = csv.writer(f)
+            writer.writerow(self.columns)
+            writer.writerows(self.datas)
 
 
 def main():
     ard = Arduino()
-
     try:
         ard.start()
         while True:
-            print(ard.data)
+            ard.logger.info(ard.data)
             time.sleep(0.02)
     except KeyboardInterrupt as e:
-        print('finish with Cntl-C')
+        ard.logger.info('finish with Cntl-C')
         ard.stop()
         ard.close()
         ard.save()
