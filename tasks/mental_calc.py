@@ -7,7 +7,7 @@ import tkinter as tk
 from random import choices
 from mpyg321.mpyg321 import MPyg321Player
 
-from baseapp import BaseFrame
+from tasks.baseapp import BaseFrame
 
 
 class MentalCalc(BaseFrame):
