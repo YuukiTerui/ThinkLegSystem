@@ -84,7 +84,11 @@
             "level":"DEBUG",
             "handlers": ["thinklegHandler", "printHandler"],
             "propagate": false
-        }
+        },
+        "thinkleg.server": {
+            "level":"DEBUG",
+            "handlers": ["thinklegSocketHandler", "printHandler"],
+            "propagate": true
     },
 
     "root": {
