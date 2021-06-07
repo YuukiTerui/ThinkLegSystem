@@ -40,7 +40,7 @@ class ThinkLegServer:
             try:
                 msg = client.recv(self.BUFFERSIZE)
                 self.logger.info('receive msg:%s from %s', msg, client_address)
-                client.send(';')
+                client.send(';'.encode('utf-8'))
                 time.sleep(1)
             except socket.error as e:
                 self.logger.warning('socket error:%s', e)
