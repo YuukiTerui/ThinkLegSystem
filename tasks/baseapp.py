@@ -24,7 +24,7 @@ class BaseApp(tk.Tk):
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
         self._init_key_binds()
-        self.logger.warning("BaseApp is initialized.")
+        self.logger.debug("BaseApp is initialized.")
 
     def _init_key_binds(self):
         self.bind('<F11>', self.toggle_fullscreen)
