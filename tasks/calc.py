@@ -70,7 +70,7 @@ class CalcFrame(BaseFrame):
         val = int(normal(loc=correct, scale=0.5, size=None))
         q = [num1, symbol, num2, '=', val, correct]
         self.questions.append(q)
-        self.logger.debug("question is created.")
+        self.logger.debug("question is created.%s", q)
     
     def update_label(self):
         text = ' '.join([str(x) for x in self.questions[-1][:-1]])
