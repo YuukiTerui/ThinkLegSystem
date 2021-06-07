@@ -5,19 +5,21 @@ from json import load
 from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
-    
+
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
 from tasks.calc import CalcFrame
 
 
-class MainApp(BaseApp):
+class ThinkLegApp(BaseApp):
     def __init__(self, datapath):
         super().__init__()
+        self.logger = getLogger('thinkleg')
         self.datapath = datapath
         self.state = 0
         self.frame = None
         self.create_widgets()
+        self.logger.debug('ThinkLegApp is initialized.')
 
     def create_widgets(self):
         self.first_frame = BaseFrame(self)
@@ -31,18 +33,23 @@ class MainApp(BaseApp):
 
         self.calc_button = tk.Button(self.first_frame, text='calc', command=lambda:self.change_frame('calc'))
         self.calc_button.pack()
+        self.logger.debug('widgets are created.')
 
     def create_vas(self):
         self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
+        self.logger.info('vas frame is created.')
 
     def create_calc(self):
         self.frame = CalcFrame(self, path=self.datapath, fname='calc.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
+        self.logger.info('calc frame is created.')
 
     def change_frame(self, to):
         #self.first_frame.pack_forget()
+        self.logger.debug('change_frame is called.')
         if self.frame:
+            self.logger.debug('%s is destroied.', self.frame)
             self.frame.destroy()
         if to == 'vas':
             self.create_vas()
@@ -58,7 +65,7 @@ def main():
     print(datapath)
     os.makedirs(datapath, exist_ok=True)
 
-    app = MainApp(datapath)
+    app = ThinkLegApp(datapath)
     app.mainloop()
 
 
