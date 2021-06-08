@@ -9,6 +9,7 @@ with open('./config/log_conf.json', 'r') as f:
 from tasks.baseapp import BaseApp, BaseFrame
 from tasks.vas import VasFrame
 from tasks.calc import CalcFrame
+from arduino import Arduino
 
 
 class ThinkLegApp(BaseApp):
@@ -18,6 +19,7 @@ class ThinkLegApp(BaseApp):
         self.datapath = datapath
         self.state = 0
         self.frame = None
+        self.arduino = Arduino(self.datapath, 'arduino_data.csv')
         self.create_widgets()
         self.logger.debug('ThinkLegApp is initialized.')
 
