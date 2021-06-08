@@ -40,6 +40,7 @@
             "class": "logging.FileHandler",
             "level": "DEBUG",
             "formatter": "mainFormatter",
+            "filename": "./logs/arduino_data.log",
             "mode": "a",
             "encoding":"utf-8"
         },
