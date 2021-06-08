@@ -72,6 +72,7 @@ class Arduino:
                 data = self.__reserve()
                 if data:
                     self.logger.debug('get correct data.')
+                    self.datalogger.debug('%s', data)
                     self.datas.append(data)
                     self.data_queue.append(data)
         except:
