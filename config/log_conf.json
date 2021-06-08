@@ -24,7 +24,7 @@
         },
         "printHandler": {
             "class": "logging.StreamHandler",
-            "level": "DEBUG",
+            "level": "INFO",
             "formatter": "print",
             "stream": "ext://sys.stdout"
         },
