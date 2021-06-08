@@ -9,6 +9,8 @@ from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
+from server import ThinkLegServer
+
 
 class Arduino:
     def __init__(self, path='./', fname='ard_data') -> None:
@@ -22,7 +24,13 @@ class Arduino:
         self.running = False
         self.thread = None
         
-        self.port = 'COM6' if os.name == 'nt' else '/dev/ttyACM0'
+        self.server = ThinkLegServer(port=10001)
+        self.thread_server = threading.Thread(target=self.server.run, daemon=True)
+        self.thread_server.start()
+        self.thread_observe_server = threading.Thread(target=self.server_process, daemon=True)
+        self.thread_observe_server.start()
+        
+        self.port = 'COM5' if os.name == 'nt' else '/dev/ttyACM0'
         self.baudrate = 115200
         self.timeout = 0.5
         self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
@@ -52,7 +60,26 @@ class Arduino:
         self.logger.debug('')
         self.serial.reset_output_buffer()
         self.serial.reset_input_buffer()
-
+        
+    def server_process(self):
+        while self.server:
+            msg = self.server.get_data()
+            if not msg:
+                continue
+            
+            if msg == '1':
+                self.logger.debug('reserve order to start.')
+                self.start()
+            elif msg == '0':
+                self.logger.debug('reserve order to stop.')
+                self.stop()
+            elif msg == '9':
+                self.logger.debug('reserve order to reset.')
+                self.reset()
+            else:
+                self.logger.warning('receive msg: %s', msg)
+            time.sleep(0.5)
+            
     def run(self):
         self.logger.debug('')
         try:
@@ -60,7 +87,6 @@ class Arduino:
                 data = self.__serve()
                 if data:
                     self.datas.append(data)
-
         except:
             pass
         else:
@@ -102,7 +128,7 @@ def main():
     try:
         ard.start()
         while True:
-            ard.logger.info(ard.data)
+            ard.logger.debug(ard.data)
             time.sleep(0.02)
     except KeyboardInterrupt as e:
         ard.logger.info('finish with Cntl-C')
