@@ -36,6 +36,13 @@
             "mode": "a",
             "encoding": "utf-8"
         },
+        "arduinoDataHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "mode": "a",
+            "encoding":"utf-8"
+        },
         "guiHandler": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
@@ -64,6 +71,11 @@
             "level": "DEBUG",
             "handlers": ["arduinoHandler", "printHandler"],
             "propagate": false
+        },
+        "arduino.data": {
+            "level": "DEBUG",
+            "handlers": ["arduinoDataHandler"],
+            "propagate": true
         },
         "gui": {
             "level": "DEBUG",
