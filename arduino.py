@@ -4,6 +4,7 @@ import csv
 import time
 import serial
 import threading
+from collections import deque
 from json import load
 from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
@@ -18,6 +19,7 @@ class Arduino:
         self.data_cnt = 0
         self.columns = ['msec', 'voltage']
         self.datas = [[0, 0]]
+        self.data_queue = deque()
         self.start_time = None
         self.running = False
         self.thread = None
@@ -37,14 +39,23 @@ class Arduino:
     @property
     def data(self):
         return self.datas[-1]
+    
+    def pop_data(self):
+        try:
+            data = self.data_queue.popleft()
+            self.logger.debug('data_queue do popleft().')
+            return data
+        except IndexError as e:
+            self.logger.debug('data_queue is empty.')
 
     def __serve(self):
         self.logger.debug('')
         data = self.serial.readline()
         try:
             data = list(map(int, data.decode('utf-8').replace('\n', '').split(',')))
+            self.logger.debug('receive data: %s', data)
         except Exception as e:
-            self.logger.warning('%s %s', data, e)
+            self.logger.warning('receiving data is failed.: %s %s', data, e)
             data = None
         return data
 
@@ -59,8 +70,9 @@ class Arduino:
             while self.running:
                 data = self.__serve()
                 if data:
+                    self.logger.debug('get correct data.')
                     self.datas.append(data)
-
+                    self.data_queue.append(data)
         except:
             pass
         else:
