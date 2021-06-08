@@ -36,12 +36,11 @@ class ThinkLegClient:
             try:
                 self.socket.send(data.encode('utf-8'))
                 msg = self.socket.recv(self.BUFFERSIZE).decode('utf-8')
-                self.logger.info('msg: %s', msg)
                 if msg == self.EOF:
                     self.logger.info('successful data transmission.: %s', data)
                     break
                 else:
-
+                    self.logger.info('msg: %s', msg)
                     continue
             except socket.error as e:
                 self.logger.warning('connection lost')
