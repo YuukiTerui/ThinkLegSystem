@@ -15,9 +15,10 @@ class Arduino:
     def __init__(self, path='./', fname='ard_data') -> None:
         self.logger = getLogger('arduino')
         self.datalogger = getLogger('arduino_data')
+
         self.path = path
         self.fname = fname
-        self.data_cnt = 0
+        
         self.columns = ['msec', 'voltage']
         self.datas = [[0, 0]]
         self.data_queue = deque()
