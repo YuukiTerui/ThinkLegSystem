@@ -45,7 +45,7 @@ class ThinkLegClient:
                     continue
             except socket.error as e:
                 self.logger.warning('connection lost')
-                self.create_connection(self.host, self.port)
+                self.create_connection()
 
 
 def main():
