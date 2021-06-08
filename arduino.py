@@ -24,7 +24,7 @@ class Arduino:
         self.running = False
         self.thread = None
         
-        self.port = 'COM6' if os.name == 'nt' else '/dev/ttyACM0'
+        self.port = 'COM5' if os.name == 'nt' else '/dev/ttyACM0'
         self.baudrate = 115200
         self.timeout = 0.5
         self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
