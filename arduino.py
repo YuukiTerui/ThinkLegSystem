@@ -48,7 +48,7 @@ class Arduino:
         except IndexError as e:
             self.logger.debug('data_queue is empty.')
 
-    def __serve(self):
+    def __reserve(self):
         self.logger.debug('')
         data = self.serial.readline()
         try:
@@ -68,7 +68,7 @@ class Arduino:
         self.logger.debug('')
         try:
             while self.running:
-                data = self.__serve()
+                data = self.__reserve()
                 if data:
                     self.logger.debug('get correct data.')
                     self.datas.append(data)
