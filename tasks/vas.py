@@ -1,5 +1,6 @@
 # coding: utf-8
 import tkinter as tk
+from tkinter import messagebox
 from tkinter import ttk 
 import csv
 from datetime import datetime
@@ -51,8 +52,11 @@ class VasFrame(BaseFrame):
         self.submit_button.pack(anchor=tk.SE, side=tk.RIGHT, fill=tk.X, padx=30, pady=30)
 
     def submit(self):
-        self.save()
-        self.finish()
+        ret = messagebox.askyesno('確認','提出しますか？')
+        if ret == True:
+            self.logger.info('submit vas.')
+            self.save()
+            self.finish()
 
     def save(self):
         print(f'save value: {self.val.get()}')
