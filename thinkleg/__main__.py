@@ -51,7 +51,6 @@ class ThinkLegApp(BaseApp):
         self.logger.info('calc frame is created.')
 
     def change_frame(self, to):
-        #self.first_frame.pack_forget()
         self.logger.debug('change_frame is called.')
         if self.frame:
             self.logger.debug('%s is destroied.', self.frame)
@@ -97,20 +96,12 @@ class MainFrame(BaseFrame):
         while t < latency:
             t = time.time()-st
             self.progress_var.set(t)
+            time.sleep(2)
         self.progress_label['text'] = 'Arduino Ready.'
         self.progress_bar.destroy()
 
-
     def change_frame(self, to):
-        #self.first_frame.pack_forget()
-        self.logger.debug('change_frame is called.')
-        if self.frame:
-            self.logger.debug('%s is destroied.', self.frame)
-            self.frame.destroy()
-        if to == 'vas':
-            self.create_vas()
-        elif to == 'calc':
-            self.create_calc()
+        self.master.change_frame(to)
 
 
 
