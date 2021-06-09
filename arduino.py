@@ -34,7 +34,7 @@ class Arduino:
         self.thread_observe_server = threading.Thread(target=self.server_process, daemon=True)
         self.thread_observe_server.start()
         
-        self.port = 'COM5' if os.name == 'nt' else '/dev/ttyACM0'
+        self.port = 'COM6' if os.name == 'nt' else '/dev/ttyACM0'
         self.baudrate = 115200
         self.timeout = 0.5
         self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
@@ -76,7 +76,7 @@ class Arduino:
         
     def server_process(self):
         while self.server:
-            msg = self.server.get_data()
+            msg = self.server.data
             if not msg:
                 continue
             
