@@ -1,24 +1,30 @@
 # coding: utf-8
 
-from sys import winver
 import time
 import socket
 import threading
 from collections import deque
 import json
-from logging import config, getLogger
+from logging import config, exception, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(json.load(f))
 
 
-class ThinkLegServer:
+class ThinkLegServer(threading.Thread):
     CLIENT_NUM = 10
     BUFFERSIZE = 2 ** 10
     def __init__(self, host='localhost', port=12345) -> None:
+        super(ThinkLegServer, self).__init__()
+        self.daemon = True
+
         self.logger = getLogger('thinkleg.server')
+
         self.host = host
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.bind((self.host, self.port))
+
         self.is_running = False
         self.data_queue = deque()
         
@@ -30,6 +36,7 @@ class ThinkLegServer:
             return data
         except IndexError as e:
             self.logger.debug('server_queue is empty.')
+            return None
     
     def clear_data(self):
         self.logger.info('data is cleard.')
@@ -37,8 +44,6 @@ class ThinkLegServer:
 
     def run(self):
         self.is_running = True
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socket.bind((self.host, self.port))
         self.socket.listen(self.CLIENT_NUM)
         while self.is_running:
             self.logger.info('Waiting for connection.')
@@ -52,10 +57,10 @@ class ThinkLegServer:
                 self.logger.error('%s', e)
             else:
                 self.logger.info('Established connection.')
-                t = threading.Thread(target=self.connect_client, args=(client_socket, address))
-                t.setDaemon(True)
+                t = threading.Thread(target=self.connect_client, args=(client_socket, address), daemon=True)
                 t.start()
             self.logger.info("thread %s started.", t)
+            time.sleep(1)
         self.logger.info('stop running')
 
     def connect_client(self, client, client_address):
@@ -74,7 +79,17 @@ class ThinkLegServer:
 
 def main():
     server = ThinkLegServer()
-    server.run()
+    server.start()
+
+    time.sleep(1)
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    client.connect(('localhost', 12345))
+
+    while True:
+        msg = input('>')
+        client.send(msg.encode('utf-8'))
 
 if __name__ == '__main__':
     main()
