@@ -42,13 +42,21 @@ class ThinkLegServer:
         self.socket.listen(self.CLIENT_NUM)
         while self.is_running:
             self.logger.info('Waiting for connection.')
-            client_socket, address = self.socket.accept()
-            #client_socket.settimeout(5)
-            self.logger.info('Established connection.')
-            t = threading.Thread(target=self.connect_client, args=(client_socket, address))
-            t.setDaemon(True)
-            t.start()
+            try:
+                client_socket, address = self.socket.accept()
+                #client_socket.settimeout(5)
+            except KeyboardInterrupt as e:
+                self.is_running = False
+                self.logger.debug('receiving cntl-C')
+            except Exception as e:
+                self.logger.error('%s', e)
+            else:
+                self.logger.info('Established connection.')
+                t = threading.Thread(target=self.connect_client, args=(client_socket, address))
+                t.setDaemon(True)
+                t.start()
             self.logger.info("thread %s started.", t)
+        self.logger.info('stop running')
 
     def connect_client(self, client, client_address):
         while True:
