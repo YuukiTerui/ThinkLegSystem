@@ -15,7 +15,7 @@ class CalcFrame(BaseFrame):
         self._init_bind(self)
         self.path = path
         self.fname = fname
-        self.is_run = False
+        self.is_running = False
         self.cnt = 0
         self.question_num = question_num
         self.questions = [['num_l1', '+or-', 'num_l2', '=', 'val', 'correct']]
@@ -38,12 +38,12 @@ class CalcFrame(BaseFrame):
 
     def mouse_clicked(self, event):
         self.logger.debug("mouse clicked. %s", event)
-        if not self.is_run:
-            self.logger.debug("is_run == %s", self.is_run)
+        if not self.is_running:
+            self.logger.debug("is_running == %s", self.is_running)
             self.start_time = time.time()
-            self.is_run = True
+            self.is_running = True
         else:
-            self.logger.debug("is_run == %s", self.is_run)
+            self.logger.debug("is_run == %s", self.is_running)
             ans = 1 if event.num == 1 else 0
             t = time.time() - self.start_time
             self.record_answer(ans, t)
