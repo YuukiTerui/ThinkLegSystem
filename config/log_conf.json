@@ -8,7 +8,7 @@
             "format": "%(asctime)s %(filename)s:%(lineno)s %(funcName)s %(module)s [%(levelname)s]: %(message)s"
         },
         "print": {
-            "format": "[%(levelname)s]\t%(message)s",
+            "format": "[%(filename)s-%(lineno)s][%(levelname)s]\t%(message)s",
             "level": "INFO"
         }
     },
