@@ -69,7 +69,7 @@ class ThinkLegServer(threading.Thread):
         while True:
             try:
                 msg = client.recv(self.BUFFERSIZE).decode('utf-8')
-                self.logger.info('receive msg:%s from %s', msg, client_address)
+                self.logger.info('receive msg: %s from %s', msg, client_address)
                 client.send(';'.encode('utf-8'))
                 self.data_queue.append(msg)
                 self.event.set()
