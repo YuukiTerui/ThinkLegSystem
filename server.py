@@ -17,7 +17,7 @@ class ThinkLegServer(threading.Thread):
         super(ThinkLegServer, self).__init__()
         self.daemon = True
         self.name = __name__
-
+        self.event = threading.Event()
         self.logger = getLogger('thinkleg.server')
 
         self.host = host
@@ -33,6 +33,7 @@ class ThinkLegServer(threading.Thread):
     def data(self):
         try:
             data = self.data_queue.popleft()
+            self.event.clear()
             self.logger.debug('data is poped.')
             return data
         except IndexError as e:
@@ -71,7 +72,7 @@ class ThinkLegServer(threading.Thread):
                 self.logger.info('receive msg:%s from %s', msg, client_address)
                 client.send(';'.encode('utf-8'))
                 self.data_queue.append(msg)
-                time.sleep(1)
+                self.event.set()
             except socket.error as e:
                 self.logger.warning('socket error:%s', e)
                 client.close()
