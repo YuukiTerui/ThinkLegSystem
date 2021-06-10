@@ -21,10 +21,12 @@ class Arduino:
 
         self.path = path
         self.fname = fname
+
+        self.thinkleg_status = 0
+        self.thinkleg_statuses = [0]
         
         self.columns = ['msec', 'voltage']
         self.raw = [[0, 0]]
-        self.record_data = deque()
         self.start_time = None
         self.is_running = False
         self.thread = None
@@ -49,14 +51,6 @@ class Arduino:
     @property
     def data(self):
         return self.raw[-1]
-    
-    def pop_data(self):
-        try:
-            data = self.record_data.popleft()
-            self.logger.debug('record_data do popleft().')
-            return data
-        except IndexError as e:
-            self.logger.debug('record_data is empty.')
 
     def __reserve(self):
         self.logger.debug('')
@@ -97,14 +91,13 @@ class Arduino:
                 self.logger.warning('receive msg: %s', msg)
             
     def run(self):
-        self.logger.debug('')
         try:
             while self.is_running:
                 data = self.__reserve()
                 if len(data) == 2:
                     self.datalogger.debug('%s', data)
                     self.raw.append(data)
-                    self.record_data.append(data)
+                    self.thinkleg_statuses.append(self.thinkleg_status)
         except:
             pass
 
@@ -132,12 +125,16 @@ class Arduino:
     def close(self):
         self.serial.close()
 
-    def save(self):
+    def save(self, data=None):
         with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(self.columns)
-            writer.writerows(self.raw)
-        self.logger.info('save arduino data')
+            if data == None:
+                writer.writerow(self.columns)
+                writer.writerows(self.raw)
+                self.logger.info('save arduino raw data.')
+            else:
+                writer.writerow([*self.columns, 'status'])
+                writer.writerows([[r, s] for r, s in zip(self.raw, self.thinkleg_statuses)])
 
 class Controller:
     def __init__(self, host='localhost', port=10001) -> None:

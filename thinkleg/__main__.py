@@ -3,7 +3,7 @@ import time
 import threading
 from datetime import datetime
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Label, ttk
 from json import load
 from logging import config, getLogger
 from tkinter.constants import HORIZONTAL
@@ -24,13 +24,13 @@ class ThinkLegApp(BaseApp):
         super().__init__()
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
-        self.state = 0
+        self.states = {'wait':0, 'task':1, 'rest':2, 'vas':3, 'stroop':4}
         self.server = ThinkLegServer(host='localhost', port=12345)
-        self.thread_server = threading.Thread(target=self.server.run, daemon=True)
-        self.thread_server.start()
+        self.server.start()
 
         self.frame = None
         self.arduino = Arduino(self.datapath, 'arduino_data.csv')
+        self.arduino.start()
 
         self.create_widgets()
         self.logger.debug('ThinkLegApp is initialized.')
@@ -43,6 +43,7 @@ class ThinkLegApp(BaseApp):
     def create_vas(self):
         self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
+        self.arduino.thinkleg_status = self.states['vas']
         self.logger.info('vas frame is created.')
 
     def create_calc(self):
@@ -53,12 +54,17 @@ class ThinkLegApp(BaseApp):
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
         if self.frame:
+            self.arduino.thinkleg_status = self.states['wait']
             self.logger.debug('%s is destroied.', self.frame)
-            self.frame.destroy()
+            self.frame.finish()
         if to == 'vas':
             self.create_vas()
         elif to == 'calc':
             self.create_calc()
+    
+    def finish(self):
+        self.arduino.save('thinkleg')
+        return super().finish()
 
 
 class MainFrame(BaseFrame):
@@ -67,7 +73,7 @@ class MainFrame(BaseFrame):
         self.master = master
         self.create_widgets()
         if self.master.arduino:
-            threading.Thread(target=self.__progress).start()
+            threading.Thread(target=self.__progress, daemon=True).start()
 
     def create_widgets(self):
         self.title_label = tk.Label(self, text='Think Leg System')
@@ -89,6 +95,9 @@ class MainFrame(BaseFrame):
         self.progress_bar.pack()
         self.progress_frame.pack()
 
+        self.finish_button = tk.Button(self, text='finish', command=lambda: self.master.finish())
+        self.finish_button.pack()
+
     def __progress(self):
         st = time.time()
         latency = 60
@@ -102,6 +111,8 @@ class MainFrame(BaseFrame):
 
     def change_frame(self, to):
         self.master.change_frame(to)
+
+
 
 
 
