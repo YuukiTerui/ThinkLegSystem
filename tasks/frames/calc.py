@@ -7,7 +7,7 @@ import numpy as np
 from numpy.random import randint, normal, choice
 from datetime import datetime
 
-from tasks.baseapp import BaseFrame
+from .baseframe import BaseFrame
 
 class CalcFrame(BaseFrame):
     def __init__(self, master=None, fname=None, path='./', question_num=5):

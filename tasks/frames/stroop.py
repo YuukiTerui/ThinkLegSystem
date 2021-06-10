@@ -9,9 +9,9 @@ from dataclasses import dataclass
 from datetime import datetime
 random.seed(0)
 
-from baseapp import BaseFrame
+from .baseframe import BaseFrame
 
-class Stroop(BaseFrame):
+class StroopFrame(BaseFrame):
     @dataclass
     class TaskData:
         correct: str
@@ -20,8 +20,8 @@ class Stroop(BaseFrame):
         def __call__(self):
             return self.correct, self.choices
 
-    def __init__(self, task, fname=None, path=r'./', limit_cnt=None, limit_second=None):
-        super().__init__()
+    def __init__(self, task, master=None, fname=None, path=r'./', limit_cnt=None, limit_second=None):
+        super().__init__(master)
         self.master.config(bg='light gray')
         self.master.protocol("WM_DELETE_WINDOW", self.finish)
 
@@ -105,7 +105,7 @@ class Stroop(BaseFrame):
 
         correct = [k for k, v in self.colors.items() if self.color_label.cget('text') == v][0]
         choices = [p.cget('bg') for p in self.color_patchs]
-        self.stream_data = Stroop.TaskData(correct, choices)
+        self.stream_data = StroopFrame.TaskData(correct, choices)
 
     def task2(self):
         '''
@@ -125,7 +125,7 @@ class Stroop(BaseFrame):
 
         correct = self.color_label.cget('text')
         choices = [p.cget('bg') for p in self.color_patchs]
-        self.stream_data = Stroop.TaskData(correct, choices)
+        self.stream_data = StroopFrame.TaskData(correct, choices)
 
     def task3(self):
         '''
@@ -147,7 +147,7 @@ class Stroop(BaseFrame):
         
         correct = self.color_label.cget('bg')
         choices = [p.cget('text') for p in self.color_patchs]
-        self.stream_data = Stroop.TaskData(correct, choices)
+        self.stream_data = StroopFrame.TaskData(correct, choices)
 
     def task4(self):
         '''
@@ -170,7 +170,7 @@ class Stroop(BaseFrame):
 
         correct = self.color_label.cget('fg')
         choices = [p.cget('text') for p in self.color_patchs]
-        self.stream_data = Stroop.TaskData(correct, choices)
+        self.stream_data = StroopFrame.TaskData(correct, choices)
 
     def save(self):
         print(*self.output_data, sep='\n')
@@ -185,7 +185,7 @@ class Stroop(BaseFrame):
 def main():
     task = 4
     for t in range(1, task+1):
-        app = Stroop(t, fname='stroop_test', limit_cnt=5, limit_second=10)
+        app = StroopFrame(t, fname='stroop_test', limit_cnt=5, limit_second=10)
         app.mainloop()
 
 

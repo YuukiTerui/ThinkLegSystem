@@ -3,17 +3,16 @@ import time
 import threading
 from datetime import datetime
 import tkinter as tk
-from tkinter import Label, ttk
 from json import load
 from logging import config, getLogger
-from tkinter.constants import HORIZONTAL
-from typing import SupportsRound
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
-from .baseapp import BaseApp, BaseFrame
-from .vas import VasFrame
-from .calc import CalcFrame
+from .baseapp import BaseApp
+from .frames.mainframe import MainFrame
+from .frames.vas import VasFrame
+from .frames.calc import CalcFrame
+from .frames.stroop import StroopFrame
 from server import ThinkLegServer
 
 
@@ -38,15 +37,20 @@ class Tasks(BaseApp):
         self.first_frame.grid(row=0, column=0, sticky="nsew")        
         self.logger.debug('widgets are created.')
 
-    def create_vas(self):
+    def create_vasframe(self):
         self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
         self.logger.info('vas frame is created.')
 
-    def create_calc(self):
+    def create_calcframe(self):
         self.frame = CalcFrame(self, path=self.datapath, fname='calc.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
         self.logger.info('calc frame is created.')
+
+    def create_stroopframe(self, task):
+        self.frame = StroopFrame(task, self, path=self.datapath, fname=f'stroop{task}.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('stroop%s frame is created.', task)
 
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
@@ -54,35 +58,17 @@ class Tasks(BaseApp):
             self.logger.debug('%s is destroied.', self.frame)
             self.frame.finish()
         if to == 'vas':
-            self.create_vas()
+            self.create_vasframe()
         elif to == 'calc':
-            self.create_calc()
+            self.create_calcframe()
+        elif 'stroop' in to:
+            self.create_stroop(int(to[-1]))
     
     def finish(self):
         return super().finish()
 
 
-class MainFrame(BaseFrame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
-        self.create_widgets()
 
-    def create_widgets(self):
-        self.title_label = tk.Label(self, text='Think Leg System')
-        self.title_label.pack()
-
-        self.vas_button = tk.Button(self, text='vas', command=lambda:self.change_frame('vas'))
-        self.vas_button.pack()
-
-        self.calc_button = tk.Button(self, text='calc', command=lambda:self.change_frame('calc'))
-        self.calc_button.pack()
-
-        self.finish_button = tk.Button(self, text='finish', command=lambda: self.master.finish())
-        self.finish_button.pack()
-
-    def change_frame(self, to):
-        self.master.change_frame(to)
 
 
 
