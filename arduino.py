@@ -75,7 +75,8 @@ class Arduino:
         self.serial.reset_input_buffer()
         
     def server_process(self):
-        while self.server:
+        while self.is_running:
+            self.server.event.wait()
             msg = self.server.data
             if not msg:
                 continue
