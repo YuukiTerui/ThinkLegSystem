@@ -75,8 +75,10 @@ class Arduino:
         self.serial.reset_input_buffer()
         
     def server_process(self):
-        while self.is_running:
+        while self.server:
+            self.logger.debug('wait server event')
             self.server.event.wait()
+            self.logger.debug('occur server event')
             msg = self.server.data
             if not msg:
                 continue
@@ -166,7 +168,7 @@ def main():
         while True:
             if ard.is_running:
                 ard.logger.info(ard.data)
-            time.sleep(0.1)
+            time.sleep(0.02)
     except KeyboardInterrupt as e:
         ard.logger.info('finish with Cntl-C')
         ard.stop()
