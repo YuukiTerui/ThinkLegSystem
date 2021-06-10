@@ -16,6 +16,7 @@ class ThinkLegServer(threading.Thread):
     def __init__(self, host='localhost', port=12345) -> None:
         super(ThinkLegServer, self).__init__()
         self.daemon = True
+        self.name = __name__
 
         self.logger = getLogger('thinkleg.server')
 
