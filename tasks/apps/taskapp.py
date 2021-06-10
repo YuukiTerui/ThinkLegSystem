@@ -62,7 +62,7 @@ class Tasks(BaseApp):
         elif to == 'calc':
             self.create_calcframe()
         elif 'stroop' in to:
-            self.create_stroop(int(to[-1]))
+            self.create_stroopframe(int(to[-1]))
     
     def finish(self):
         return super().finish()
