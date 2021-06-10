@@ -23,8 +23,8 @@ class Arduino:
         self.fname = fname
         
         self.columns = ['msec', 'voltage']
-        self.datas = [[0, 0]]
-        self.data_queue = deque()
+        self.raw = [[0, 0]]
+        self.record_data = deque()
         self.start_time = None
         self.is_running = False
         self.thread = None
@@ -48,15 +48,15 @@ class Arduino:
 
     @property
     def data(self):
-        return self.datas[-1]
+        return self.raw[-1]
     
     def pop_data(self):
         try:
-            data = self.data_queue.popleft()
-            self.logger.debug('data_queue do popleft().')
+            data = self.record_data.popleft()
+            self.logger.debug('record_data do popleft().')
             return data
         except IndexError as e:
-            self.logger.debug('data_queue is empty.')
+            self.logger.debug('record_data is empty.')
 
     def __reserve(self):
         self.logger.debug('')
@@ -98,10 +98,10 @@ class Arduino:
         try:
             while self.is_running:
                 data = self.__reserve()
-                if data:
+                if len(data) == 2:
                     self.datalogger.debug('%s', data)
-                    self.datas.append(data)
-                    self.data_queue.append(data)
+                    self.raw.append(data)
+                    self.record_data.append(data)
         except:
             pass
 
@@ -132,7 +132,7 @@ class Arduino:
         with open(f'{self.path}{self.fname}.csv', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(self.columns)
-            writer.writerows(self.datas)
+            writer.writerows(self.raw)
         self.logger.info('save arduino data')
 
 class Controller:
