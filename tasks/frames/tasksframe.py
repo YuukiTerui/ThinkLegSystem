@@ -11,8 +11,8 @@ class TasksFrame(BaseFrame):
 
     def create_widgets(self):
         title_font = ('System', 100, 'bold', 'italic', 'underline', 'overstrike')
-        self.title_label = tk.Label(self, text='Think Leg System', bg=self.bg, font=title_font)
-        self.title_label.pack(ipady=50)
+        self.title_label = tk.Label(self, text='Think Leg System', font=title_font)
+        self.title_label.pack(pady=10, expand=True, fill=tk.X)
 
         self.task_frame = self.create_taskframe()
         self.task_frame.pack(pady=10)
