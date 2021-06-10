@@ -2,6 +2,7 @@
 #define INPUT_PIN A0
 #define LED_PIN 13
 unsigned long time_ = 0;
+unsigned long start_time = 0;
 int data = 0;
 bool send_flag = false;
 
@@ -15,7 +16,7 @@ void setup() {
 }
 
 void send_data() {
-  time_ = millis();
+  time_ = millis() - start_time;
   data = analogRead(INPUT_PIN);
   String s = String(time_);
   s += ",";
@@ -42,6 +43,7 @@ void serialEvent() {
         break;
       case byte('1'):
         send_flag = true;
+        start_time = millis();
         digitalWrite(LED_PIN, HIGH);
         break;
       // default:
