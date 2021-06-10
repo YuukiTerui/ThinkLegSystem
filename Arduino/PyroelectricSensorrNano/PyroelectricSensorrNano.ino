@@ -4,7 +4,7 @@
 unsigned long time_ = 0;
 unsigned long start_time = 0;
 int data = 0;
-bool send_flag = true;
+bool send_flag = false;
 
 
 void setup() {
