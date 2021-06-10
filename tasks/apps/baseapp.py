@@ -52,7 +52,7 @@ class BaseApp(tk.Tk):
 
 
 if __name__ == '__main__':
-    from .frames.baseframe import BaseFrame
+    from ..frames.baseframe import BaseFrame
 
     app = BaseFrame()
     app.logger.info("app is running")
