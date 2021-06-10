@@ -80,7 +80,6 @@ class Arduino:
             msg = self.server.data
             if not msg:
                 continue
-            
             if msg == '1':
                 self.logger.debug('reserve order to start.')
                 self.start()
@@ -92,7 +91,6 @@ class Arduino:
                 self.reset()
             else:
                 self.logger.warning('receive msg: %s', msg)
-            time.sleep(0.5)
             
     def run(self):
         self.logger.debug('')
