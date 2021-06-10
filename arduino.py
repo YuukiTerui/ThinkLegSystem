@@ -88,9 +88,11 @@ class Arduino:
             elif msg == '0':
                 self.logger.debug('reserve order to stop.')
                 self.stop()
-            elif msg == '9':
+            elif msg == 'reset':
                 self.logger.debug('reserve order to reset.')
                 self.reset()
+            elif msg == 'd':
+                self.logger.info('%s', self.data)
             else:
                 self.logger.warning('receive msg: %s', msg)
             
