@@ -3,7 +3,7 @@ import tkinter as tk
 from .baseframe import BaseFrame
 
 
-class MainFrame(BaseFrame):
+class TasksFrame(BaseFrame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
