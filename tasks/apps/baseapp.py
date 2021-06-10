@@ -13,8 +13,9 @@ class BaseApp(tk.Tk):
         super().__init__()
         self.logger = getLogger('gui.app')
         self.title('BaseApp')
-        self.width = 1200 if self.winfo_screenwidth() > 1200 else self.winfo_screenwidth()
-        self.height = 800 if self.winfo_screenheight() > 800 else self.winfo_screenheight()
+        self.width = 1200
+        self.height = 800
+
         self.geometry(f'{self.width}x{self.height}')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
