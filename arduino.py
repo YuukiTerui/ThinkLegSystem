@@ -17,7 +17,7 @@ from server import ThinkLegServer
 class Arduino:
     def __init__(self, path='./data/arduino/', fname='ard_data') -> None:
         self.logger = getLogger('arduino')
-        self.datalogger = getLogger('arduino_data')
+        self.datalogger = getLogger('arduino.data')
 
         self.path = path
         self.fname = fname
@@ -123,6 +123,7 @@ class Arduino:
     def reset(self):
         self.is_running = False
         self.serial.write(b'9')
+        self.flush_buffer()
         self.logger.info('reset arduino')
 
     def close(self):
