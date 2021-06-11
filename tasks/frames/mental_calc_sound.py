@@ -7,7 +7,7 @@ import tkinter as tk
 from random import choices
 from mpyg321.mpyg321 import MPyg321Player
 
-from tasks.baseapp import BaseFrame
+from ..apps.baseapp import BaseFrame
 
 
 class MentalCalc(BaseFrame):
@@ -59,12 +59,3 @@ class MentalCalc(BaseFrame):
 
         process() # TODO: process is executed in thread
         self.inTask = False
-
-
-
-def main():
-    app = MentalCalc()
-    app.mainloop()
-
-if __name__ == '__main__':
-    main()

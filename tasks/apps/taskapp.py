@@ -5,6 +5,7 @@ from datetime import datetime
 import tkinter as tk
 from json import load
 from logging import config, getLogger
+from typing import Collection
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
@@ -13,6 +14,7 @@ from ..frames.tasksframe import TasksFrame
 from ..frames.vas import VasFrame
 from ..frames.calc import CalcFrame
 from ..frames.stroop import StroopFrame
+from ..frames.mentalcalc import MentalCalcFrame
 from mysocket.server import ThinkLegServer
 
 
@@ -47,8 +49,13 @@ class Tasks(BaseApp):
         self.frame.grid(row=0, column=0, sticky="nsew")
         self.logger.info('calc frame is created.')
 
+    def create_mentalcalc_frame(self, num):
+        self.frame = MentalCalcFrame(num, master=self, path=self.datapath, fname=f'mentalcalc{num}.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('mentalcalc%s, frame is created.', num)
+
     def create_stroopframe(self, task):
-        self.frame = StroopFrame(task, self, path=self.datapath, fname=f'stroop{task}.csv')
+        self.frame = StroopFrame(task, master=self, path=self.datapath, fname=f'stroop{task}.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('stroop%s frame is created.', task)
 
@@ -63,6 +70,8 @@ class Tasks(BaseApp):
             self.create_calcframe()
         elif 'stroop' in to:
             self.create_stroopframe(int(to[-1]))
+        elif 'mentalcalc' in to:
+            self.create_mentalcalc_frame(int(to[-1]))
     
     def finish(self):
         return super().finish()
