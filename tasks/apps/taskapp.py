@@ -13,7 +13,7 @@ from ..frames.tasksframe import TasksFrame
 from ..frames.vas import VasFrame
 from ..frames.calc import CalcFrame
 from ..frames.stroop import StroopFrame
-from server import ThinkLegServer
+from mysocket.server import ThinkLegServer
 
 
 
