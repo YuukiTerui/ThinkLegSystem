@@ -46,10 +46,12 @@ class MentalCalcFrame(BaseFrame):
     
     def key_pressed(self, event):
         key_name = event.keysym
+        if 'KP_' in key_name:
+            key_name = key_name.replace('KP_', '')
         var = self.q_value.get()
         POSNUM = 3
         if self.q_pos in [0, 1]:
-            if key_name == 'Return':
+            if key_name in ['Return', 'Enter']:
                 self.q_pos = (self.q_pos + 1) % POSNUM
                 self.change_label()
         else: # self.q_pos == 2
