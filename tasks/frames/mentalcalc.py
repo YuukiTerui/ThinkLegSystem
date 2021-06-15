@@ -55,7 +55,7 @@ class MentalCalcFrame(BaseFrame):
                 self.q_pos = (self.q_pos + 1) % POSNUM
                 self.change_label()
         else: # self.q_pos == 2
-            if key_name == ['Return', 'Enter']:
+            if key_name in ['Return', 'Enter']:
                 if not var == 0:
                     self.q_cnt += 1
                     self.submit_answer() # TODO create function
