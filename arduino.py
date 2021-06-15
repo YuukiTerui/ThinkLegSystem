@@ -40,13 +40,14 @@ class Arduino:
         self.baudrate = 115200
         self.timeout = 0.5
         self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)#, dsrdtr=True)
+        self.logger.info(self.serial)
         #self.flush_buffer()
         while True:
-            msg = self.serial.readlines()
+            msg = self.serial.readline()
             self.logger.info(msg)
-            if msg == [b'arduino is avairable\n']:
+            if msg == b'arduino is avairable\n':
                 break
-        self.logger.info(self.serial)
+        
 
     @property
     def data(self):
