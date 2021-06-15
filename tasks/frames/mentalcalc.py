@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import csv
 from json import load
 from tkinter.constants import HIDDEN
 from numpy.random import randint
@@ -11,7 +12,7 @@ from  ..frames.baseframe import BaseFrame
 
 
 class MentalCalcFrame(BaseFrame):
-    def __init__(self, digit=2, master=None, path='./data/MentalCalc/', fname='mentalcalc.csv'):
+    def __init__(self, digit=2, master=None, path='./data/MentalCalc/', fname='mentalcalc.csv', q_max=5):
         super().__init__(master)
         self.logger = getLogger('gui.frame')
         self.path = path
@@ -23,6 +24,7 @@ class MentalCalcFrame(BaseFrame):
         self.records = [['num1', 'num2', 'answer', 'result', 'time']]
         self.q_digit = digit
         self.q_cnt = 0
+        self.q_max = q_max
         self.q_pos = 0
         self.q_value = tk.StringVar(value=str(self.question[0]))
 
@@ -53,8 +55,12 @@ class MentalCalcFrame(BaseFrame):
         else: # self.q_pos == 2
             if key_name == 'Return':
                 if not var == 0:
+                    self.q_cnt += 1
                     self.submit_answer() # TODO create function
                     self.question = self.create_question(self.q_digit)
+                    if self.q_cnt >= self.q_max:
+                        self.save()
+                        self.finish()
                     self.q_pos = (self.q_pos + 1) % POSNUM
                     self.change_label()
             elif key_name == 'BackSpace':
@@ -85,6 +91,12 @@ class MentalCalcFrame(BaseFrame):
         ls = [num1, num2, ans, result, t]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
+
+    def save(self):
+        with open(self.path + self.fname, 'a', newline='') as f:
+            writer = csv.writer(f, lineterminator='\n')
+            writer.writerows(self.records)
+        self.logger.info('mentalcalc records is saved.: %s', self.fname)
 
     @staticmethod
     def create_question(digit):
