@@ -21,7 +21,7 @@ class ThinkLegApp(Tasks):
         
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
-        self.states = {'wait':0, 'task':1, 'rest':2, 'vas':3, 'stroop':4}
+        self.states = {'wait':-1, 'rest':0, 'mentalcalc':1, 'vas':2, 'stroop':3, 'calc':4}
         self.server = ThinkLegServer(host='localhost', port=12345)
         self.server.start()
 
@@ -58,6 +58,26 @@ class ThinkLegApp(Tasks):
             time.sleep(2)
         self.progress_label['text'] = 'Arduino Ready.'
         self.progress_bar.destroy()
+
+    def change_frame(self, to):
+        self.logger.debug('change_frame is called.')
+        if self.frame:
+            self.logger.debug('%s is destroied.', self.frame)
+            self.arduino.thinkleg_status = self.states['wait']
+            self.frame.finish()
+        
+        if to == 'vas':
+            self.arduino.thinkleg_status = self.states['vas']
+            self.create_vasframe()
+        elif to == 'calc':
+            self.arduino.thinkleg_status = self.states['calc']
+            self.create_calcframe()
+        elif 'stroop' in to:
+            self.arduino.thinkleg_status = self.states['stroop']
+            self.create_stroopframe(int(to[-1]))
+        elif 'mentalcalc' in to:
+            self.arduino.thinkleg_status = self.states['mentalcalc']
+            self.create_mentalcalc_frame(int(to[-1]))
     
     def finish(self):
         self.arduino.save('thinkleg')
