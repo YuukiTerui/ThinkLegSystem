@@ -26,7 +26,7 @@ class ThinkLegApp(Tasks):
         self.server.start()
 
         self.frame = None
-        self.arduino = Arduino(self.datapath, 'arduino_data.csv')
+        self.arduino = Arduino(self.datapath, 'arduino_data')
         self.arduino.start()
 
         super().__init__(datapath=datapath)
