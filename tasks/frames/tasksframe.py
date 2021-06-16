@@ -65,8 +65,5 @@ class TasksFrame(BaseFrame):
         self.stroop_button.pack()
         return frame
 
-
-
-
     def change_frame(self, to):
         self.master.change_frame(to)
