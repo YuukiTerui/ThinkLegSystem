@@ -21,7 +21,7 @@ class ThinkLegApp(Tasks):
         
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
-        self.states = {'wait':-1, 'rest':0, 'mentalcalc':1, 'vas':2, 'stroop':3, 'calc':4}
+        self.status = {'wait':-1, 'rest':0, 'mentalcalc':1, 'vas':2, 'stroop':3, 'calc':4}
         self.server = ThinkLegServer(host='localhost', port=12345)
         self.server.start()
 
@@ -63,20 +63,20 @@ class ThinkLegApp(Tasks):
         self.logger.debug('change_frame is called.')
         if self.frame:
             self.logger.debug('%s is destroied.', self.frame)
-            self.arduino.thinkleg_status = self.states['wait']
+            self.arduino.thinkleg_status = self.status['wait']
             self.frame.finish()
         
         if to == 'vas':
-            self.arduino.thinkleg_status = self.states['vas']
+            self.arduino.thinkleg_status = self.status['vas']
             self.create_vasframe()
         elif to == 'calc':
-            self.arduino.thinkleg_status = self.states['calc']
+            self.arduino.thinkleg_status = self.status['calc']
             self.create_calcframe()
         elif 'stroop' in to:
-            self.arduino.thinkleg_status = self.states['stroop']
+            self.arduino.thinkleg_status = self.status['stroop']
             self.create_stroopframe(int(to[-1]))
         elif 'mentalcalc' in to:
-            self.arduino.thinkleg_status = self.states['mentalcalc']
+            self.arduino.thinkleg_status = self.status['mentalcalc']
             self.create_mentalcalc_frame(int(to[-1]))
     
     def finish(self):
