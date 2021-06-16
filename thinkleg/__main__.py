@@ -18,7 +18,7 @@ from mysocket.server import ThinkLegServer
 
 class ThinkLegApp(Tasks):
     def __init__(self, datapath):
-        super().__init__(datapath=datapath)
+        
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
         self.states = {'wait':0, 'task':1, 'rest':2, 'vas':3, 'stroop':4}
@@ -29,24 +29,35 @@ class ThinkLegApp(Tasks):
         self.arduino = Arduino(self.datapath, 'arduino_data.csv')
         self.arduino.start()
 
+        super().__init__(datapath=datapath)
         self.create_widgets()
         self.logger.debug('ThinkLegApp is initialized.')
 
     def create_widgets(self):
-        self.first_frame = MainFrame(master=self)
-        self.first_frame.grid(row=0, column=0, sticky="nsew")        
+        super().create_widgets()
+        self.progress_frame = tk.Frame(self.first_frame)
+        self.progress_label = tk.Label(self.progress_frame, text='Preparing for Arduino')
+        self.progress_label.pack()
+        self.progress_var = tk.IntVar(value=0)
+        self.progress_bar = ttk.Progressbar(self.progress_frame,
+            orient=tk.HORIZONTAL, variable=self.progress_var, maximum=60, length=200, mode='determinate'
+        )
+        self.progress_bar.pack()
+        self.progress_frame.pack()
+        if self.arduino:
+            threading.Thread(target=self.__progress, daemon=True).start()
         self.logger.debug('widgets are created.')
 
-    def change_frame(self, to):
-        self.logger.debug('change_frame is called.')
-        if self.frame:
-            self.arduino.thinkleg_status = self.states['wait']
-            self.logger.debug('%s is destroied.', self.frame)
-            self.frame.finish()
-        if to == 'vas':
-            self.create_vas()
-        elif to == 'calc':
-            self.create_calc()
+    def __progress(self):
+        st = time.time()
+        latency = 60
+        t = 0
+        while t < latency:
+            t = time.time()-st
+            self.progress_var.set(t)
+            time.sleep(2)
+        self.progress_label['text'] = 'Arduino Ready.'
+        self.progress_bar.destroy()
     
     def finish(self):
         self.arduino.save('thinkleg')
