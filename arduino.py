@@ -22,7 +22,7 @@ class Arduino:
         self.path = path
         self.fname = fname
 
-        self.thinkleg_status = 0
+        self.thinkleg_status = -1
         self.thinkleg_statuses = [0]
         
         self.columns = ['msec', 'voltage']
