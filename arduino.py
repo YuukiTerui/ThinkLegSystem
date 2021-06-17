@@ -135,7 +135,7 @@ class Arduino:
                 self.logger.info('save arduino raw data.')
             else:
                 writer.writerow([*self.columns, 'status'])
-                writer.writerows([[r, s] for r, s in zip(self.raw, self.thinkleg_statuses)])
+                writer.writerows([[r[0], r[1], s] for r, s in zip(self.raw, self.thinkleg_statuses)])
 
 class Controller:
     def __init__(self, host='localhost', port=10001) -> None:
