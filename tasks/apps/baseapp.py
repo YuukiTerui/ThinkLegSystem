@@ -21,7 +21,7 @@ class BaseApp(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
 
         self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
-        self.fullscreen_state = False
+        self.fullscreen_state = True
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
         self._init_key_binds()
