@@ -9,12 +9,11 @@ from .baseframe import BaseFrame
 
 
 class VasFrame(BaseFrame):
-    def __init__(self, master=None, path='./', fname=None, status=None):
+    def __init__(self, master=None, path='./', fname=None):
         super().__init__(master)
         self.fname = fname
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
-        self.status = status
         self.create_widgets()
 
     def create_widgets(self):

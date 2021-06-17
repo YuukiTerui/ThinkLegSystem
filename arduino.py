@@ -22,8 +22,8 @@ class Arduino:
         self.path = path
         self.fname = fname
 
-        self.thinkleg_status = -1
-        self.thinkleg_statuses = [0]
+        self.thinkleg_status = 'first'
+        self.thinkleg_statuses = ['first']
         
         self.columns = ['msec', 'voltage']
         self.raw = [[0, 0]]
@@ -48,7 +48,6 @@ class Arduino:
             if msg == b'arduino is avairable\n':
                 break
         
-
     @property
     def data(self):
         return self.raw[-1]

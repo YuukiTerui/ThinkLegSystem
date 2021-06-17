@@ -16,6 +16,8 @@ class BaseApp(tk.Tk):
         self.width = 1200
         self.height = 800
 
+        self.frame = None
+
         self.geometry(f'{self.width}x{self.height}')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -46,6 +48,11 @@ class BaseApp(tk.Tk):
     def quit_app(self, event):
         self.finish()
         self.logger.info("quit_app is called.")
+
+    def remove_frame(self):
+        if isinstance(self.frame, tk.Frame):
+            self.frame.destroy()
+            self.frame = None
 
     def finish(self):
         self.destroy()
