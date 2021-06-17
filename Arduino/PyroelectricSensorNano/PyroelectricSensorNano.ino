@@ -46,7 +46,7 @@ void loop() {
   if (tmp_time >= interval) {
     time_ = tmp_time;
     if (send_flag) {
-      send_data();
+      send_to_RPi();
     }
     time_read = millis();
   }
