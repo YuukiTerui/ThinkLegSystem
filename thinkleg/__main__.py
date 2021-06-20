@@ -33,7 +33,7 @@ class ThinkLegApp(BaseApp):
         super().__init__()
         self.title('ThinkLegTaskApp')
         self.first = FirstFrame(self)
-        self.first.grid()
+        self.first.grid(row=0, column=0)
         self.appframe = None
         #self.set_frame('first')
 
