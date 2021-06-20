@@ -12,7 +12,7 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from tasks.apps.baseapp import BaseApp
-from tasks.frames.tasksframe import TasksFrame
+from tasks.frames.tasks import TasksFrame
 from tasks.frames.vas import VasFrame
 from tasks.frames.mentalcalc import MentalCalcFrame
 from arduino import Arduino
