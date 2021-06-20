@@ -36,7 +36,8 @@ class MentalCalcFrame(BaseFrame):
         self.q_label['font'] = ('MSゴシック', 80, 'bold')
         #self.q_label.bind('<Button-1>', self.mouse_clicked)
         #self.q_label.bind('<Button-3>', self.mouse_clicked)
-        self.q_label.bind('<KeyPress>', self.key_pressed)
+        #self.q_label.bind('<KeyPress>', self.key_pressed)
+        self.q_label.bind('<KeyRelease>', self.key_pressed)
         self.q_label.focus_set()
         self.q_label.pack(expand=True, fill=tk.BOTH)
 
