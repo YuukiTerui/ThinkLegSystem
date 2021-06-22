@@ -94,9 +94,11 @@ class FirstFrame(BaseFrame):
         frame = tk.LabelFrame(self, text='Tasks', font=('System', 60))
         padx = 50
         self.vas_frame = tk.LabelFrame(frame, text='VAS', font=('System', 30))
+        self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
         self.mentalcalc_frame = tk.LabelFrame(frame, text='MentalCalc', font=('System', 30))
 
         self.vas_frame.pack(padx=padx, side=tk.LEFT)
+        self.tapping_frame.pack(padx=padx, side=tk.LEFT)
         self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
 
         btn_w, btn_h = 10, 2
