@@ -1,24 +1,16 @@
-from manager import TimeManager
 import tkinter as tk
-import time
+import csv
 from numpy.random import randint
-from json import load
-from logging import config, getLogger
-from os import path
-with open('./config/log_conf.json', 'r') as f:
-    config.dictConfig(load(f))
 
 from .baseframe import BaseFrame
-from ...manager import TimeManager
+from manager import TimeManager
 
 
 class TappingFrame(BaseFrame):
     def __init__(self, digit=2, master=None, path='./data/tapping/', fname='tapping.csv', timelimit=None):
         super().__init__(master)
-        self.logger = getLogger('gui.frame')
         self.path = path
         self.fname = fname
-        self.is_running = False
         self.cnt = 0
         self.digit = digit
         self.question = [] # [num, ans, time]
@@ -26,6 +18,7 @@ class TappingFrame(BaseFrame):
 
         self.create_widgets()
         self.time_manager = TimeManager(self, tl=timelimit)
+        self.time_manager.execute(self.exit_process, after=timelimit)
         
     def create_widgets(self):
         self.num = tk.StringVar(value=self.create_question(self.digit))
@@ -80,6 +73,19 @@ class TappingFrame(BaseFrame):
             self.num.set(str(self.question))
         else:
             self.num.set('0')
+
+    def exit_process(self):
+        self.save()
+        self.finish()
+
+    def save(self):
+        with open(self.path + self.fname, 'a', newline='') as f:
+            writer = csv.writer(f, lineterminator='\n')
+            writer.writerows(self.records)
+        self.logger.info('tapping records is saved.: %s', self.fname)
+        
+    def finish(self):
+        return super().finish()
 
     @staticmethod
     def create_question(digit):

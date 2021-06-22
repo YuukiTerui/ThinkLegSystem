@@ -51,7 +51,7 @@ class Tasks(BaseApp):
         self.logger.info('calc frame is created.')
 
     def create_tapping_frame(self, num):
-        self.frame = TappingFrame(num, self, path=self.datapath, fname='tapping.csv')
+        self.frame = TappingFrame(num, self, path=self.datapath, fname='tapping.csv', timelimit=30)
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('tapping%s, frame is created', num)
 
