@@ -1,6 +1,4 @@
 import os
-from tasks.frames.baseframe import BaseFrame
-from tasks.apps.baseapp import BaseApp
 import time
 import threading
 from datetime import datetime
@@ -11,21 +9,19 @@ from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
-from tasks.apps.baseapp import BaseApp
-from tasks.frames.tasks import TasksFrame
-from tasks.frames.vas import VasFrame
-from tasks.frames.mentalcalc import MentalCalcFrame
+from tasks.apps import BaseApp
+from tasks.frames import BaseFrame
+from tasks.frames import VasFrame
+from tasks.frames import TappingFrame
+from tasks.frames import MentalCalcFrame
 from arduino import Arduino
-from mysocket.server import ThinkLegServer
+from manager import TimeManager
 
 
 class ThinkLegApp(BaseApp):
     def __init__(self, datapath):
-        
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
-        self.server = ThinkLegServer(host='localhost', port=12345)
-        self.server.start()
 
         self.arduino = Arduino(path=self.datapath, fname='arduino')
         self.arduino.start()
@@ -34,9 +30,7 @@ class ThinkLegApp(BaseApp):
         self.title('ThinkLegTaskApp')
         self.first = FirstFrame(self)
         self.first.grid(row=0, column=0)
-        self.appframe = None
-        #self.set_frame('first')
-
+        self.time_manager = TimeManager(self)
         self.logger.debug('ThinkLegApp is initialized.')
 
     def __setattr__(self, name, value) -> None:
@@ -47,11 +41,14 @@ class ThinkLegApp(BaseApp):
     def set_frame(self, to):
         self.logger.debug('set_frame is called.')
         if to == 'vas':
-            self.arduino.thinkleg_status = 'vas'
+            self.arduino.thinkleg_status = to
             self.frame = VasFrame(self, self.datapath, 'vas')
         elif 'mentalcalc' in to:
-            self.arduino.thinkleg_status = 'mentalcalc'
+            self.arduino.thinkleg_status = to
             self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath)
+        elif 'tapping' in to:
+            self.arduino.thinkleg_status = to
+            self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=30)
         self.frame.grid(row=0, column=0, sticky='nsew')
     
     def finish(self):
@@ -65,7 +62,6 @@ class FirstFrame(BaseFrame):
         super().__init__(master=master)
         self.create_widgets()
         
-
     def create_widgets(self):
         self.grid(row=0, column=0, sticky='nsew')
         title_font = ('System', 100, 'bold', 'italic', 'underline', 'overstrike')
@@ -104,6 +100,16 @@ class FirstFrame(BaseFrame):
         btn_w, btn_h = 10, 2
         self.vas_button = tk.Button(self.vas_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('vas'))
         self.vas_button.pack()
+
+        self.radio_var_tapping = tk.IntVar(value=2)
+        self.tapping_radio1 = tk.Radiobutton(self.tapping_frame, value=2, variable=self.radio_var_tapping, text='2')
+        self.tapping_radio2 = tk.Radiobutton(self.tapping_frame, value=4, variable=self.radio_var_tapping, text='4')        
+        self.tapping_radio1.pack()
+        self.tapping_radio2.pack()
+        self.tapping_button = tk.Button(self.tapping_frame, text='start', width=btn_w, height=btn_h,
+            command=lambda:self.set_frame(f'tapping{self.radio_var_tapping.get()}')
+        )
+        self.tapping_button.pack()
 
         self.radio_var_mentalcalc = tk.IntVar(value=2)
         self.mentalcalc_radio1 = tk.Radiobutton(self.mentalcalc_frame, value=2, variable=self.radio_var_mentalcalc, text='Low')

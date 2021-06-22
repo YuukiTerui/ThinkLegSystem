@@ -46,6 +46,7 @@ class MentalCalcFrame(BaseFrame):
         self.q_label.focus_set()
     
     def key_pressed(self, event):
+        self.q_label.focus_set()
         key_name = event.keysym
         if 'KP_' in key_name:
             key_name = key_name.replace('KP_', '')

@@ -4,8 +4,7 @@ from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
-from ..apps.baseapp import BaseApp
-
+from ..apps import BaseApp
 
 class BaseFrame(tk.Frame):
     def __init__(self, master: BaseApp):

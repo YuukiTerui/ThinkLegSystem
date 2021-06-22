@@ -20,7 +20,7 @@ from mysocket.server import ThinkLegServer
 
 
 
-class Tasks(BaseApp):
+class TasksApp(BaseApp):
     def __init__(self, datapath):
         super().__init__()
         self.title('ThinkLegTaskApp')

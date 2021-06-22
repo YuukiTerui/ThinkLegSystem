@@ -13,7 +13,7 @@ class TappingFrame(BaseFrame):
         self.fname = fname
         self.cnt = 0
         self.digit = digit
-        self.question = [] # [num, ans, time]
+        self.question = [] # [num, ans, result, time]
         self.records = []
 
         self.create_widgets()
@@ -22,6 +22,7 @@ class TappingFrame(BaseFrame):
         
     def create_widgets(self):
         self.num = tk.StringVar(value=self.create_question(self.digit))
+        self.question = int(self.num.get())
         self.label_pos = 0
         self.num_label = tk.Label(self, textvariable=self.num, relief=tk.RAISED, bg=self.bg)
         self.num_label['font'] = ('MSゴシック', 80, 'bold')
@@ -64,7 +65,8 @@ class TappingFrame(BaseFrame):
     def submit_answer(self):
         ans = int(self.num.get())
         t = self.time_manager.elapsed_time
-        ls = [ans, t]
+        result = (ans == self.question)
+        ls = [self.question, ans, result, t]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
 

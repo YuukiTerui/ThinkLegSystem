@@ -27,5 +27,5 @@ class TimeManager():
         def th_func():
             event.wait(timeout=after)
             func()
-        thread  = Thread(target=th_func)
+        thread  = Thread(target=th_func, daemon=True)
         thread.start()
