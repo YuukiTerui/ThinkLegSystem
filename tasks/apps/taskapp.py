@@ -1,5 +1,4 @@
 import os
-from tasks.frames.tapping import TappingFrame
 import time
 import threading
 from datetime import datetime
@@ -11,11 +10,12 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from .baseapp import BaseApp
-from ..frames.tasks import TasksFrame
-from ..frames.vas import VasFrame
-from ..frames.calc import CalcFrame
-from ..frames.stroop import StroopFrame
-from ..frames.mentalcalc import MentalCalcFrame
+from ..frames import TasksFrame
+from ..frames import VasFrame
+from ..frames import CalcFrame
+from ..frames import StroopFrame
+from ..frames import MentalCalcFrame
+from ..frames import TappingFrame
 from mysocket.server import ThinkLegServer
 
 
