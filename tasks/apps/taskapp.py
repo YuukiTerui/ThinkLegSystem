@@ -1,4 +1,5 @@
 import os
+from tasks.frames.tapping import TappingFrame
 import time
 import threading
 from datetime import datetime
@@ -10,7 +11,7 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from .baseapp import BaseApp
-from ..frames.tasksframe import TasksFrame
+from ..frames.tasks import TasksFrame
 from ..frames.vas import VasFrame
 from ..frames.calc import CalcFrame
 from ..frames.stroop import StroopFrame
@@ -39,22 +40,27 @@ class Tasks(BaseApp):
         self.first_frame.grid(row=0, column=0, sticky="nsew")        
         self.logger.debug('widgets are created.')
 
-    def create_vasframe(self):
+    def create_vas_frame(self):
         self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
         self.logger.info('vas frame is created.')
 
-    def create_calcframe(self):
+    def create_calc_frame(self):
         self.frame = CalcFrame(self, path=self.datapath, fname='calc.csv')
         self.frame.grid(row=0, column=0, sticky="nsew")
         self.logger.info('calc frame is created.')
+
+    def create_tapping_frame(self, num):
+        self.frame = TappingFrame(num, self, path=self.datapath, fname='tapping.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('tapping%s, frame is created', num)
 
     def create_mentalcalc_frame(self, num):
         self.frame = MentalCalcFrame(num, master=self, path=self.datapath, fname=f'mentalcalc{num}.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('mentalcalc%s, frame is created.', num)
 
-    def create_stroopframe(self, task):
+    def create_stroop_frame(self, task):
         self.frame = StroopFrame(task, master=self, path=self.datapath, fname=f'stroop{task}.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('stroop%s frame is created.', task)
@@ -65,13 +71,15 @@ class Tasks(BaseApp):
             self.logger.debug('%s is destroied.', self.frame)
             self.frame.finish()
         if to == 'vas':
-            self.create_vasframe()
+            self.create_vas_frame()
         elif to == 'calc':
-            self.create_calcframe()
+            self.create_calc_frame()
         elif 'stroop' in to:
-            self.create_stroopframe(int(to[-1]))
+            self.create_stroop_frame(int(to[-1]))
         elif 'mentalcalc' in to:
             self.create_mentalcalc_frame(int(to[-1]))
+        elif 'tapping' in to:
+            self.create_tapping_frame(int(to[-1]))
     
     def finish(self):
         return super().finish()

@@ -59,7 +59,7 @@ class MentalCalcFrame(BaseFrame):
             if key_name in ['Return', 'Enter']:
                 if not var == 0:
                     self.q_cnt += 1
-                    self.submit_answer() # TODO create function
+                    self.submit_answer()
                     self.question = self.create_question(self.q_digit)
                     if self.q_cnt >= self.q_max:
                         self.save()

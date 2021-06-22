@@ -26,9 +26,11 @@ class TasksFrame(BaseFrame):
         self.calc_frame = tk.LabelFrame(frame, text='Calc', font=('System', 30))
         self.mentalcalc_frame = tk.LabelFrame(frame, text='MentalCalc', font=('System', 30))
         self.stroop_frame = tk.LabelFrame(frame, text='Stroop', font=('System', 30))
+        self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
 
         self.vas_frame.pack(padx=padx, side=tk.LEFT)
         self.calc_frame.pack(padx=padx, side=tk.LEFT)
+        self.tapping_frame.pack(padx=padx, side=tk.LEFT)
         self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
         self.stroop_frame.pack(padx=padx, side=tk.LEFT)
 
@@ -38,6 +40,16 @@ class TasksFrame(BaseFrame):
 
         self.calc_button = tk.Button(self.calc_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.change_frame('calc'))
         self.calc_button.pack()
+
+        self.radio_var_tapping = tk.IntVar(value=2)
+        self.tapping_radio1 = tk.Radiobutton(self.tapping_frame, value=2, variable=self.radio_var_tapping, text='2')
+        self.tapping_radio2 = tk.Radiobutton(self.tapping_frame, value=4, variable=self.radio_var_tapping, text='4')        
+        self.tapping_radio1.pack()
+        self.tapping_radio2.pack()
+        self.tapping_button = tk.Button(self.tapping_frame, text='start', width=btn_w, height=btn_h,
+            command=lambda:self.change_frame(f'tapping{self.radio_var_tapping.get()}')
+        )
+        self.tapping_button.pack()
 
         self.radio_var_mentalcalc = tk.IntVar(value=2)
         self.mentalcalc_radio1 = tk.Radiobutton(self.mentalcalc_frame, value=2, variable=self.radio_var_mentalcalc, text='Low')
