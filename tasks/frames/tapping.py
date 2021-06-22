@@ -1,3 +1,4 @@
+from manager import TimeManager
 import tkinter as tk
 import time
 from numpy.random import randint
@@ -8,10 +9,11 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from .baseframe import BaseFrame
+from ...manager import TimeManager
 
 
 class TappingFrame(BaseFrame):
-    def __init__(self, digit=2, master=None, path='./data/tapping/', fname='tapping.csv'):
+    def __init__(self, digit=2, master=None, path='./data/tapping/', fname='tapping.csv', timelimit=None):
         super().__init__(master)
         self.logger = getLogger('gui.frame')
         self.path = path
@@ -23,7 +25,7 @@ class TappingFrame(BaseFrame):
         self.records = []
 
         self.create_widgets()
-        self.start_time = time.time()
+        self.time_manager = TimeManager(self, tl=timelimit)
         
     def create_widgets(self):
         self.num = tk.StringVar(value=self.create_question(self.digit))
@@ -53,6 +55,7 @@ class TappingFrame(BaseFrame):
                     self.submit_answer()
                     self.label_pos = (self.label_pos + 1) % POSNUM
                     self.question = self.create_question(self.digit)
+                    self.change_label()
             elif key_name == 'BackSpace':
                 if len(var) == 1:
                     self.num.set('0')
@@ -67,14 +70,14 @@ class TappingFrame(BaseFrame):
     
     def submit_answer(self):
         ans = int(self.num.get())
-        t = time.time() - self.start_time
+        t = self.time_manager.elapsed_time
         ls = [ans, t]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
 
     def change_label(self):
         if self.label_pos == 0:
-            self.num.set(self.question[0])
+            self.num.set(str(self.question))
         else:
             self.num.set('0')
 
