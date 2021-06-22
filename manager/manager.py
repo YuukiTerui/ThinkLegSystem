@@ -1,4 +1,6 @@
+import threading
 import time
+from threading import Thread, Event
 
 
 class TimeManager():
@@ -9,7 +11,7 @@ class TimeManager():
 
     @property
     def elapsed_time(self):
-        return time.time() - self.start_time()
+        return time.time() - self.start_time
 
     @property
     def is_timeover(self):
@@ -20,4 +22,10 @@ class TimeManager():
             return False
         return True
 
-    
+    def execute(self, func, after=0):
+        event = Event()
+        def th_func():
+            event.wait(timeout=after)
+            func()
+        thread  = Thread(target=th_func)
+        thread.start()
