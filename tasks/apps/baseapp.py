@@ -53,7 +53,8 @@ class BaseApp(tk.Tk):
     def remove_frame(self):
         if isinstance(self.frame, tk.Frame):
             self.frame.destroy()
-            self.frame = None
+        self.frame = None
+            
 
     def finish(self):
         self.destroy()
