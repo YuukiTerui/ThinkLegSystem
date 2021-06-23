@@ -35,7 +35,6 @@ class VasFrame(BaseFrame):
         self.scale = tk.Scale(self.scale_frame,
             variable=self.val, orient=tk.HORIZONTAL, length=800, width=30,
             from_=0, to=100, showvalue=False,
-            command=lambda e: print(f"val:{self.val.get():4}")
         )
         self.scale.pack(side=tk.LEFT)
 
