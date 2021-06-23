@@ -1,6 +1,6 @@
 import os
 import time
-import threading
+from threading import Thread, Event
 from datetime import datetime
 import tkinter as tk
 from tkinter import ttk
@@ -14,6 +14,7 @@ from tasks.frames import BaseFrame
 from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
+from tasks.frames import RestFrame
 from arduino import Arduino
 from manager import TimeManager
 
@@ -22,6 +23,8 @@ class ThinkLegApp(BaseApp):
     def __init__(self, datapath):
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
+        self.rest_time = 10
+        self.change_event = Event()
 
         self.arduino = Arduino(path=self.datapath, fname='arduino')
         self.arduino.start()
@@ -36,6 +39,8 @@ class ThinkLegApp(BaseApp):
     def __setattr__(self, name, value) -> None:
         if name == 'frame' and value == None:
             self.arduino.thinkleg_status = 'first'
+            self.change_event.set()
+            self.change_event.clear()
         return super().__setattr__(name, value)
 
     def set_frame(self, to):
@@ -49,12 +54,24 @@ class ThinkLegApp(BaseApp):
         elif 'tapping' in to:
             self.arduino.thinkleg_status = to
             self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=30)
+        elif 'rest' in to:
+            self.arduino.thinkleg_status = to
+            self.frame = RestFrame(self, self.rest_time)
+
         self.frame.grid(row=0, column=0, sticky='nsew')
-    
+
+    def preliminary_exp(self):
+        def process():
+            ls = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
+            for l in ls:
+                self.logger.info(f'pre {l}')
+                self.set_frame(l)
+                self.change_event.wait()
+        Thread(target=process, daemon=True).start()
+        
     def finish(self):
         self.arduino.save('thinkleg')
         return super().finish()
-
 
 
 class FirstFrame(BaseFrame):
@@ -81,10 +98,16 @@ class FirstFrame(BaseFrame):
         self.progress_bar.pack()
         self.progress_frame.pack()
         if self.master.arduino:
-            threading.Thread(target=self.__progress, daemon=True).start()
+            Thread(target=self.__progress, daemon=True).start()
         
         self.finish_button = tk.Button(self, text='finish', width=20, height=5, command=lambda: self.master.finish())
         self.finish_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
+
+        self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest'))
+        self.rest_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
+
+        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp())
+        self.pre_exp_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):
         frame = tk.LabelFrame(self, text='Tasks', font=('System', 60))
