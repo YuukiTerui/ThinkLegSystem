@@ -81,7 +81,7 @@ class FirstFrame(BaseFrame):
         
     def create_widgets(self):
         self.grid(row=0, column=0, sticky='nsew')
-        title_font = ('System', 100, 'bold', 'italic', 'underline', 'overstrike')
+        title_font = ('System', 90, 'bold', 'italic', 'underline', 'overstrike')
         self.title_label = tk.Label(self, text='Think Leg System', font=title_font)
         self.title_label.pack(pady=10, expand=True, fill=tk.X)
 
@@ -110,7 +110,7 @@ class FirstFrame(BaseFrame):
         self.pre_exp_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):
-        frame = tk.LabelFrame(self, text='Tasks', font=('System', 60))
+        frame = tk.LabelFrame(self, text='Tasks', font=('System', 40))
         padx = 50
         self.vas_frame = tk.LabelFrame(frame, text='VAS', font=('System', 30))
         self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
