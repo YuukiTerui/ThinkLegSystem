@@ -43,27 +43,25 @@ class ThinkLegApp(BaseApp):
             self.change_event.clear()
         return super().__setattr__(name, value)
 
-    def set_frame(self, to):
+    def set_frame(self, to, timelimit=None):
         self.logger.debug('set_frame is called.')
+        self.arduino.thinkleg_status = to
         if to == 'vas':
-            self.arduino.thinkleg_status = to
             self.frame = VasFrame(self, self.datapath, 'vas')
         elif 'mentalcalc' in to:
-            self.arduino.thinkleg_status = to
             self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath)
         elif 'tapping' in to:
-            self.arduino.thinkleg_status = to
             self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=30)
         elif 'rest' in to:
-            self.arduino.thinkleg_status = to
             self.frame = RestFrame(self, self.rest_time)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
     def preliminary_exp(self):
         def process():
-            ls = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
-            for l in ls:
+            to = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
+            tl = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None]
+            for l in to:
                 self.logger.info(f'pre {l}')
                 self.set_frame(l)
                 self.change_event.wait()
