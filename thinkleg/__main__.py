@@ -101,13 +101,13 @@ class FirstFrame(BaseFrame):
             Thread(target=self.__progress, daemon=True).start()
         
         self.finish_button = tk.Button(self, text='finish', width=20, height=5, command=lambda: self.master.finish())
-        self.finish_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
+        self.finish_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
         self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest'))
-        self.rest_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
+        self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
         self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp())
-        self.pre_exp_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
+        self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):
         frame = tk.LabelFrame(self, text='Tasks', font=('System', 40))
