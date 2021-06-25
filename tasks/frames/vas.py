@@ -1,9 +1,7 @@
 # coding: utf-8
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import ttk 
 import csv
-from datetime import datetime
 
 from .baseframe import BaseFrame
 
