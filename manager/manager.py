@@ -22,6 +22,8 @@ class TimeManager():
         return True
 
     def execute(self, func, after=0):
+        if not isinstance(after, int):
+            raise TypeError
         event = Event()
         def th_func():
             event.wait(timeout=after)
