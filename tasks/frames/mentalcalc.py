@@ -1,20 +1,15 @@
 import tkinter as tk
 import time
 import csv
-from json import load
-from tkinter.constants import HIDDEN
 from numpy.random import randint
-from logging import config, getLogger
-with open('./config/log_conf.json', 'r') as f:
-    config.dictConfig(load(f))
 
+from manager import TimeManager
 from  ..frames.baseframe import BaseFrame
 
 
 class MentalCalcFrame(BaseFrame):
-    def __init__(self, digit=2, master=None, path='./data/MentalCalc/', fname='mentalcalc.csv', q_max=5):
+    def __init__(self, digit=2, master=None, path='./data/MentalCalc/', fname='mentalcalc.csv', q_max=None, timelimit=None):
         super().__init__(master)
-        self.logger = getLogger('gui.frame')
         self.path = path
         self.fname = fname
         self.is_running = False
@@ -28,8 +23,10 @@ class MentalCalcFrame(BaseFrame):
         self.q_pos = 0
         self.q_value = tk.StringVar(value=str(self.question[0]))
 
+
         self.create_widgets()
-        self.start_time = time.time()
+        self.time_manager = TimeManager(timelimit=timelimit)
+        self.time_manager.execute(self.exit_process, after=timelimit)
 
     def create_widgets(self):
         self.q_label = tk.Label(self, textvariable=self.q_value, relief=tk.RAISED, bg=self.bg)
@@ -62,9 +59,6 @@ class MentalCalcFrame(BaseFrame):
                     self.q_cnt += 1
                     self.submit_answer()
                     self.question = self.create_question(self.q_digit)
-                    if self.q_cnt >= self.q_max:
-                        self.save()
-                        self.finish()
                     self.q_pos = (self.q_pos + 1) % POSNUM
                     self.change_label()
             elif key_name == 'BackSpace':
@@ -91,7 +85,7 @@ class MentalCalcFrame(BaseFrame):
         num1, num2 = self.question
         ans = int(self.q_value.get())
         result = (num1 + num2 == ans)
-        t = time.time() - self.start_time
+        t = self.time_manager.elapsed_time
         ls = [num1, num2, ans, result, t]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
@@ -101,6 +95,10 @@ class MentalCalcFrame(BaseFrame):
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(self.records)
         self.logger.info('mentalcalc records is saved.: %s', self.fname)
+    
+    def exit_process(self):
+        self.save()
+        self.finish()
 
     @staticmethod
     def create_question(digit):
