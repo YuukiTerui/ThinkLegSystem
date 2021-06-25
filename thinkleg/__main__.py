@@ -23,7 +23,6 @@ class ThinkLegApp(BaseApp):
     def __init__(self, datapath):
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
-        self.rest_time = 10
         self.change_event = Event()
 
         self.arduino = Arduino(path=self.datapath, fname='arduino')
@@ -47,23 +46,24 @@ class ThinkLegApp(BaseApp):
         self.logger.debug('set_frame is called.')
         self.arduino.thinkleg_status = to
         if to == 'vas':
-            self.frame = VasFrame(self, self.datapath, 'vas')
+            self.frame = VasFrame(self, self.datapath, 'vas.csv')
         elif 'mentalcalc' in to:
-            self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath)
+            self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath, timelimit=timelimit)
         elif 'tapping' in to:
-            self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=30)
+            self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=timelimit)
         elif 'rest' in to:
-            self.frame = RestFrame(self, self.rest_time)
+            self.frame = RestFrame(self, timelimit)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
     def preliminary_exp(self):
         def process():
-            to = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
-            tl = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None]
-            for l in to:
-                self.logger.info(f'pre {l}')
-                self.set_frame(l)
+            frames = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
+            #timelimits = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None]
+            timelimits = [None, 30, 30, None, 180, None, 180, None, 180, None, 30, None]
+            for to, tl in zip(frames, timelimits):
+                self.logger.info(f'pre {to}')
+                self.set_frame(to, tl)
                 self.change_event.wait()
         Thread(target=process, daemon=True).start()
         
