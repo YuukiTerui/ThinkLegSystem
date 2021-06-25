@@ -23,10 +23,10 @@ class MentalCalcFrame(BaseFrame):
         self.q_pos = 0
         self.q_value = tk.StringVar(value=str(self.question[0]))
 
-
         self.create_widgets()
-        self.time_manager = TimeManager(timelimit=timelimit)
-        self.time_manager.execute(self.exit_process, after=timelimit)
+        self.time_manager = TimeManager(self, tl=timelimit)
+        if timelimit:
+            self.time_manager.execute(self.exit_process, after=timelimit)
 
     def create_widgets(self):
         self.q_label = tk.Label(self, textvariable=self.q_value, relief=tk.RAISED, bg=self.bg)
