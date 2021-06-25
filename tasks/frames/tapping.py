@@ -18,7 +18,8 @@ class TappingFrame(BaseFrame):
 
         self.create_widgets()
         self.time_manager = TimeManager(self, tl=timelimit)
-        self.time_manager.execute(self.exit_process, after=timelimit)
+        if timelimit:
+            self.time_manager.execute(self.exit_process, after=timelimit)
         
     def create_widgets(self):
         self.num = tk.StringVar(value=self.create_question(self.digit))
