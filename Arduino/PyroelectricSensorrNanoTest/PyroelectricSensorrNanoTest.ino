@@ -11,11 +11,13 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
   Serial.begin(115200);
+  //analogReference(EXTERNAL);
   Serial.print("arduino is avairable\n");
 }
 
 String create_send_data() {
-  String s = String(millis() - start_time);
+  String s = "";
+  s += String(millis() - start_time);
   s += ",";
   s += String(analogRead(A0));
   s += ",";
