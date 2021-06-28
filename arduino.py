@@ -94,7 +94,7 @@ class Arduino:
         try:
             while self.is_running:
                 data = self.__reserve()
-                if len(data) == 2:
+                if len(data) == 7:
                     self.datalogger.debug('%s', data)
                     self.raw.append(data)
                     self.thinkleg_statuses.append(self.thinkleg_status)
@@ -105,7 +105,7 @@ class Arduino:
         self.logger.info('start arduino')
         self.serial.write(b'1')
         self.is_running = True
-        t, v = self.__reserve()
+        t, *v = self.__reserve()
         self.start_time = int(t)
         self.thread = threading.Thread(target=self.run, daemon=True)
         self.thread.start()
@@ -134,7 +134,7 @@ class Arduino:
                 self.logger.info('save arduino raw data.')
             else:
                 writer.writerow([*self.columns, 'status'])
-                writer.writerows([[r[0], r[1], s] for r, s in zip(self.raw, self.thinkleg_statuses)])
+                writer.writerows([[*r, s] for r, s in zip(self.raw, self.thinkleg_statuses)])
 
 class Controller:
     def __init__(self, host='localhost', port=10001) -> None:
