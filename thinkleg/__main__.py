@@ -4,10 +4,10 @@ from threading import Thread, Event
 from datetime import datetime
 import tkinter as tk
 from tkinter import ttk
-from json import load
-from logging import config, getLogger
-with open('./config/log_conf.json', 'r') as f:
-    config.dictConfig(load(f))
+#from json import load
+#from logging import config, getLogger
+#with open('./config/log_conf.json', 'r') as f:
+#    config.dictConfig(load(f))
 
 from tasks.apps import BaseApp
 from tasks.frames import BaseFrame
