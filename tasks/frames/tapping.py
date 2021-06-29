@@ -76,8 +76,10 @@ class TappingFrame(BaseFrame):
 
     def change_label(self):
         if self.label_pos == 0:
+            self.num_label['fg'] = 'black'
             self.num.set(str(self.question))
         else:
+            self.num_label['fg'] = 'gray20'
             self.num.set('0')
 
     def exit_process(self):

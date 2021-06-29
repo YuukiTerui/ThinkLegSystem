@@ -29,6 +29,9 @@ class MentalCalcFrame(BaseFrame):
             self.time_manager.execute(self.exit_process, after=timelimit)
 
     def create_widgets(self):
+        self.title_label = tk.Label(self, text='暗算課題', font=('MS ゴシック', 20, 'bold'))
+        self.title_label.pack()
+
         self.q_label = tk.Label(self, textvariable=self.q_value, relief=tk.RAISED, bg=self.bg)
         self.q_label['font'] = ('MSゴシック', 80, 'bold')
         #self.q_label.bind('<Button-1>', self.mouse_clicked)
@@ -75,11 +78,13 @@ class MentalCalcFrame(BaseFrame):
     
     def change_label(self):
         if self.q_pos == 0:
+            self.q_label['fg'] = 'black'
             self.q_value.set(self.question[0])
         elif self.q_pos == 1:
             self.q_value.set(f'+{self.question[1]}')
         else:
             self.q_value.set('0')
+            self.q_label['fg'] = 'gray20'
     
     def submit_answer(self):
         num1, num2 = self.question
