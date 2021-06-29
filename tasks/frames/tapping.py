@@ -22,6 +22,9 @@ class TappingFrame(BaseFrame):
             self.time_manager.execute(self.exit_process, after=timelimit)
         
     def create_widgets(self):
+        self.title_label = tk.Label(self, text='typing', font=('MS ゴシック', 20, 'bold'))
+        self.title_label.pack()
+
         self.num = tk.StringVar(value=self.create_question(self.digit))
         self.question = int(self.num.get())
         self.label_pos = 0
