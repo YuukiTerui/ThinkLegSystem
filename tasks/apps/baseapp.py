@@ -31,7 +31,7 @@ class BaseApp(tk.Tk):
 
     def _init_key_binds(self):
         self.bind('<F11>', self.toggle_fullscreen)
-        self.bind('<F12>', self.quit_app)
+        #self.bind('<F12>', self.quit_app)
         self.bind('<Tab>', (lambda: 'pass')())
         self.bind('<Escape>', self.quit_fullscreen)
         self.logger.debug("key binds are initialized.")
