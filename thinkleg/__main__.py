@@ -128,7 +128,7 @@ class FirstFrame(BaseFrame):
         self.tapping_radio1.pack()
         self.tapping_radio2.pack()
         self.tapping_button = tk.Button(self.tapping_frame, text='start', width=btn_w, height=btn_h,
-            command=lambda:self.set_frame(f'tapping{self.radio_var_tapping.get()}')
+            command=lambda:self.set_frame(f'tapping{self.radio_var_tapping.get()}', 30)
         )
         self.tapping_button.pack()
 
@@ -138,7 +138,7 @@ class FirstFrame(BaseFrame):
         self.mentalcalc_radio1.pack()
         self.mentalcalc_radio2.pack()
         self.mentalcalc_button = tk.Button(self.mentalcalc_frame, text='start', width=btn_w, height=btn_h,
-            command=lambda:self.set_frame(f'mentalcalc{self.radio_var_mentalcalc.get()}')
+            command=lambda:self.set_frame(f'mentalcalc{self.radio_var_mentalcalc.get()}', 30)
         )
         self.mentalcalc_button.pack()
         return frame
@@ -154,8 +154,8 @@ class FirstFrame(BaseFrame):
         self.progress_label['text'] = 'Arduino Ready.'
         self.progress_bar.destroy()
 
-    def set_frame(self, to):
-        self.master.set_frame(to)
+    def set_frame(self, to, timelimit=None):
+        self.master.set_frame(to, timelimit)
 
 
 def main():
