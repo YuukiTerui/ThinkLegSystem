@@ -6,3 +6,4 @@ from .stroop import StroopFrame
 from .rest import RestFrame
 from .calc import CalcFrame
 from .tasks import TasksFrame
+from .nasa_tlx import NasaTLX

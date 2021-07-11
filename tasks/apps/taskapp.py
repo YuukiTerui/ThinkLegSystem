@@ -16,6 +16,7 @@ from ..frames import CalcFrame
 from ..frames import StroopFrame
 from ..frames import MentalCalcFrame
 from ..frames import TappingFrame
+from ..frames import NasaTLX
 from mysocket.server import ThinkLegServer
 
 
@@ -64,6 +65,11 @@ class TasksApp(BaseApp):
         self.frame = StroopFrame(task, master=self, path=self.datapath, fname=f'stroop{task}.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('stroop%s frame is created.', task)
+        
+    def create_nasa_tlx_frame(self, ):
+        self.frame = NasaTLX(self, 'nasa_tlx')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('nasa_tlx is created')
 
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
@@ -80,7 +86,9 @@ class TasksApp(BaseApp):
             self.create_mentalcalc_frame(int(to[-1]))
         elif 'tapping' in to:
             self.create_tapping_frame(int(to[-1]))
-    
+        elif 'nasa_tlx' in to:
+            self.create_nasa_tlx_frame()
+            
     def finish(self):
         return super().finish()
 

@@ -16,6 +16,10 @@ class TasksFrame(BaseFrame):
         self.task_frame = self.create_taskframe()
         self.task_frame.pack(pady=10)
         
+        self.nasa = tk.Button(self, text='nasa', 
+                              command=lambda:self.change_frame(f'nasa_tlx'))
+        self.nasa.pack(pady=10)
+        
         self.finish_button = tk.Button(self, text='finish', width=20, height=5, command=lambda: self.master.finish())
         self.finish_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
     
