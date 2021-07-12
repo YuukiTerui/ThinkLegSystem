@@ -94,7 +94,7 @@ class Arduino:
         try:
             while self.is_running:
                 data = self.__reserve()
-                if len(data) == 7:
+                if len(data) == 2:
                     self.datalogger.debug('%s', data)
                     self.raw.append(data)
                     self.thinkleg_statuses.append(self.thinkleg_status)
