@@ -61,7 +61,7 @@ class ThinkLegApp(BaseApp):
 
     def preliminary_exp(self):
         def process():
-            frames = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas' 'nasa_tlx']
+            frames = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas', 'nasa_tlx']
             #timelimits = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None, None]
             timelimits = [None, 10, 10, None, 20, None, 20, None, 20, None, 10, None, None]
             for to, tl in zip(frames, timelimits):
