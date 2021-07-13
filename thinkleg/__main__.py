@@ -15,6 +15,7 @@ from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
 from tasks.frames import RestFrame
+from tasks.frames import NasaTLX
 from arduino import Arduino
 from manager import TimeManager
 
@@ -53,14 +54,16 @@ class ThinkLegApp(BaseApp):
             self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=timelimit)
         elif 'rest' in to:
             self.frame = RestFrame(self, timelimit)
+        elif 'nasa_tlx' in to:
+            self.frame = NasaTLX(self, path=self.datapath, fname='nasa_tlx.csv')
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
     def preliminary_exp(self):
         def process():
-            frames = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas']
-            #timelimits = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None]
-            timelimits = [None, 30, 30, None, 180, None, 180, None, 180, None, 30, None]
+            frames = ['vas', 'tapping2', 'rest', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'mentalcalc2', 'vas', 'tapping2', 'vas' 'nasa_tlx']
+            #timelimits = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None, None]
+            timelimits = [None, 10, 10, None, 20, None, 20, None, 20, None, 10, None, None]
             for to, tl in zip(frames, timelimits):
                 self.logger.info(f'pre {to}')
                 self.set_frame(to, tl)

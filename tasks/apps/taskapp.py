@@ -67,7 +67,7 @@ class TasksApp(BaseApp):
         self.logger.info('stroop%s frame is created.', task)
         
     def create_nasa_tlx_frame(self, ):
-        self.frame = NasaTLX(self, 'nasa_tlx')
+        self.frame = NasaTLX(self, path=self.datapath, fname='nasa_tlx.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('nasa_tlx is created')
 
