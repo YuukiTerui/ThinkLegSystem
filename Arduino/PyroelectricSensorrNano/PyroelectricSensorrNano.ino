@@ -1,39 +1,56 @@
-
-#define INPUT_PIN A0
 #define LED_PIN 13
 unsigned long time_ = 0;
 unsigned long start_time = 0;
-int data = 0;
-bool send_flag = false;
+unsigned long read_time = 0;
+int interval = 20;
+int v = 0;
+int data = 512;
+boolean send_flag = false;
 
+void(* resetFunc) (void) = 0;
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
   Serial.begin(115200);
-  //while(Serial.available()) Serial.read();
   Serial.print("arduino is avairable\n");
 }
 
-void send_data() {
-  time_ = millis() - start_time;
-  data = analogRead(INPUT_PIN);
-  String s = String(time_);
+void read_v() {
+  v = analogRead(A0);
+}
+
+int LPF(int y0, int raw) {
+  float alpha = 0.7;
+  float y;
+  y = alpha * y0+ (1-alpha) * raw;
+  return int(y);
+}
+
+void send_to_RPi(unsigned long t) {
+  data = LPF(data, v);
+  String s = String(t);
+  s += ",";
+  s += String(raw);
   s += ",";
   s += String(data);
   s += '\n';
   Serial.print(s);
 }
 
-void(* resetFunc) (void) = 0;
-
 void loop() {
   serialEvent();
-  if (send_flag) {
-    send_data();
+  read_v();
+  int tmp_time = millis()-time_read;
+  if (tmp_time >= interval) {
+    time_ = tmp_time;
+    if (send_flag) {
+      send_to_RPi(time_);
+    }
+    time_read = millis();
   }
-  delay(20);
 }
+
 void serialEvent() {
   if(Serial.available() > 0) { // 内部でloop毎にSerial.available()>0の時呼ばれる関数なはずだから要らないのかもしれない．
     char c = Serial.read();
