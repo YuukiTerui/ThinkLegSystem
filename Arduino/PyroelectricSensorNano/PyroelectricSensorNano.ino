@@ -2,9 +2,9 @@
 unsigned long time_ = 0;
 unsigned long start_time = 0;
 unsigned long read_time = 0;
-int interval = 20;
+int interval = 10;
 int v = 0;
-int data = 512;
+int data = 1024 / 4; // TODO あとでセンサーの出力平均値に変更
 boolean send_flag = false;
 
 void(* resetFunc) (void) = 0;
