@@ -16,11 +16,13 @@ class BaseApp(tk.Tk):
         self.width = 1200
         self.height = 800
 
+        self.frame = None
+
         self.geometry(f'{self.width}x{self.height}')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        self.fullscreen_attr = '-fullscreen' if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
+        self.fullscreen_attr = '-fullscreen'# if os.name == 'nt' else '-zoomed'    # nt -> windows, posix -> mac or linux
         self.fullscreen_state = True
         self.attributes(self.fullscreen_attr, self.fullscreen_state)
 
@@ -29,7 +31,8 @@ class BaseApp(tk.Tk):
 
     def _init_key_binds(self):
         self.bind('<F11>', self.toggle_fullscreen)
-        self.bind('<F12>', self.quit_app)
+        #self.bind('<F12>', self.quit_app)
+        self.bind('<Tab>', (lambda: 'pass')())
         self.bind('<Escape>', self.quit_fullscreen)
         self.logger.debug("key binds are initialized.")
 
@@ -46,6 +49,12 @@ class BaseApp(tk.Tk):
     def quit_app(self, event):
         self.finish()
         self.logger.info("quit_app is called.")
+
+    def remove_frame(self):
+        if isinstance(self.frame, tk.Frame):
+            self.frame.destroy()
+        self.frame = None
+            
 
     def finish(self):
         self.destroy()

@@ -22,8 +22,8 @@ class Arduino:
         self.path = path
         self.fname = fname
 
-        self.thinkleg_status = 0
-        self.thinkleg_statuses = [0]
+        self.thinkleg_status = 'first'
+        self.thinkleg_statuses = ['first']
         
         self.columns = ['msec', 'voltage']
         self.raw = [[0, 0]]
@@ -48,7 +48,6 @@ class Arduino:
             if msg == b'arduino is avairable\n':
                 break
         
-
     @property
     def data(self):
         return self.raw[-1]
@@ -95,10 +94,9 @@ class Arduino:
         try:
             while self.is_running:
                 data = self.__reserve()
-                if len(data) == 2:
-                    self.datalogger.debug('%s', data)
-                    self.raw.append(data)
-                    self.thinkleg_statuses.append(self.thinkleg_status)
+                self.datalogger.debug('%s', data)
+                self.raw.append(data)
+                self.thinkleg_statuses.append(self.thinkleg_status)
         except:
             pass
 
@@ -106,7 +104,7 @@ class Arduino:
         self.logger.info('start arduino')
         self.serial.write(b'1')
         self.is_running = True
-        t, v = self.__reserve()
+        t, *v = self.__reserve()
         self.start_time = int(t)
         self.thread = threading.Thread(target=self.run, daemon=True)
         self.thread.start()
@@ -135,7 +133,7 @@ class Arduino:
                 self.logger.info('save arduino raw data.')
             else:
                 writer.writerow([*self.columns, 'status'])
-                writer.writerows([[r, s] for r, s in zip(self.raw, self.thinkleg_statuses)])
+                writer.writerows([[*r, s] for r, s in zip(self.raw, self.thinkleg_statuses)])
 
 class Controller:
     def __init__(self, host='localhost', port=10001) -> None:

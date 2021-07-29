@@ -7,6 +7,8 @@ int v = 0;
 int data = 512;
 boolean send_flag = false;
 
+void(* resetFunc) (void) = 0;
+
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
@@ -14,7 +16,6 @@ void setup() {
   Serial.print("arduino is avairable\n");
 }
 
-void(* resetFunc) (void) = 0;
 
 void read_v() {
   v = analogRead(A0);
@@ -27,10 +28,13 @@ int LPF(int y0, int raw) {
   return int(y);
 }
 
-void send_to_RPi() {
-  time_ = millis() - start_time;
+
+void send_to_RPi(unsigned long t) {
   data = LPF(data, v);
-  String s = String(time_);
+  String s = String(t);
+  s += ",";
+  s += String(raw);
+
   s += ",";
   s += String(raw);
   s += ",";
@@ -46,7 +50,7 @@ void loop() {
   if (tmp_time >= interval) {
     time_ = tmp_time;
     if (send_flag) {
-      send_to_RPi();
+      send_to_RPi(time_);
     }
     time_read = millis();
   }

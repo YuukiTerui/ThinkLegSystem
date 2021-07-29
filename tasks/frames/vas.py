@@ -1,21 +1,19 @@
 # coding: utf-8
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import ttk 
 import csv
-from datetime import datetime
 
 from .baseframe import BaseFrame
 
 
 class VasFrame(BaseFrame):
-    def __init__(self, master=None, path='./', fname=None, status=None):
+    def __init__(self, master=None, path='./', fname='vas.csv'):
         super().__init__(master)
         self.fname = fname
         self.fpath = path
         self.val = tk.IntVar(self.master, 50)
-        self.status = status
         self.create_widgets()
+        
 
     def create_widgets(self):
         font = [("MSゴシック", "15", "bold"), ("MSゴシック", "10", "bold"), ("MSゴシック", "5", "bold")]
@@ -35,7 +33,6 @@ class VasFrame(BaseFrame):
         self.scale = tk.Scale(self.scale_frame,
             variable=self.val, orient=tk.HORIZONTAL, length=800, width=30,
             from_=0, to=100, showvalue=False,
-            command=lambda e: print(f"val:{self.val.get():4}")
         )
         self.scale.pack(side=tk.LEFT)
 
@@ -60,10 +57,8 @@ class VasFrame(BaseFrame):
             self.finish()
 
     def save(self):
-        print(f'save value: {self.val.get()}')
-        if not self.fname:
-            self.fname = f'{datetime.now().isoformat()}.csv'
-        with open(f'{self.fpath}{self.fname}', 'a', newline='\n') as f:
+        self.logger.info('save value: %s', self.val.get())
+        with open(f'{self.fpath}{self.fname}', 'a', newline='') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
 

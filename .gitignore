@@ -1,8 +1,6 @@
-# my environment
-/raw/
+# my environmentS
 /.idea/
-/data/raw/
-/data/
+#/data/
 /notebook/data/
 
 
