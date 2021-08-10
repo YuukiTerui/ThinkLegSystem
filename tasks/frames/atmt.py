@@ -11,6 +11,8 @@ class ATMTFrame(BaseFrame):
         self.path = path
         self.fname = fname
         self.is_running = False
+        self.width = master['width']
+        self.height = master['height']
 
         self.startnum = startnum
         self.endnum = endnum
@@ -22,17 +24,19 @@ class ATMTFrame(BaseFrame):
         self.currentnum_label = Label(self, textvariable=self.currentnum, font=('', 30))
         self.currentnum_label.pack()
 
-        self.number_markers = self.NumberMarker(self.startnum, self.endnum)
+        self.number_markers = self.NumberMarker(self, self.startnum, self.endnum)
         self.number_markers.pack(padx=50, pady=50)
 
         return super().create_widgets()
 
     class NumberMarker(Canvas):
-        def __init__(self, master, startnum):
-            super().__init__(master)
+        def __init__(self, master, startnum, endnum):
+            super().__init__(master=master,
+            width=1200,
+            height=800
+            )
             self.startnum = startnum
-            self.width = master.width
-            self.height  = master.height
+            self.endnum = endnum
             self.border = 0
             self.borderwidth = 0
             self.oval_diameter = 40
@@ -43,11 +47,11 @@ class ATMTFrame(BaseFrame):
             points = []
             for i in range(5):
                 for j in range(5):
-                    x = randint(i*self.widht/5, (i+1)*self.width/5)
+                    x = randint(i*self.width/5, (i+1)*self.width/5)
                     y = randint(j*self.height/5, (j+1)*self.height/5)
                     points.append((x, y))
             nls = sample(list(range(n, n+25)), 25)
-            for x, y, n in zip(points, nls):
+            for (x, y), n in zip(points, nls):
                 oval = self.create_oval((x, y, x+self.oval_diameter, y+self.oval_diameter),
                     outline='gray', fill='gray', width=3, tags=n)
                 self.tag_bind(oval, '<Enter>', self.__enter(oval))
@@ -80,7 +84,7 @@ class ATMTFrame(BaseFrame):
 
         def update(self):
             n = self.master.currentnum.get()
-            if n == self.master.endnum:
+            if n == self.endnum:
                 pass
                 # TODO finish()
             else:
