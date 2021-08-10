@@ -31,12 +31,14 @@ class TasksFrame(BaseFrame):
         self.mentalcalc_frame = tk.LabelFrame(frame, text='MentalCalc', font=('System', 30))
         self.stroop_frame = tk.LabelFrame(frame, text='Stroop', font=('System', 30))
         self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
+        self.atmt_frame = tk.LabelFrame(frame, text='ATMT', font=('System', 30))
 
         self.vas_frame.pack(padx=padx, side=tk.LEFT)
         self.calc_frame.pack(padx=padx, side=tk.LEFT)
         self.tapping_frame.pack(padx=padx, side=tk.LEFT)
         self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
         self.stroop_frame.pack(padx=padx, side=tk.LEFT)
+        self.atmt_frame.pack(padx=padx, side=tk.LEFT)
 
         btn_w, btn_h = 10, 2
         self.vas_button = tk.Button(self.vas_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.change_frame('vas'))
@@ -79,6 +81,11 @@ class TasksFrame(BaseFrame):
             command=lambda: self.change_frame(f'stroop{self.radio_var_stroop.get()}')
         )
         self.stroop_button.pack()
+
+        self.atmt_button = tk.Button(self.atmt_frame, text='start', width=btn_w, height=btn_h,
+            command=lambda: self.change_frame(f'atmt'))
+        self.atmt_button.pack()
+        
         return frame
 
     def change_frame(self, to):

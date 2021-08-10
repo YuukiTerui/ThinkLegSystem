@@ -1,4 +1,5 @@
 import os
+from tasks.frames.atmt import ATMTFrame
 import time
 import threading
 from datetime import datetime
@@ -71,6 +72,11 @@ class TasksApp(BaseApp):
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('nasa_tlx is created')
 
+    def create_atmt_frame(self):
+        self.frame = ATMTFrame(self, path=self.datapath, fname='atmt.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('atmt is created')
+
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
         if self.frame:
@@ -88,6 +94,8 @@ class TasksApp(BaseApp):
             self.create_tapping_frame(int(to[-1]))
         elif 'nasa_tlx' in to:
             self.create_nasa_tlx_frame()
+        elif 'atmt' in to:
+            self.create_atmt_frame()
             
     def finish(self):
         return super().finish()
