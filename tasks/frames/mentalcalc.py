@@ -16,7 +16,7 @@ class MentalCalcFrame(BaseFrame):
         
         self.question = self.create_question(digit) # [num1, num2]
         self.questions = [['num1', 'num2']]
-        self.records = [['num1', 'num2', 'answer', 'result', 'time']]
+        self.records = [['num1', 'num2', 'answer', 'result', 'elapsed_time', 'time']]
         self.q_digit = digit
         self.q_cnt = 0
         self.q_max = q_max
@@ -90,8 +90,9 @@ class MentalCalcFrame(BaseFrame):
         num1, num2 = self.question
         ans = int(self.q_value.get())
         result = (num1 + num2 == ans)
-        t = self.time_manager.elapsed_time
-        ls = [num1, num2, ans, result, t]
+        et = self.time_manager.elapsed_time
+        dt = self.time_manager.datetime
+        ls = [num1, num2, ans, result, et, dt]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
 
