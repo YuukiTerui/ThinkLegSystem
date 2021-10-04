@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from threading import Thread, Event
 
 
@@ -11,6 +12,10 @@ class TimeManager():
     @property
     def elapsed_time(self):
         return time.time() - self.start_time
+
+    @property
+    def datetime(self):
+        return datetime.now()
 
     @property
     def is_timeover(self):
