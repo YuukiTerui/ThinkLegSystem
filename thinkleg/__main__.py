@@ -75,7 +75,7 @@ class ThinkLegApp(BaseApp):
 
     def preliminary_exp2(self):
         def process():
-            frames = 'vas atmt rest vas mentalcalc4 atmt vas'.split()
+            frames = 'atmt rest vas mentalcalc4 atmt vas'.split()
             times = [None, 5, None, 15, None, None]
             for to, tl in zip(frames, times):
                 self.logger.info(f'pre {to}')

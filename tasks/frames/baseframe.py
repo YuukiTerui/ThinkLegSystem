@@ -19,4 +19,4 @@ class BaseFrame(tk.Frame):
         self.grid(row=0, column=0, sticky="nsew")
     
     def finish(self):
-        pass
+        self.master.remove_frame()
