@@ -10,7 +10,7 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from tasks.apps import BaseApp
-from tasks.frames import BaseFrame, vas
+from tasks.frames import BaseFrame
 from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
