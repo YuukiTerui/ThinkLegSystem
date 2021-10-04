@@ -16,6 +16,7 @@ from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
 from tasks.frames import RestFrame
 from tasks.frames import NasaTLX
+from tasks.frames import ATMTFrame
 from arduino import Arduino
 from manager import TimeManager
 
@@ -56,6 +57,8 @@ class ThinkLegApp(BaseApp):
             self.frame = RestFrame(self, timelimit)
         elif 'nasa_tlx' in to:
             self.frame = NasaTLX(self, path=self.datapath, fname='nasa_tlx.csv')
+        elif 'atmt' in to:
+            self.frame = ATMTFrame(self, path=self.datapath, fname='atmt.csv')
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -65,6 +68,16 @@ class ThinkLegApp(BaseApp):
             #timelimits = [None, 300, 300, None, 1800, None, 1800, None, 1800, None, 300, None, None]
             timelimits = [None, 10, 10, None, 20, None, 20, None, 20, None, 10, None, None]
             for to, tl in zip(frames, timelimits):
+                self.logger.info(f'pre {to}')
+                self.set_frame(to, tl)
+                self.change_event.wait()
+        Thread(target=process, daemon=True).start()
+
+    def preliminary_exp2(self):
+        def process():
+            frames = 'vas atmt rest vas mentalcalc4 atmt vas'.split()
+            times = [None, 5, None, 15, None, None]
+            for to, tl in zip(frames, times):
                 self.logger.info(f'pre {to}')
                 self.set_frame(to, tl)
                 self.change_event.wait()
@@ -107,7 +120,7 @@ class FirstFrame(BaseFrame):
         self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest'))
         self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
-        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp())
+        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp2())
         self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):

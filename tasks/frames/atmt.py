@@ -7,7 +7,7 @@ from tkinter import Canvas, IntVar, Label
 from tasks.frames.baseframe import BaseFrame
 
 class ATMTFrame(BaseFrame):
-    def __init__(self, master, path='./data/ATMT/', fname='atmt.csv', startnum=1, endnum=25):
+    def __init__(self, master, path='./data/ATMT/', fname='atmt.csv', startnum=1, endnum=10):
         super().__init__(master)
         self.path = path
         self.fname = fname
@@ -28,88 +28,107 @@ class ATMTFrame(BaseFrame):
         self.screen_label.pack(expand=True, fill=tk.BOTH)
 
         return super().create_widgets()
-    
+
     def __start(self, event):
         self.screen_label.destroy()
-        self.currentnum_label = Label(self, textvariable=self.currentnum, font=('', 30))
-        self.number_markers = self.NumberMarker(self, self.startnum, self.endnum)
-        self.currentnum_label.pack()
-        self.number_markers.pack(padx=50, pady=50)
-        
+        frame = TaskFrame(self, startnum=self.startnum, endnum=self.endnum)
+        frame.pack()
+
+    def to_csv(self, path=None, fname=None, n=-1):
+        if self.records is None:
+            return
+        if path is None:
+            path = self.path
+        if fname is None:
+            fname = self.fname
+
+        with open(path+fname, 'a', newline='\n') as f:
+            writer = csv.writer(f)
+            writer.writerows(self.records[n])
+      
+
+
+class TaskFrame(BaseFrame):
+    def __init__(self, master, **args) -> None:
+        super().__init__(master=master)
+        self.startnum = args['startnum']
+        self.endnum = args['endnum']
+        self.record = [] # [datetime, num, correction]
+        self.currentnum = self.startnum
+        self.create_widgets()
+        self.draw2()
+        self.starttime = datetime.now()
+
+    def create_widgets(self):
+        self.current_num_label = Label(self, text=self.currentnum, font=('', 30))
+        self.current_num_label.pack()
+
+        self.canvas_w = 800
+        self.canvas_h = 600
+        self.canvas_items = [] # idが入る [(oval_id, text_id), ...]
+        self.canvas = Canvas(self, bg='light gray', width=self.canvas_w, height=self.canvas_h)
+        self.canvas.pack()
+
+    def draw2(self):
+        cn = self.currentnum
+        nums = sample(list(range(cn, cn+25)), 25)
+        points = sample(list(range(0, 48)), 25)
+        oval_size = 40
+        for n, p in zip(nums, points):
+            x0 = (p - (p // 8 * 8)) * 100
+            y0 = (p // 8) * 100
+            x0 = randint(x0, x0+100-oval_size)
+            y0 = randint(y0, y0+100-oval_size)
+            oval = self.canvas.create_oval(x0, y0, x0+oval_size, y0+oval_size, fill='gray', activefill='light gray', tags=n)
+            oval_text = self.canvas.create_text(x0+oval_size//2, y0+oval_size//2, text=n, font=('', 14), fill='black', tags=n)
+            self.canvas.tag_bind(oval_text, '<Enter>', self.__enter(oval))
+            self.canvas.tag_bind(oval_text, '<Leave>', self.__leave(oval))
+            self.canvas.tag_bind(oval_text, '<Button-1>', self.__clicked)
+            self.canvas.tag_bind(oval, '<Button-1>', self.__clicked)
+
+    def __enter(self, id):
+        def inner(event):
+            self.canvas.itemconfig(id, fill='light gray')
+        return inner
+
+    def __leave(self, id):
+        def inner(event):
+            self.canvas.itemconfig(id, fill='gray')
+        return inner
+
+    def __clicked(self, event):
+        x, y = self.canvas.canvasx(event.x), self.canvas.canvasy(event.y)
+        tags = [self.canvas.itemcget(obj, 'tags') for obj in self.canvas.find_overlapping(x, y, x, y)]
+
+        t = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+        correction = self.correct(tags)
+        self.record.append([t, self.currentnum, correction])
+
+        self.update()
+
+    def correct(self, tags):
+        if set([f'{self.currentnum}', f'{self.currentnum} current']) & set(tags):
+            return True
+        return False
+
+    def clean_canvas(self):
+        self.canvas.addtag_all('delete')
+        self.canvas.delete('delete')
+
+    def update(self):
+        if self.currentnum < self.endnum:
+            self.clean_canvas()
+            self.currentnum += 1
+            self.current_num_label.config(text=self.currentnum)
+            self.draw2()
+        else:
+            print(*self.record, sep='\n')
+            self.save()
+            self.finish()
+
     def save(self):
-        with open(self.path + self.fname, 'a', newline='') as f:
-            writer = csv.writer(f, lineterminator='\n')
-            writer.writerows(self.records)
-        
+        self.master.records.append(self.record)
+        self.master.to_csv()
+
     def finish(self):
-        self.destroy()
-
-    class NumberMarker(Canvas):
-        def __init__(self, master, startnum, endnum):
-            self.width = 800
-            self.height = 600
-            super().__init__(master=master,
-            width=self.width,
-            height=self.height
-            )
-            self.startnum = startnum
-            self.endnum = endnum
-            self.border = 0
-            self.borderwidth = 0
-            self.oval_diameter = 40
-            self.bind('<ButtonPress-1>', self.__on_press)
-            self.bind('<ButtonRelease-1>', self.__on_release)
-            self.draw(self.startnum)
-
-        def draw(self, n):
-            points = []
-            for i in range(5):
-                for j in range(5):
-                    x = randint(i*self.width/5, (i+1)*self.width/5 - self.oval_diameter)
-                    y = randint(j*self.height/5, (j+1)*self.height/5 - self.oval_diameter)
-                    points.append((x, y))
-            nls = sample(list(range(n, n+25)), 25)
-            for (x, y), n in zip(points, nls):
-                oval = self.create_oval((x, y, x+self.oval_diameter, y+self.oval_diameter),
-                    outline='gray', fill='gray', width=3, tags=n)
-                self.tag_bind(oval, '<Enter>', self.__enter(oval))
-                self.tag_bind(oval, '<Leave>', self.__leave(oval))
-                text = self.create_text(x+self.oval_diameter//2, y+self.oval_diameter//2,
-                    text=n, font=('', 15))
-                self.tag_bind(text, '<Enter>', self.__enter(oval))
-                self.tag_bind(text, '<Leave>', self.__leave(oval))
-
-        def __enter(self, id):
-            def inner(event):
-                self.itemconfig(id, fill='light gray')
-            return inner
-            
-        def __leave(self, id):
-            def inner(event):
-                self.itemconfig(id, fill='gray')
-            return inner
-
-        def __on_press(self, event):
-            x, y = self.canvasx(event.x),  self.canvasy(event.y)
-            l = ''.join([self.itemcget(obj,'tags') for obj in self.find_overlapping(x, y, x, y)])
-
-        def __on_release(self, event):
-            x, y = self.canvasx(event.x),  self.canvasy(event.y)
-            l = ''.join([self.itemcget(obj,'tags') for obj in self.find_overlapping(x, y, x, y)])
-            print(datetime.now(), 'release', str(self.master.currentnum.get())in l)
-            self.master.records.append(f'{datetime.now()},')
-            self.update()
-
-        def update(self):
-            print('update')
-            n = self.master.currentnum.get()
-            if n == self.endnum:
-                self.finish()
-            else:
-                self.delete('all')
-                self.master.currentnum.set(n+1)
-                self.draw(n+1)    
-                
-        def finish(self):
-            self.master.save()
-            self.master.finish()
+        self.master.finish()

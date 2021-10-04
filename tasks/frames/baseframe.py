@@ -4,13 +4,12 @@ from logging import config, getLogger
 with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
-from ..apps import BaseApp
 
 class BaseFrame(tk.Frame):
-    def __init__(self, master: BaseApp):
+    def __init__(self, master):
         super().__init__(master)
         self.logger = getLogger("gui.frame")
-        self.master = master   
+        self.master = master
         self.bg = 'light gray'
         self.config(bg=self.bg)
         self.logger.debug("%sFrame is initialized.", self.__class__)
@@ -20,5 +19,4 @@ class BaseFrame(tk.Frame):
         self.grid(row=0, column=0, sticky="nsew")
     
     def finish(self):
-        self.master.remove_frame()
-        self.logger.debug("frame is destroied.")
+        pass

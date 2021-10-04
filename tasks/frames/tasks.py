@@ -1,6 +1,8 @@
 import tkinter as tk
+from tkinter import ttk
 
 from .baseframe import BaseFrame
+from ..frames import VasFrame
 
 
 class TasksFrame(BaseFrame):
@@ -9,84 +11,117 @@ class TasksFrame(BaseFrame):
         self.create_widgets()
 
     def create_widgets(self):
-        title_font = ('System', 100, 'bold', 'italic', 'underline', 'overstrike')
+        title_font = ('URW Gothic L', 100, 'bold', 'italic', 'underline', 'overstrike')
         self.title_label = tk.Label(self, text='Think Leg System', font=title_font)
         self.title_label.pack(pady=10, expand=True, fill=tk.X)
 
-        self.task_frame = self.create_taskframe()
-        self.task_frame.pack(pady=10)
+        tabstyle = ttk.Style()
+        tabstyle.theme_create( "MyStyle", parent="winnative", settings={
+        "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
+        "TNotebook.Tab": {"configure": {"padding": [50, 10],
+                                        "font" : ('URW Gothic L', '10', 'bold')},
+                                        }})
+        tabstyle.theme_use("MyStyle")
         
-        self.nasa = tk.Button(self, text='nasa', 
-                              command=lambda:self.change_frame(f'nasa_tlx'))
-        self.nasa.pack(pady=10)
+        
+        self.tab = self.create_tabs()
+        self.tab.pack(expand=True, anchor=tk.CENTER, fill=tk.Y)
+        
+        
         
         self.finish_button = tk.Button(self, text='finish', width=20, height=5, command=lambda: self.master.finish())
         self.finish_button.pack(padx=50, pady=50, side=tk.BOTTOM, anchor=tk.SE)
     
-    def create_taskframe(self):
-        frame = tk.LabelFrame(self, text='Tasks', font=('System', 60))
-        padx = 50
-        self.vas_frame = tk.LabelFrame(frame, text='VAS', font=('System', 30))
-        self.calc_frame = tk.LabelFrame(frame, text='Calc', font=('System', 30))
-        self.mentalcalc_frame = tk.LabelFrame(frame, text='MentalCalc', font=('System', 30))
-        self.stroop_frame = tk.LabelFrame(frame, text='Stroop', font=('System', 30))
-        self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
-        self.atmt_frame = tk.LabelFrame(frame, text='ATMT', font=('System', 30))
+    def create_tabs(self):
+        tab = ttk.Notebook(self)
 
-        self.vas_frame.pack(padx=padx, side=tk.LEFT)
-        self.calc_frame.pack(padx=padx, side=tk.LEFT)
-        self.tapping_frame.pack(padx=padx, side=tk.LEFT)
-        self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
-        self.stroop_frame.pack(padx=padx, side=tk.LEFT)
-        self.atmt_frame.pack(padx=padx, side=tk.LEFT)
+        self.create_vastab(tab)
+        self.create_calctab(tab)
+        self.create_mentalcalctab(tab)
+        self.create_typingtab(tab)
+        self.create_strooptab(tab)
+        self.create_atmttab(tab)
+        self.create_nasatab(tab)
+        return tab
 
+    def create_vastab(self, nb):
         btn_w, btn_h = 10, 2
-        self.vas_button = tk.Button(self.vas_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.change_frame('vas'))
-        self.vas_button.pack()
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='Visual Analog Scale\n')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.change_frame('vas'))
+        start_btn.pack(anchor=tk.CENTER, expand=True)
+        nb.add(frame, text='VAS')
 
-        self.calc_button = tk.Button(self.calc_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.change_frame('calc'))
-        self.calc_button.pack()
+    def create_calctab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
+        self.calc_button = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.change_frame('calc'))
+        self.calc_button.pack(anchor=tk.CENTER, expand=True)
+        nb.add(frame, text='Calc')
 
-        self.radio_var_tapping = tk.IntVar(value=2)
-        self.tapping_radio1 = tk.Radiobutton(self.tapping_frame, value=2, variable=self.radio_var_tapping, text='2')
-        self.tapping_radio2 = tk.Radiobutton(self.tapping_frame, value=4, variable=self.radio_var_tapping, text='4')        
-        self.tapping_radio1.pack()
-        self.tapping_radio2.pack()
-        self.tapping_button = tk.Button(self.tapping_frame, text='start', width=btn_w, height=btn_h,
-            command=lambda:self.change_frame(f'tapping{self.radio_var_tapping.get()}')
-        )
-        self.tapping_button.pack()
-
+    def create_mentalcalctab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
         self.radio_var_mentalcalc = tk.IntVar(value=2)
-        self.mentalcalc_radio1 = tk.Radiobutton(self.mentalcalc_frame, value=2, variable=self.radio_var_mentalcalc, text='Low')
-        self.mentalcalc_radio2 = tk.Radiobutton(self.mentalcalc_frame, value=4, variable=self.radio_var_mentalcalc, text='High')
+        self.mentalcalc_radio1 = tk.Radiobutton(frame, value=2, variable=self.radio_var_mentalcalc, text='Low')
+        self.mentalcalc_radio2 = tk.Radiobutton(frame, value=4, variable=self.radio_var_mentalcalc, text='High')
         self.mentalcalc_radio1.pack()
         self.mentalcalc_radio2.pack()
-        self.mentalcalc_button = tk.Button(self.mentalcalc_frame, text='start', width=btn_w, height=btn_h,
+        self.mentalcalc_button = tk.Button(frame, text='Start', width=btn_w, height=btn_h,
             command=lambda:self.change_frame(f'mentalcalc{self.radio_var_mentalcalc.get()}')
         )
         self.mentalcalc_button.pack()
+        nb.add(frame, text='MentalCalc')
 
-        self.radio_var_stroop = tk.IntVar(value=1)
-        self.stroop_radio1 = tk.Radiobutton(self.stroop_frame, value=1, variable=self.radio_var_stroop, text='task1')
-        self.stroop_radio2 = tk.Radiobutton(self.stroop_frame, value=2, variable=self.radio_var_stroop, text='task2')
-        self.stroop_radio3 = tk.Radiobutton(self.stroop_frame, value=3, variable=self.radio_var_stroop, text='task3')
-        self.stroop_radio4 = tk.Radiobutton(self.stroop_frame, value=4, variable=self.radio_var_stroop, text='task4')
-        self.stroop_radio1.pack()
-        self.stroop_radio2.pack()
-        self.stroop_radio3.pack()
-        self.stroop_radio4.pack()
-
-        self.stroop_button = tk.Button(self.stroop_frame, text='start', width=btn_w, height=btn_h, 
-            command=lambda: self.change_frame(f'stroop{self.radio_var_stroop.get()}')
+    def create_typingtab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
+        self.radio = tk.IntVar(value=2)
+        self.radio_btn1 = tk.Radiobutton(frame, value=2, variable=self.radio, text='2')
+        self.radio_btn2 = tk.Radiobutton(frame, value=4, variable=self.radio, text='4')        
+        self.radio_btn1.pack()
+        self.radio_btn2.pack()
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h,
+            command=lambda:self.change_frame(f'tapping{self.radio.get()}')
         )
-        self.stroop_button.pack()
+        self.start_btn.pack(anchor=tk.SE)
+        nb.add(frame, text='Typing')
 
-        self.atmt_button = tk.Button(self.atmt_frame, text='start', width=btn_w, height=btn_h,
-            command=lambda: self.change_frame(f'atmt'))
-        self.atmt_button.pack()
+    def create_strooptab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
+        radio = tk.IntVar(value=1)
+        self.radio_btn1 = tk.Radiobutton(frame, value=1, variable=radio, text='task1')
+        self.radio_btn2 = tk.Radiobutton(frame, value=2, variable=radio, text='task2')
+        self.radio_btn3 = tk.Radiobutton(frame, value=3, variable=radio, text='task3')
+        self.radio_btn4 = tk.Radiobutton(frame, value=4, variable=radio, text='task4')
+        self.radio_btn1.pack()
+        self.radio_btn2.pack()
+        self.radio_btn3.pack()
+        self.radio_btn4.pack()
+
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h, 
+            command=lambda: self.change_frame(f'stroop{radio.get()}')
+        )
+        self.start_btn.pack()
+        nb.add(frame, text='Stroop')
+
+    def create_atmttab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
         
-        return frame
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h,
+            command=lambda: self.change_frame(f'atmt'))
+        self.start_btn.pack()
+        nb.add(frame, text='ATMT')
+
+    def create_nasatab(self, nb):
+        frame = tk.Frame(nb)
+        self.start_btn = tk.Button(frame, text='Start', 
+                              command=lambda:self.change_frame(f'nasa_tlx'))
+        self.start_btn.pack(pady=10)
+        nb.add(frame, text='NASA-TLX')
 
     def change_frame(self, to):
         self.master.change_frame(to)

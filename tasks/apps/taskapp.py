@@ -18,7 +18,6 @@ from ..frames import StroopFrame
 from ..frames import MentalCalcFrame
 from ..frames import TappingFrame
 from ..frames import NasaTLX
-from mysocket.server import ThinkLegServer
 
 
 
@@ -29,8 +28,6 @@ class TasksApp(BaseApp):
         self.logger = getLogger('thinkleg')
         self.datapath = datapath
         self.states = {'wait':0, 'task':1, 'rest':2, 'vas':3, 'stroop':4}
-        self.server = ThinkLegServer(host='localhost', port=12345)
-        self.server.start()
 
         self.frame = None
 
