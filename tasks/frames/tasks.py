@@ -16,10 +16,10 @@ class TasksFrame(BaseFrame):
         self.title_label.pack(pady=10, expand=True, fill=tk.X)
 
         tabstyle = ttk.Style()
-        tabstyle.theme_create( "MyStyle", parent="winnative", settings={
+        tabstyle.theme_create( "MyStyle", parent="classic", settings={
         "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
         "TNotebook.Tab": {"configure": {"padding": [50, 10],
-                                        "font" : ('URW Gothic L', '10', 'bold')},
+                                        "font" : ('', '10', 'bold')},
                                         }})
         tabstyle.theme_use("MyStyle")
         
