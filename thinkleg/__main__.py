@@ -10,7 +10,7 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from tasks.apps import BaseApp
-from tasks.frames import BaseFrame
+from tasks.frames import BaseFrame, vas
 from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
@@ -44,21 +44,23 @@ class ThinkLegApp(BaseApp):
             self.change_event.clear()
         return super().__setattr__(name, value)
 
-    def set_frame(self, to, timelimit=None):
+    def set_frame(self, to, timelimit=None, fname=None):
         self.logger.debug('set_frame is called.')
         self.arduino.thinkleg_status = to
+        if not '.csv' in fname:
+            fname += '.csv'
         if to == 'vas':
-            self.frame = VasFrame(self, self.datapath, 'vas.csv')
+            self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         elif 'mentalcalc' in to:
-            self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath, timelimit=timelimit)
+            self.frame = MentalCalcFrame(int(to[-1]), self, self.datapath, fname=fname, timelimit=timelimit)
         elif 'tapping' in to:
-            self.frame = TappingFrame(int(to[-1]), self, self.datapath, timelimit=timelimit)
+            self.frame = TappingFrame(int(to[-1]), self, self.datapath,fname=fname, timelimit=timelimit)
         elif 'rest' in to:
             self.frame = RestFrame(self, timelimit)
         elif 'nasa_tlx' in to:
-            self.frame = NasaTLX(self, path=self.datapath, fname='nasa_tlx.csv')
+            self.frame = NasaTLX(self, path=self.datapath, fname=fname)
         elif 'atmt' in to:
-            self.frame = ATMTFrame(self, path=self.datapath, fname='atmt.csv')
+            self.frame = ATMTFrame(self, path=self.datapath, fname=fname)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -75,11 +77,13 @@ class ThinkLegApp(BaseApp):
 
     def preliminary_exp2(self):
         def process():
-            frames = 'atmt rest vas mentalcalc4 atmt vas'.split()
-            times = [None, 5, None, 15, None, None]
-            for to, tl in zip(frames, times):
+            frames = 'rest vas mentalcalc4 atmt atmt atmt vas mentalcalc4 atmt atmt atmt vas mentalcalc4 atmt atmt atmt vas rest vas nasa_tlx nasa_tlx'.split()
+            times = [60*3, None, 60*15, None, None, None, None, 60*15, None, None, None, None, 60*15, None, None, None, None, 60*3, None, None, None]
+            #times = [60*0.1, None, 60*1, None, None, None, None, 60*1, None, None, None, None, 60*1, None, None, None, None, 60*0.1, None, None, None]
+            fnames = [None, None, 'mentalcalc1', 'atmt1-1', 'atmt1-2', 'atmt1-3', None, 'mentalcalc2', 'atmt2-1', 'atmt2-2', 'atmt2-3', None, 'mentalcalc3', 'atmt3-1', 'atmt3-2', 'atmt3-3', None, None, None, 'nasa_calc', 'nasa_atmt']
+            for to, tl, fn in zip(frames, times, fnames):
                 self.logger.info(f'pre {to}')
-                self.set_frame(to, tl)
+                self.set_frame(to, timelimit=tl, fname=fn)
                 self.change_event.wait()
         Thread(target=process, daemon=True).start()
         
