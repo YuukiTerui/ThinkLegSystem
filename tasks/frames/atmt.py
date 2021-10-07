@@ -7,7 +7,7 @@ from tkinter import Canvas, IntVar, Label
 from tasks.frames.baseframe import BaseFrame
 
 class ATMTFrame(BaseFrame):
-    def __init__(self, master, path='./data/ATMT/', fname='atmt.csv', startnum=1, endnum=10):
+    def __init__(self, master, path='./data/ATMT/', fname='atmt.csv', startnum=11, endnum=99):
         super().__init__(master)
         self.path = path
         self.fname = fname
