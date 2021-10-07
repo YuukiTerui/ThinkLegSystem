@@ -108,7 +108,7 @@ class ThinkLegApp(BaseApp):
         ftf.append(('rest', 60*3, None))
         ftf.append(('vas', None, None))
         ftf.append(('nasa_tlx', None, 'nasa_calc'))
-        ftf.append('nasa_tlx', None, 'nasa_atmt')
+        ftf.append(('nasa_tlx', None, 'nasa_atmt'))
         def process():
             for to, tl, fn in ftf:
                 self.set_frame(to, timelimit=tl, fname=fn)
@@ -152,7 +152,7 @@ class FirstFrame(BaseFrame):
         self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest'))
         self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
-        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp2())
+        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp3())
         self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):
