@@ -10,7 +10,7 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from tasks.apps import BaseApp
-from tasks.frames import BaseFrame
+from tasks.frames import BaseFrame, mentalcalc
 from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
@@ -88,6 +88,33 @@ class ThinkLegApp(BaseApp):
                 self.change_event.wait()
         Thread(target=process, daemon=True).start()
         
+    def preliminary_exp3(self): # nabetani
+        ftf = [('vas', None, None), ('rest', 60*3, None), ('vas', None, None)] # (frame, time, fname)
+        for i in range(1, 9):
+            ftf.append((f'atmt', None, f'atmt1-{i}'))
+            
+        ftf.append(('vas', None, None))    
+        ftf.append(('mentalcalc4', 60*15, 'mentalcalc1'))
+        ftf.append(('vas', None, None))
+        ftf.append(('mentalcalc4', 60*15, 'mentalcalc2'))
+        ftf.append(('vas', None, None))
+        ftf.append(('mentalcalc4', 60*15, 'mentalcalc3'))
+        ftf.append(('vas', None, None))
+        
+        for i in range(1, 9):
+            ftf.append((f'atmt', None, f'atmt2-{i}'))
+        
+        ftf.append(('vas', None, None))
+        ftf.append(('rest', 60*3, None))
+        ftf.append(('vas', None, None))
+        ftf.append(('nasa_tlx', None, 'nasa_calc'))
+        ftf.append('nasa_tlx', None, 'nasa_atmt')
+        def process():
+            for to, tl, fn in ftf:
+                self.set_frame(to, timelimit=tl, fname=fn)
+                self.change_event.wait()
+        Thread(target=process, daemon=True).start()
+            
     def finish(self):
         self.arduino.save('thinkleg')
         return super().finish()
