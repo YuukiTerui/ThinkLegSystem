@@ -91,7 +91,7 @@ class MentalCalcFrame(BaseFrame):
         ans = int(self.q_value.get())
         result = (num1 + num2 == ans)
         et = self.time_manager.elapsed_time
-        dt = self.time_manager.datetime
+        dt = self.time_manager.datetime 
         ls = [num1, num2, ans, result, et, dt]
         self.records.append(ls)
         self.logger.info('record: %s', ls)
