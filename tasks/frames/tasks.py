@@ -36,6 +36,7 @@ class TasksFrame(BaseFrame):
         tab = ttk.Notebook(self)
 
         self.create_vastab(tab)
+        self.create_mathtab(tab)
         self.create_calctab(tab)
         self.create_mentalcalctab(tab)
         self.create_typingtab(tab)
@@ -43,6 +44,15 @@ class TasksFrame(BaseFrame):
         self.create_atmttab(tab)
         self.create_nasatab(tab)
         return tab
+    
+    def create_mathtab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='MATH\n')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.change_frame('math'))
+        start_btn.pack(anchor=tk.CENTER, expand=True)
+        nb.add(frame, text='MATH')
 
     def create_vastab(self, nb):
         btn_w, btn_h = 10, 2
