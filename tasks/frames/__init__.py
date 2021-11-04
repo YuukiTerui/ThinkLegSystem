@@ -8,3 +8,4 @@ from .calc import CalcFrame
 from .tasks import TasksFrame
 from .nasa_tlx import NasaTLX
 from .atmt import ATMTFrame
+from .math import MATHFrame
