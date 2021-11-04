@@ -18,6 +18,7 @@ from ..frames import StroopFrame
 from ..frames import MentalCalcFrame
 from ..frames import TappingFrame
 from ..frames import NasaTLX
+from ..frames import MATHFrame
 
 
 
@@ -73,6 +74,11 @@ class TasksApp(BaseApp):
         self.frame = ATMTFrame(self, path=self.datapath, fname='atmt.csv')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('atmt is created')
+        
+    def create_math_frame(self):
+        self.frame =MATHFrame(self, path=self.datapath, fname='math.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('math is created')
 
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
@@ -93,6 +99,8 @@ class TasksApp(BaseApp):
             self.create_nasa_tlx_frame()
         elif 'atmt' in to:
             self.create_atmt_frame()
+        elif 'math' in to:
+            self.create_math_frame()
             
     def finish(self):
         return super().finish()
