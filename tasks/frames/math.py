@@ -75,9 +75,9 @@ class MATHFrame(BaseFrame):
         frame =tk.Frame(self)
         self.set_bind(frame)
         self.anstxt = tk.StringVar(value='answer')
-        anslabel = tk.Label(frame, textvariable=self.anstxt, font=self.font)
-        anslabel.pack(anchor='center',expand=True)
-        self.set_bind(anslabel)
+        self.anslabel = tk.Label(frame, textvariable=self.anstxt, font=self.font)   
+        self.anslabel.pack(anchor='center',expand=True)
+        self.set_bind(self.anslabel)
         return frame
 
     def create_intframe(self):
@@ -99,7 +99,7 @@ class MATHFrame(BaseFrame):
         time.sleep(1)
         self.labelstate = 'answer'
         self.ansframe.tkraise()
-        self.thread_event.wait(3)
+        self.thread_event.wait(1.5)
         self.labelstate = 'interval'
         self.intframe.tkraise()
         self.cleanup()
@@ -124,33 +124,47 @@ class MATHFrame(BaseFrame):
             ans += sample([-1, 1], 1)[0] * int(sample(range(10), 1)[0])
             return ans
         
+        def adjust2(ans):
+            print(ans)
+            n = len(str(abs(ans)))
+            idx = randint(0, n-1)
+            if str(abs(ans))[idx] == '9':
+                op = -1
+            elif str(abs(ans))[idx] == '0':
+                op = 1
+            else:
+                op = sample([1, -1], 1)[0]
+            ans += op * 10**idx
+            print(ans)
+            return ans
+        
         op = sample(['+', '-'], 1)[0] # operator
         cw = random() # correct / wrong
         res = True
 
         if self.level == 1:
-            num1 = randint(10, 100)
-            num2 = randint(1, 10)
+            num1 = randint(10, 100-1)
+            num2 = randint(1, 10-1)
         elif self.level == 2:
-            num1 = randint(10, 100)
-            num2 = randint(10, 100)
+            num1 = randint(10, 100-1)
+            num2 = randint(10, 100-1)
         elif self.level == 3:
-            num1 = randint(100, 1000)
-            num2 = randint(10, 100)
+            num1 = randint(100, 1000-1)
+            num2 = randint(10, 100-1)
             
         elif self.level == 4:
-            num1 = randint(100, 1000)
-            num2 = randint(100, 1000)
+            num1 = randint(100, 1000-1)
+            num2 = randint(100, 1000-1)
             op = '+'
         elif self.level == 5:
-            num1 = randint(100, 1000)
-            num2 = randint(100, 1000)
+            num1 = randint(100, 1000-1)
+            num2 = randint(100, 1000-1)
             op = '-'
 
         ans = eval(f'{num1}{op}{num2}')
 
-        if cw <= 0.5: # create wrong answer
-            ans = adjust(ans)
+        if cw <= 0.4: # create wrong answer
+            ans = adjust2(ans)
             res = False
         
         q = [num1, op, num2, ans, res]
