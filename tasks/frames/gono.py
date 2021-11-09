@@ -9,7 +9,7 @@ from datetime import datetime
 from .baseframe import BaseFrame
 
 
-class GoNo(BaseFrame):
+class GoNoFrame(BaseFrame):
     def __init__(self, master=None, fname=None, path='./'):
         self.path = path
         self.fname = fname
