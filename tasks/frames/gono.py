@@ -68,13 +68,13 @@ class GoNoFrame(BaseFrame):
     def create_s2_frame(self):
         frame = tk.Frame(self)
         self.set_bind(frame)
-        self.upper_label = tk.Label(frame, bg='red')
+        self.upper_label = tk.Label(frame, bg='red', width=50, height=10)
         self.upper_label.pack(anchor=tk.S, expand=True)
         self.set_bind(self.upper_label)
         self.center_label = tk.Label(frame, text='+', font=self.font)
         self.center_label.pack(anchor=tk.CENTER, expand=True)
         self.set_bind(self.center_label)
-        self.bottom_label = tk.Label(frame, bg='black')
+        self.bottom_label = tk.Label(frame, bg='black', width=50, height=10)
         self.bottom_label.pack(anchor=tk.N, expand=True)
         self.set_bind(self.bottom_label)
         return frame
