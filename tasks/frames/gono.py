@@ -16,7 +16,7 @@ class GoNoFrame(BaseFrame):
         self.fname = fname
         
         self.clicked = None
-        self.font = ('', 50, 'bold')
+        self.font = ('', 100, 'bold')
         self.create_widgets()
 
         self.thread = Thread(target=self.run, daemon=True)
@@ -57,9 +57,11 @@ class GoNoFrame(BaseFrame):
 
     def create_s2_frame(self):
         frame = tk.Frame(self)
-        tk.Label(frame, bg='red').pack(anchor=tk.S, expand=True)
+        self.upper_label = tk.Label(frame, bg='red')
+        self.upper_label.pack(anchor=tk.S, expand=True)
         tk.Label(frame, text='+', font=self.font).pack(anchor=tk.CENTER, expand=True)
-        tk.Label(frame, bg='black').pack(anchor=tk.N, expand=True)
+        self.bottom_label = tk.Label(frame, bg='black')
+        self.bottom_label.pack(anchor=tk.N, expand=True)
         return frame
 
 
@@ -68,14 +70,33 @@ class GoNoFrame(BaseFrame):
             self.process()
     
     def process(self):
+        self.update()
         self.s1_frame.tkraise()
-        time.sleep(0.2)
+        #time.sleep(0.2)
+        time.sleep(1)
         self.mid_frame.tkraise()
         time.sleep(1.8)
         self.s2_frame.tkraise()
-        time.sleep(0.2)
+        #time.sleep(0.2)
+        time.sleep(1)
         self.mid_frame.tkraise()
         time.sleep(uniform(2.6, 2.8))
 
-
-
+    def update(self) -> None:
+        target_rate = random()
+        target = sample(['↑', '↓'], 1)[0]
+        self.s1_var.set(target)
+        if 0.8 <= target_rate:
+            if target == '↑':
+                self.upper_label.config(bg='black')
+                self.bottom_label.config(bg='gray94')
+            else:
+                self.upper_label.config(bg='gray94')
+                self.bottom_label.config(bg='black')
+        else:
+            if target == '↑':
+                self.upper_label.config(bg='gray94')
+                self.bottom_label.config(bg='black')
+            else:
+                self.upper_label.config(bg='black')
+                self.bottom_label.config(bg='gray94')
