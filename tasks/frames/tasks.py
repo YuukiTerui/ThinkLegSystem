@@ -37,12 +37,14 @@ class TasksFrame(BaseFrame):
 
         self.create_vastab(tab)
         self.create_mathtab(tab)
+        self.create_gonotab(tab)
         self.create_calctab(tab)
         self.create_mentalcalctab(tab)
         self.create_typingtab(tab)
         self.create_strooptab(tab)
         self.create_atmttab(tab)
         self.create_nasatab(tab)
+        
         return tab
     
     def create_mathtab(self, nb):
@@ -53,6 +55,15 @@ class TasksFrame(BaseFrame):
         start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.change_frame('math'))
         start_btn.pack(anchor=tk.CENTER, expand=True)
         nb.add(frame, text='MATH')
+
+    def create_gonotab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='GoNo\n')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.change_frame('gono'))
+        start_btn.pack(anchor=tk.CENTER, expand=True)
+        nb.add(frame, text='GoNo')
 
     def create_vastab(self, nb):
         btn_w, btn_h = 10, 2
