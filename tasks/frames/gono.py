@@ -79,7 +79,6 @@ class GoNoFrame(BaseFrame):
         self.set_bind(self.bottom_label)
         return frame
 
-
     def run(self):
         while True:
             self.process()
