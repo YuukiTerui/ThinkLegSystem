@@ -1,4 +1,5 @@
 # coding: utf-8
+import csv
 import time
 import tkinter as tk
 from threading import Thread, Event
@@ -32,9 +33,11 @@ class GoNoFrame(BaseFrame):
             return
         ans_t = datetime.now() - self.s_time
         self.record.append(ans_t.total_seconds())
-        print(self.record)
         if self.record[-2]:
-            self.record.append(True)
+            if self.record[-1] > 0.5: # 
+                self.record.append(False)
+            else:
+                self.record.append(True)
         else:
             self.record.append(False)
         self.is_clicked = True
@@ -61,7 +64,10 @@ class GoNoFrame(BaseFrame):
 
     def create_mid_frame(self):
         frame = tk.Frame(self)
-        tk.Label(frame, text='+', font=self.font).pack(anchor=tk.CENTER, expand=True)
+        self.set_bind(frame)
+        label = tk.Label(frame, text='+', font=self.font)
+        label.pack(anchor=tk.CENTER, expand=True)
+        self.set_bind(label)
         return frame
 
     def create_s2_frame(self):
@@ -101,7 +107,7 @@ class GoNoFrame(BaseFrame):
         self.target_rate = random()
         self.target = choice(['↑', '↓'])
         self.s1_var.set(self.target)
-        if 0.8 <= self.target_rate:
+        if self.target_rate <= 0.8: # correct rate: 0.8
             if self.target == '↑':
                 self.upper_label.config(bg='black')
                 self.bottom_label.config(bg='gray94')
@@ -115,12 +121,18 @@ class GoNoFrame(BaseFrame):
             else:
                 self.upper_label.config(bg='black')
                 self.bottom_label.config(bg='gray94')
-        self.record = [self.target, 0.8<=self.target_rate]
+        self.record = [self.target, self.target_rate<=0.8]
 
     def cleanup(self):
         if len(self.record) == 2:
             self.record.append(None)
-            self.record.append((0.8<=self.target_rate) == self.is_clicked)
+            self.record.append((self.target_rate<=0.8) == self.is_clicked)
         self.is_clicked = False
         self.records.append(self.record)
-        print(self.records[-1])
+        self.logger.info(self.records[-1])
+
+    def save(self):
+        with open(self.path + self.fname, 'a', newline='') as f:
+            writer = csv.writer(f, lineterminator='\n')
+            writer.writerows(self.records)
+        self.logger.info('gono records is saved.: %s', self.fname)
