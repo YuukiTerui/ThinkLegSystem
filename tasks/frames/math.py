@@ -181,4 +181,11 @@ class MATHFrame(BaseFrame):
         else:
             if self.level > 1:
                 self.level -= 1
-        
+    
+    def save(self):
+        with open(self.path + self.fname, 'a', newline='') as f:
+            writer = csv.writer(f, lineterminator='\n')
+            writer.writerows(self.records)
+        self.logger.info('math records is saved.: %s', self.fname)
+
+    
