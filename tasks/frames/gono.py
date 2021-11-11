@@ -2,9 +2,8 @@
 import time
 import tkinter as tk
 from threading import Thread, Event
-import numpy as np
 from random import random, randint, choice, uniform
-from datetime import date, datetime
+from datetime import datetime
 
 from .baseframe import BaseFrame
 
@@ -86,14 +85,14 @@ class GoNoFrame(BaseFrame):
     def process(self):
         self.update()
         self.s1_frame.tkraise()
-        #time.sleep(0.2)
-        time.sleep(1)
+        time.sleep(0.2)
+        #time.sleep(1)
         self.mid_frame.tkraise()
         time.sleep(1.8)
         self.s2_frame.tkraise()
         self.s_time = datetime.now()
-        #time.sleep(0.2)
-        time.sleep(2)
+        time.sleep(0.2)
+        #time.sleep(2)
         self.mid_frame.tkraise()
         time.sleep(uniform(2.6, 2.8))
         self.cleanup()
