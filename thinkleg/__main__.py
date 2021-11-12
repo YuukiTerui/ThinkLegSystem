@@ -10,13 +10,15 @@ with open('./config/log_conf.json', 'r') as f:
     config.dictConfig(load(f))
 
 from tasks.apps import BaseApp
-from tasks.frames import BaseFrame, mentalcalc
+from tasks.frames import BaseFrame
 from tasks.frames import VasFrame
 from tasks.frames import TappingFrame
 from tasks.frames import MentalCalcFrame
 from tasks.frames import RestFrame
 from tasks.frames import NasaTLX
 from tasks.frames import ATMTFrame
+from tasks.frames import GoNoFrame
+from tasks.frames import MATHFrame
 from arduino import Arduino
 from manager import TimeManager
 
@@ -62,6 +64,10 @@ class ThinkLegApp(BaseApp):
             self.frame = NasaTLX(self, path=self.datapath, fname=fname)
         elif 'atmt' in to:
             self.frame = ATMTFrame(self, path=self.datapath, fname=fname)
+        elif 'math' in to:
+            self.frame = MATHFrame(self, path=self.datapath, fname=fname)
+        elif 'gono' in to:
+            self.frame = GoNoFrame(self, fname=fname, path=self.datapath)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -146,46 +152,101 @@ class FirstFrame(BaseFrame):
         if self.master.arduino:
             Thread(target=self.__progress, daemon=True).start()
         
+
         self.finish_button = tk.Button(self, text='finish', width=20, height=5, command=lambda: self.master.finish())
         self.finish_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
-        self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest'))
-        self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
-
-        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=lambda: self.master.preliminary_exp3())
+        #self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest', 5))
+        #self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
+        self.exp = lambda: self.master.preliminary_exp3()
+        self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=self.exp)
         self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
     
     def create_taskframe(self):
         frame = tk.LabelFrame(self, text='Tasks', font=('System', 40))
         padx = 50
-        self.vas_frame = tk.LabelFrame(frame, text='VAS', font=('System', 30))
-        self.tapping_frame = tk.LabelFrame(frame, text='Tapping', font=('System', 30))
-        self.mentalcalc_frame = tk.LabelFrame(frame, text='MentalCalc', font=('System', 30))
-
+        self.vas_frame = self.create_vas_frame(frame)
         self.vas_frame.pack(padx=padx, side=tk.LEFT)
-        self.tapping_frame.pack(padx=padx, side=tk.LEFT)
-        self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
 
+        self.nasa_frame = self.create_nasatlx_frame(frame)
+        self.nasa_frame.pack(padx=padx, side=tk.LEFT)
+
+        self.math_frame = self.create_math_frame(frame)
+        self.math_frame.pack(padx=padx, side=tk.LEFT)
+
+        self.gono_frame = self.create_gono_frame(frame)
+        self.gono_frame.pack(padx=padx, side=tk.LEFT)
+
+        self.atmt_frame = self.create_atmt_frame(frame)
+        self.atmt_frame.pack(padx=padx, side=tk.LEFT)
+
+        #self.tapping_frame.pack(padx=padx, side=tk.LEFT)
+        #self.tapping_frame = self.create_tapping_frame(frame)
+        
+        #self.mentalcalc_frame.pack(padx=padx, side=tk.LEFT)
+        #self.mentalcalc_frame = self.create_mentalcalc_frame(frame)
+
+        return frame
+
+    def create_nasatlx_frame(self, master):
+        frame = tk.LabelFrame(master, text='NASA-TLX', font=('System', 30))
         btn_w, btn_h = 10, 2
-        self.vas_button = tk.Button(self.vas_frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('vas'))
-        self.vas_button.pack()
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('nasa_tlx'))
+        self.start_btn.pack()
+        return frame
 
+    def create_math_frame(self, master):
+        frame = tk.LabelFrame(master, text='MATH', font=('System', 30))
+        btn_w, btn_h = 10, 2
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('math'))
+        self.start_btn.pack()
+        return frame
+
+    def create_gono_frame(self, master):
+        frame = tk.LabelFrame(master, text='GONO', font=('System', 30))
+        btn_w, btn_h = 10, 2
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('gono'))
+        self.start_btn.pack()
+        return frame
+
+    def create_atmt_frame(self, master):
+        frame = tk.LabelFrame(master, text='ATMT', font=('System', 30))
+        btn_w, btn_h = 10, 2
+        self.start_btn = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('atmt'))
+        self.start_btn.pack()
+        return frame
+
+    def create_vas_frame(self, master):
+        frame = tk.LabelFrame(master, text='VAS', font=('System', 30))
+        btn_w, btn_h = 10, 2
+        self.vas_button = tk.Button(frame, text='start', width=btn_w, height=btn_h, command=lambda:self.set_frame('vas'))
+        self.vas_button.pack()
+        return frame
+
+    def create_tapping_frame(self, master):
+        frame = tk.LabelFrame(master, text='Tapping', font=('System', 30))
+        btn_w, btn_h = 10, 2
         self.radio_var_tapping = tk.IntVar(value=2)
-        self.tapping_radio1 = tk.Radiobutton(self.tapping_frame, value=2, variable=self.radio_var_tapping, text='2')
-        self.tapping_radio2 = tk.Radiobutton(self.tapping_frame, value=4, variable=self.radio_var_tapping, text='4')        
+        self.tapping_radio1 = tk.Radiobutton(frame, value=2, variable=self.radio_var_tapping, text='2')
+        self.tapping_radio2 = tk.Radiobutton(frame, value=4, variable=self.radio_var_tapping, text='4')        
         self.tapping_radio1.pack()
         self.tapping_radio2.pack()
-        self.tapping_button = tk.Button(self.tapping_frame, text='start', width=btn_w, height=btn_h,
+        self.tapping_button = tk.Button(frame, text='start', width=btn_w, height=btn_h,
             command=lambda:self.set_frame(f'tapping{self.radio_var_tapping.get()}', 30)
         )
         self.tapping_button.pack()
+        return frame
+
+    def create_mentalcalc_frame(self, master):
+        frame = tk.LabelFrame(master, text='MentalCalc', font=('System', 30))
+        btn_w, btn_h = 10, 2
 
         self.radio_var_mentalcalc = tk.IntVar(value=2)
-        self.mentalcalc_radio1 = tk.Radiobutton(self.mentalcalc_frame, value=2, variable=self.radio_var_mentalcalc, text='Low')
-        self.mentalcalc_radio2 = tk.Radiobutton(self.mentalcalc_frame, value=4, variable=self.radio_var_mentalcalc, text='High')
+        self.mentalcalc_radio1 = tk.Radiobutton(frame, value=2, variable=self.radio_var_mentalcalc, text='Low')
+        self.mentalcalc_radio2 = tk.Radiobutton(frame, value=4, variable=self.radio_var_mentalcalc, text='High')
         self.mentalcalc_radio1.pack()
         self.mentalcalc_radio2.pack()
-        self.mentalcalc_button = tk.Button(self.mentalcalc_frame, text='start', width=btn_w, height=btn_h,
+        self.mentalcalc_button = tk.Button(frame, text='start', width=btn_w, height=btn_h,
             command=lambda:self.set_frame(f'mentalcalc{self.radio_var_mentalcalc.get()}', 30)
         )
         self.mentalcalc_button.pack()
@@ -193,7 +254,7 @@ class FirstFrame(BaseFrame):
 
     def __progress(self):
         st = time.time()
-        latency = 60
+        latency = 30
         t = 0
         while t < latency:
             t = time.time()-st
