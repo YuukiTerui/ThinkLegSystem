@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 
 from .baseframe import BaseFrame
-from ..frames import VasFrame
 
 
 class TasksFrame(BaseFrame):
