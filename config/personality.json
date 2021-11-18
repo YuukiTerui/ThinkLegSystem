@@ -8,54 +8,55 @@
         "2": "やや当てはまらない",
         "1": "きわめて当てはまらない"
     },
-
-    "1": {
-        "question": "知らない人とすぐ話ができる",
-        "reverse": false
-    },
-    "2": {
-        "question": "人が快適で幸せかどうか気にかかる",
-        "reverse": false
-    },
-    "3": {
-        "question": "絵画等の制作，著述，音楽を作る",
-        "reverse": false
-    },
-    "4": {
-        "question": "かなり前から準備をする",
-        "reverse": false
-    },
-    "5": {
-        "question": "落ち込んだり憂鬱になったりする",
-        "reverse": false
-    },
-    "6": {
-        "question": "パーティや社交イベントを企画する",
-        "reverse": false
-    },
-    "7": {
-        "question": "人を侮辱する",
-        "reverse": true
-    },
-    "8": {
-        "question": "哲学的，精神的な問題を考える",
-        "reverse": false
-    },
-    "9": {
-        "question": "物事の整理ができない",
-        "reverse": true
-    },
-    "10": {
-        "question": "ストレスを感じたり不安になったりする",
-        "reverse": false
-    },
-    "11": {
-        "question": "難しい言葉を使う",
-        "reverse": false
-    },
-    "12": {
-        "question": "他の人の気持ちを思いやる",
-        "reverse": false
+    "質問": {
+        "1": {
+            "question": "知らない人とすぐ話ができる",
+            "reverse": false
+        },
+        "2": {
+            "question": "人が快適で幸せかどうか気にかかる",
+            "reverse": false
+        },
+        "3": {
+            "question": "絵画等の制作，著述，音楽を作る",
+            "reverse": false
+        },
+        "4": {
+            "question": "かなり前から準備をする",
+            "reverse": false
+        },
+        "5": {
+            "question": "落ち込んだり憂鬱になったりする",
+            "reverse": false
+        },
+        "6": {
+            "question": "パーティや社交イベントを企画する",
+            "reverse": false
+        },
+        "7": {
+            "question": "人を侮辱する",
+            "reverse": true
+        },
+        "8": {
+            "question": "哲学的，精神的な問題を考える",
+            "reverse": false
+        },
+        "9": {
+            "question": "物事の整理ができない",
+            "reverse": true
+        },
+        "10": {
+            "question": "ストレスを感じたり不安になったりする",
+            "reverse": false
+        },
+        "11": {
+            "question": "難しい言葉を使う",
+            "reverse": false
+        },
+        "12": {
+            "question": "他の人の気持ちを思いやる",
+            "reverse": false
+        }
     },
     "次元": ["外向性", "神経質傾向", "誠実性", "調和性", "(経験への)開放性"],
     "計算": {
