@@ -20,6 +20,7 @@ from ..frames import TappingFrame
 from ..frames import NasaTLX
 from ..frames import MATHFrame
 from ..frames import GoNoFrame
+from ..frames import PersonalityTestFrame
 
 
 
@@ -86,6 +87,11 @@ class TasksApp(BaseApp):
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('gono is created')
 
+    def create_personalitytest_frame(self):
+        self.frame = PersonalityTestFrame(self, path=self.datapath, fname='personalitytest.csv')
+        self.frame.grid(row=0, column=0, sticky='nsew')
+        self.logger.info('personalitytest is created')
+
     def change_frame(self, to):
         self.logger.debug('change_frame is called.')
         if self.frame:
@@ -109,6 +115,8 @@ class TasksApp(BaseApp):
             self.create_math_frame()
         elif 'gono' in to:
             self.create_gono_frame()
+        elif 'personalitytest' in to:
+            self.create_personalitytest_frame()
             
     def finish(self):
         return super().finish()

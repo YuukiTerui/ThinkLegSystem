@@ -43,6 +43,7 @@ class TasksFrame(BaseFrame):
         self.create_strooptab(tab)
         self.create_atmttab(tab)
         self.create_nasatab(tab)
+        self.create_personalitytesttab(tab)
         
         return tab
     
@@ -142,6 +143,13 @@ class TasksFrame(BaseFrame):
                               command=lambda:self.change_frame(f'nasa_tlx'))
         self.start_btn.pack(pady=10)
         nb.add(frame, text='NASA-TLX')
+
+    def create_personalitytesttab(self, nb):
+        frame = tk.Frame(nb)
+        self.start_btn = tk.Button(frame, text='Start',
+            command=lambda: self.change_frame('personalitytest'))
+        self.start_btn.pack(pady=10)
+        nb.add(frame, text='PersonalityTest')
 
     def change_frame(self, to):
         self.master.change_frame(to)

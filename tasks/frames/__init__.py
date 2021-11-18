@@ -10,3 +10,4 @@ from .nasa_tlx import NasaTLX
 from .atmt import ATMTFrame
 from .math import MATHFrame
 from .gono import GoNoFrame
+from .personalitytest import PersonalityTestFrame
