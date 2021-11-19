@@ -88,7 +88,7 @@ class TasksApp(BaseApp):
         self.logger.info('gono is created')
 
     def create_personalitytest_frame(self):
-        self.frame = PersonalityTestFrame(self, path=self.datapath, fname='personalitytest.csv')
+        self.frame = PersonalityTestFrame(self, path=self.datapath, fname='personalitytest.json')
         self.frame.grid(row=0, column=0, sticky='nsew')
         self.logger.info('personalitytest is created')
 
