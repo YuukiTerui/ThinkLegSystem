@@ -174,7 +174,6 @@ class StroopFrame(BaseFrame):
 
     def save(self):
         print(*self.output_data, sep='\n')
-        #TODO Decide the directory for writing csv files
         fname = f'task{self.task_num+1}.csv'
         with open(self.fpath+fname, 'w', newline='', encoding='utf8') as f:
             writer = csv.writer(f, delimiter=',')
