@@ -89,6 +89,12 @@ class NasaTLX(BaseFrame):
         if not self.pwc_done:
             messagebox.showwarning('', '一対比較をしてください')
             return False
+        self.save()
+        return True
+
+    def save(self):
+        if '.csv' not in self.fname:
+            self.fname += '.csv'
         columns = [self.conf[str(i)]['name_short'] for i in range(1, len(self.conf)+1)]
         vals = [val.get() for val in self.vals]
         with open(self.path + self.fname, 'a', newline='') as f:
@@ -96,7 +102,6 @@ class NasaTLX(BaseFrame):
             writer.writerow(columns)
             writer.writerow(vals)
             writer.writerow(self.weight)
-        return True
         
     def load_conf(self):
         with open('./config/nasa_tlx_conf.json', 'r', encoding='utf-8') as f:

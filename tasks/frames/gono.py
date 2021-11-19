@@ -132,6 +132,8 @@ class GoNoFrame(BaseFrame):
         self.logger.info(self.records[-1])
 
     def save(self):
+        if '.csv' not in self.fname:
+            self.fname += '.csv'
         with open(self.path + self.fname, 'a', newline='') as f:
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(self.records)

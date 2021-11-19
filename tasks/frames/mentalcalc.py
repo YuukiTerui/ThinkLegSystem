@@ -97,6 +97,8 @@ class MentalCalcFrame(BaseFrame):
         self.logger.info('record: %s', ls)
 
     def save(self):
+        if '.csv' not in self.fname:
+            self.fname += '.csv'
         with open(self.path + self.fname, 'a', newline='') as f:
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(self.records)

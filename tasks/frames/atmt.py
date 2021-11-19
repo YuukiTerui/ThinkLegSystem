@@ -40,7 +40,10 @@ class ATMTFrame(BaseFrame):
         if path is None:
             path = self.path
         if fname is None:
+            if '.csv' not in self.fname:
+                fname += '.csv'
             fname = self.fname
+
 
         with open(path+fname, 'a', newline='\n') as f:
             writer = csv.writer(f)

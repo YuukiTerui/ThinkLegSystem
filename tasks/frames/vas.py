@@ -58,6 +58,8 @@ class VasFrame(BaseFrame):
 
     def save(self):
         self.logger.info('save value: %s', self.val.get())
+        if '.csv' not in self.fname:
+            self.fname += '.csv'
         with open(f'{self.fpath}{self.fname}', 'a', newline='') as f:
             writer = csv.writer(f, lineterminator=',')
             writer.writerow([self.val.get()])
