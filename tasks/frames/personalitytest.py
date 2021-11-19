@@ -97,8 +97,11 @@ class PersonalityTestFrame(BaseFrame):
         self.logger.info(f'score {score}')
         exp = self.explain(score)
         self.logger.info(f'explanation {exp}')
-        with open(self.path + self.fname, 'w') as f:
-            json.dump({'回答':self.qans, 'スコア':score, '解釈':exp}, f, indent=4)
+
+        if '.json' not in self.fname:
+            self.fname += '.json'
+        with open(self.path + self.fname, encoding='utf-8', mode='w') as f:
+            json.dump({'回答':self.qans, 'スコア':score, '解釈':exp}, f, ensure_ascii=False, indent=4)
 
     def load_json(self):
         with open('./config/personality.json', 'r', encoding='utf-8') as f:
