@@ -30,7 +30,7 @@ class NasaTLX(BaseFrame):
         title.pack()
         intro_label = tk.Label(self, text=self.conf['intro'], font=('MS ゴシック', 15, 'bold'))
         intro_label.pack()
-        for i in range(1, len(self.conf)+1):
+        for i in range(1, self.conf['qnum']+1):
             frame = self.create_vas_frame(i)
             frame.pack(expand=True, fill=tk.Y, pady=10)
             #tmp.grid(column=0, row=0)
