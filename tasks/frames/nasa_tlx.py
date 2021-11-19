@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import json
 import csv
 import random
@@ -21,14 +22,17 @@ class NasaTLX(BaseFrame):
         self.font_scale = ('MS ゴシック', 25, 'bold')
         self.font_exp = ('MS ゴシック', 18)
         self.pwc = PairWiseComparisons # 引数で変える？
+        self.pwc_done = False
         self.create_widgets()
         
     def create_widgets(self):
         title = tk.Label(self, text='NASA-TLX', font=('MS ゴシック', 50, 'bold'))
         title.pack()
+        intro_label = tk.Label(self, text=self.conf['intro'], font=('MS ゴシック', 15, 'bold'))
+        intro_label.pack()
         for i in range(1, len(self.conf)+1):
             frame = self.create_vas_frame(i)
-            frame.pack(expand=True, fill=tk.Y, pady=20)
+            frame.pack(expand=True, fill=tk.Y, pady=10)
             #tmp.grid(column=0, row=0)
             
         exp_label = tk.Label(self, text='', textvariable=self.explanation, font=self.font_exp)
@@ -76,22 +80,24 @@ class NasaTLX(BaseFrame):
         window = tk.Toplevel(self.master)
         window.geometry(f'{self.master.width}x{self.master.height}')
         self.pwc(window, self, self.conf, vals)
+        self.pwc_done = True
         
     def submit_clicked(self):
-        self.submit()
-        self.finish()
+        if self.submit():
+            self.finish()
         
     def submit(self):
+        if not self.pwc_done:
+            messagebox.showwarning('', '一対比較をしてください')
+            return False
         columns = [self.conf[str(i)]['name_short'] for i in range(1, len(self.conf)+1)]
         vals = [val.get() for val in self.vals]
-        print(columns)
-        print(vals)
         with open(self.path + self.fname, 'a', newline='') as f:
             writer = csv.writer(f, lineterminator='\n')
             writer.writerow(columns)
             writer.writerow(vals)
             writer.writerow(self.weight)
-        return vals
+        return True
         
     def load_conf(self):
         with open('./config/nasa_tlx_conf.json', 'r', encoding='utf-8') as f:
