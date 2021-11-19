@@ -4,8 +4,7 @@ import json
 import csv
 import random
 from itertools import combinations
-from tkinter import font
-from tkinter.constants import LEFT
+
 
 from .baseframe import BaseFrame
 
