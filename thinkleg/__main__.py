@@ -49,9 +49,7 @@ class ThinkLegApp(BaseApp):
     def set_frame(self, to, timelimit=None, fname=None):
         self.logger.debug('set_frame is called.')
         self.arduino.thinkleg_status = to
-        if fname is not None:
-            if not '.csv' in fname:
-                fname += '.csv'
+
         if to == 'vas':
             self.frame = VasFrame(self, path=self.datapath, fname='vas.csv')
         elif 'mentalcalc' in to:
