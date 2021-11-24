@@ -3,7 +3,7 @@ import csv
 import time
 import tkinter as tk
 from threading import Thread, Event
-from random import random, randint, choice, uniform
+from random import random, choice, uniform
 from datetime import datetime
 
 from .baseframe import BaseFrame
@@ -138,3 +138,7 @@ class GoNoFrame(BaseFrame):
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(self.records)
         self.logger.info('gono records is saved.: %s', self.fname)
+
+    def exit_process(self):
+        self.save()
+        self.finish()
