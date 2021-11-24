@@ -10,7 +10,7 @@ from .baseframe import BaseFrame
 
 
 class GoNoFrame(BaseFrame):
-    def __init__(self, master=None, fname=None, path='./'):
+    def __init__(self, master=None, fname=None, path='./', timelimit=None):
         super().__init__(master)
         self.path = path
         self.fname = fname
@@ -21,9 +21,12 @@ class GoNoFrame(BaseFrame):
         self.font = ('', 100, 'bold')
         self.create_widgets()
 
+        self.timelimit = timelimit
+        self.ptimes = 0
+        self.thread_event = Event()
         self.thread = Thread(target=self.run, daemon=True)
         self.thread.start()
-        self.thread_event = Event()
+        
 
     def set_bind(self, obj):
         obj.bind('<Button-1>', self.mouse_clicked)
@@ -85,8 +88,12 @@ class GoNoFrame(BaseFrame):
         return frame
 
     def run(self):
-        while True:
-            self.process()
+        if self.timelimit:
+            while self.ptimes < self.timelimit:
+                self.process()
+        else:
+            while True:
+                self.process()
     
     def process(self):
         self.update()
