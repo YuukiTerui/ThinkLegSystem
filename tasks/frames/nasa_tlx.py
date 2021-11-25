@@ -10,12 +10,12 @@ from .baseframe import BaseFrame
 
 
 class NasaTLX(BaseFrame):
-    def __init__(self, master, path='./data/nasa_tlx/', fname='nasa_tlx.csv'):
+    def __init__(self, master, path='./data/nasa_tlx/', fname=None):
         super().__init__(master)
         self.path = path
-        self.fname = fname
+        self.fname = fname if fname is not None else 'nasa_tlx.csv'
         self.conf = self.load_conf()
-        self.vals = [tk.IntVar(value=50) for _ in range(len(self.conf))]
+        self.vals = [tk.IntVar(value=50) for _ in range(self.conf['qnum']+1)]
         self.weight = [0] * len(self.vals)
         self.explanation = tk.StringVar()
         self.font_scale = ('MS ゴシック', 25, 'bold')
@@ -95,7 +95,7 @@ class NasaTLX(BaseFrame):
     def save(self):
         if '.csv' not in self.fname:
             self.fname += '.csv'
-        columns = [self.conf[str(i)]['name_short'] for i in range(1, len(self.conf)+1)]
+        columns = [self.conf[str(i)]['name_short'] for i in range(1, self.conf['qnum']+1)]
         vals = [val.get() for val in self.vals]
         with open(self.path + self.fname, 'a', newline='') as f:
             writer = csv.writer(f, lineterminator='\n')
@@ -121,8 +121,9 @@ class PairWiseComparisons(BaseFrame):
         self.tlx = tlx
         self.data = data
         self.pairs = self.create_pairs()
+        print(self.pairs)
         self.pair = None
-        self.weight = [0] * len(data)
+        self.weight = [0] * tlx['qnum']
         self.title1 = tk.StringVar()
         self.title2 = tk.StringVar()
         self.exp1 = tk.StringVar()
@@ -161,7 +162,7 @@ class PairWiseComparisons(BaseFrame):
         return super().create_widgets()
     
     def create_pairs(self):
-        data = [str(i) for i in range(1, len(self.data))]
+        data = [str(i) for i in range(1, self.tlx['qnum'])]
         data_pair = list(combinations(data, 2))
         random.shuffle(data_pair)
         return data_pair
