@@ -11,11 +11,13 @@ from .baseframe import BaseFrame
 
 
 class MATHFrame(BaseFrame):
-    def __init__(self, master=None, fname=None, path='./'):
+    def __init__(self, master=None, fname=None, path='./', timelimit=None):
         super().__init__(master)
         self.path = path
         self.fname = fname
 
+        self.timelimit = timelimit
+        self.qnum = 0
         self.labelstate = None
         self.clicked = False
         self.level = 3
@@ -85,8 +87,13 @@ class MATHFrame(BaseFrame):
         return frame
 
     def run(self):
-        while True:
-            self.process()
+        if self.timelimit:
+            while self.qnum < self.timelimit:
+                self.process()
+                self.qnum += 1
+        else:
+            while True:
+                self.process()
     
     def process(self):
         self.update()
@@ -99,7 +106,7 @@ class MATHFrame(BaseFrame):
         time.sleep(1)
         self.labelstate = 'answer'
         self.ansframe.tkraise()
-        self.thread_event.wait(1.5)
+        self.thread_event.wait(2)
         self.labelstate = 'interval'
         self.intframe.tkraise()
         self.cleanup()
