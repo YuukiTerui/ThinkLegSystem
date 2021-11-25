@@ -196,7 +196,10 @@ class FirstFrame(BaseFrame):
             回答が分からなかった場合はマウスをクリックしないでください．\n\
             以上の作業が所定の回数繰り返されます．')
         exp.pack()
-        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('math'))
+        limit = tk.Entry(frame, width=10)
+        limit.insert(tk.END, 10)
+        limit.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('math', timelimit=int(limit.get())))
         start_btn.pack(pady=20, side=tk.BOTTOM)
         nb.add(frame, text='MATH')
 
@@ -209,7 +212,7 @@ class FirstFrame(BaseFrame):
             提示された矢印と長方形の上下の位置が一致した場合，可能な限り早くマウスを左クリックしてください．\n\
             以上の作業が所定の回数繰り返されます．')
         exp.pack()
-        limit = tk.Entry(frame, width=5)
+        limit = tk.Entry(frame, width=10)
         limit.insert(tk.END, 10)
         limit.pack()
         start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('gono', timelimit=int(limit.get())))
