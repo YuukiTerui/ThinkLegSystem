@@ -41,7 +41,7 @@ class ATMTFrame(BaseFrame):
             path = self.path
         if fname is None:
             if '.csv' not in self.fname:
-                fname += '.csv'
+                self.fname += '.csv'
             fname = self.fname
 
 
