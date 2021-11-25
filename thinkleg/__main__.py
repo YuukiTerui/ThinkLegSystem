@@ -68,7 +68,7 @@ class ThinkLegApp(BaseApp):
         elif 'gono' in to:
             self.frame = GoNoFrame(self, fname=fname, path=self.datapath, timelimit=timelimit)
         elif 'personalitytest' in to:
-            self.frame = PersonalityTestFrame(self, fname=fname, path=self.datapath, timelimit=timelimit)
+            self.frame = PersonalityTestFrame(self, fname=fname, path=self.datapath)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -122,6 +122,27 @@ class ThinkLegApp(BaseApp):
                 self.change_event.wait()
         Thread(target=process, daemon=True).start()
             
+    def main_exp(self):
+        def process():
+            gono = lambda n: ('gono', 3, f'gono{n}') # 180
+            atmt = lambda n: ('atmt', 1, f'atmt{n}') # 180
+            math = lambda n: ('math', 3, f'math{n}') # 180
+            tasks = [gono, atmt, math]
+            ftf = [('personalitytest', None, 'personalitytest'), ('vas', None, 'vas')]
+            for i in range(3):
+                for j in range(3):
+                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
+                    if i != 2:
+                        ftf.append(('vas', None, 'vas'))
+                    else:
+                        ftf.append(('nasa_tlx', None, f'nasa_{tasks[j].__name__}'))
+
+            for frame, timelimit, fname in ftf:
+                self.logger.info(f'main exp: {frame}')
+                self.set_frame(frame, fname=fname, timelimit=timelimit)
+                self.change_event.wait()
+        Thread(target=process, daemon=True).start()
+
     def finish(self):
         self.arduino.save('thinkleg')
         return super().finish()
@@ -170,7 +191,8 @@ class FirstFrame(BaseFrame):
 
         #self.rest_button = tk.Button(self, text='Rest', width=20, height=5, command=lambda: self.set_frame('rest', 5))
         #self.rest_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
-        self.exp = lambda: self.master.preliminary_exp3()
+        #self.exp = lambda: self.master.preliminary_exp3()
+        self.exp = lambda: self.master.main_exp()
         self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=self.exp)
         self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
 
