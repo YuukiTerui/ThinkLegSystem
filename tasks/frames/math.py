@@ -14,7 +14,7 @@ class MATHFrame(BaseFrame):
     def __init__(self, master=None, fname=None, path='./', timelimit=None):
         super().__init__(master)
         self.path = path
-        self.fname = fname
+        self.fname = fname if fname is not None else 'math.csv'
 
         self.timelimit = timelimit
         self.qnum = 0
@@ -91,6 +91,7 @@ class MATHFrame(BaseFrame):
             while self.qnum < self.timelimit:
                 self.process()
                 self.qnum += 1
+            self.exit_process()
         else:
             while True:
                 self.process()
@@ -196,5 +197,9 @@ class MATHFrame(BaseFrame):
             writer = csv.writer(f, lineterminator='\n')
             writer.writerows(self.records)
         self.logger.info('math records is saved.: %s', self.fname)
+    
+    def exit_process(self):
+        self.save()
+        self.finish()
 
     

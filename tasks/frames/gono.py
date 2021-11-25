@@ -13,7 +13,7 @@ class GoNoFrame(BaseFrame):
     def __init__(self, master=None, fname=None, path='./', timelimit=None):
         super().__init__(master)
         self.path = path
-        self.fname = fname
+        self.fname = fname if fname is not None else 'gono.csv'
         
         self.is_clicked = False
         self.records = []
@@ -91,6 +91,8 @@ class GoNoFrame(BaseFrame):
         if self.timelimit:
             while self.ptimes < self.timelimit:
                 self.process()
+                self.ptimes += 1
+            self.exit_process()
         else:
             while True:
                 self.process()
