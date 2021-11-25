@@ -7,10 +7,10 @@ from tkinter import Canvas, IntVar, Label
 from tasks.frames.baseframe import BaseFrame
 
 class ATMTFrame(BaseFrame):
-    def __init__(self, master, path='./data/ATMT/', fname='atmt.csv', startnum=11, endnum=45):
+    def __init__(self, master, path='./data/ATMT/', fname=None, startnum=11, endnum=45):
         super().__init__(master)
         self.path = path
-        self.fname = fname
+        self.fname = fname if fname is not None else 'atmt.csv'
         self.is_running = False
         self.width = master['width']
         self.height = master['height']
