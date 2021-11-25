@@ -19,6 +19,7 @@ from tasks.frames import NasaTLX
 from tasks.frames import ATMTFrame
 from tasks.frames import GoNoFrame
 from tasks.frames import MATHFrame
+from tasks.frames import PersonalityTestFrame
 from arduino import Arduino
 from manager import TimeManager
 
@@ -63,9 +64,11 @@ class ThinkLegApp(BaseApp):
         elif 'atmt' in to:
             self.frame = ATMTFrame(self, path=self.datapath, fname=fname)
         elif 'math' in to:
-            self.frame = MATHFrame(self, path=self.datapath, fname=fname)
+            self.frame = MATHFrame(self, path=self.datapath, fname=fname, timelimit=timelimit)
         elif 'gono' in to:
-            self.frame = GoNoFrame(self, fname=fname, path=self.datapath)
+            self.frame = GoNoFrame(self, fname=fname, path=self.datapath, timelimit=timelimit)
+        elif 'personalitytest' in to:
+            self.frame = PersonalityTestFrame(self, fname=fname, path=self.datapath, timelimit=timelimit)
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -135,8 +138,19 @@ class FirstFrame(BaseFrame):
         self.title_label = tk.Label(self, text='Think Leg System', font=title_font)
         self.title_label.pack(pady=10, expand=True, fill=tk.X)
 
-        self.task_frame = self.create_taskframe()
-        self.task_frame.pack(pady=10)
+        tabstyle = ttk.Style()
+        tabstyle.theme_create( "MyStyle", parent="classic", settings={
+        "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
+        "TNotebook.Tab": {"configure": {"padding": [50, 10],
+                                        "font" : ('', '10', 'bold')},
+                                        }})
+        tabstyle.theme_use("MyStyle")
+
+        self.tab = self.create_tabs()
+        self.tab.pack(expand=True, anchor=tk.CENTER, fill=tk.Y)
+
+        # self.task_frame = self.create_taskframe()
+        # self.task_frame.pack(pady=10)
 
         self.progress_frame = tk.Frame(self)
         self.progress_label = tk.Label(self.progress_frame, text='Preparing for Arduino')
@@ -159,7 +173,96 @@ class FirstFrame(BaseFrame):
         self.exp = lambda: self.master.preliminary_exp3()
         self.pre_exp_button = tk.Button(self, text='Pre_EXP', width=20, height=5, command=self.exp)
         self.pre_exp_button.pack(padx=50, pady=20, side=tk.BOTTOM, anchor=tk.SE)
-    
+
+    def create_tabs(self):
+        tab = ttk.Notebook(self)
+        self.create_vastab(tab)
+        self.create_personalitytesttab(tab)
+        self.create_gonotab(tab)
+        self.create_atmttab(tab)
+        self.create_mathtab(tab)
+        self.create_nasatab(tab)
+        return tab
+        
+    def create_mathtab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='MATH\n\n\
+            ディスプレイ上に1~3桁の加算又は減算の式が2秒間提示されます．\n\
+            その後，「EQUALS」という文字が1.5秒間提示されます．\n\
+            さらに，計算式の答えの数値が2秒間提示されます．\n\
+            答えが提示されている時間内に，提示された答えが正しいかどうか判断してください．\n\
+            提示された答えが正しい場合はマウスを左クリック，間違っている場合はマウスを右クリックしてください．\n\
+            回答が分からなかった場合はマウスをクリックしないでください．\n\
+            以上の作業が所定の回数繰り返されます．')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('math'))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='MATH')
+
+    def create_gonotab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='選択反応課題\n\n\
+            画面中央に上または下方向の矢印が0.2秒間提示されます．\n\
+            その後，画面の中央を表す注視点が表示され，1.8秒後に注視点の上または下に黒い長方形が0.2秒間提示されます．\n\
+            提示された矢印と長方形の上下の位置が一致した場合，可能な限り早くマウスを左クリックしてください．\n\
+            以上の作業が所定の回数繰り返されます．')
+        exp.pack()
+        limit = tk.Entry(frame, width=5)
+        limit.insert(tk.END, 10)
+        limit.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('gono', timelimit=int(limit.get())))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='GoNo')
+
+    def create_vastab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='Visual Analog Scale\n\n主観的な疲労感を尋ねるスケールです．')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h, command=lambda:self.set_frame('vas'))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='VAS')
+
+    def create_atmttab(self, nb):
+        frame = tk.Frame(nb)
+        btn_w, btn_h = 10, 2
+        exp = tk.Label(frame, text='Advanced Trail Making Test(視覚探索課題)\n\n\
+            画面上のランダムな位置に11から45の数の書かれた円形のマーカーがに表示されます．\n\
+            11から45までの数の書かれたマーカーを順に，可能な限り早くクリックしてください．\n\
+            クリックするたびに，表示される数の範囲が一つ大きくなり，マーカーの配置がランダムに変更されます．\n\
+            次にクリックする必要のある数は画面の上部に表示されます．')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h,
+            command=lambda: self.set_frame(f'atmt'))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='ATMT')
+
+    def create_nasatab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='NASA-TLX\n\n\
+            主観的なメンタルワークロード評価手法．\n\
+            6つの下位尺度に関して，ワークロード(作業負担)の大きさを尋ねます．\n\
+            一対比較を行う場合は，「どちらの指標が大きいかではなく，どちらの方が負担感に関連が深いか」を判断してください．')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h,
+                              command=lambda:self.set_frame(f'nasa_tlx'))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='NASA-TLX')
+
+    def create_personalitytesttab(self, nb):
+        btn_w, btn_h = 10, 2
+        frame = tk.Frame(nb)
+        exp = tk.Label(frame, text='ニューカッスル・パーソナリティ評定尺度\n\n12項目の行動や考え方について回答することで，性格特性の評価をします．')
+        exp.pack()
+        start_btn = tk.Button(frame, text='Start', width=btn_w, height=btn_h,
+            command=lambda: self.set_frame('personalitytest'))
+        start_btn.pack(pady=20, side=tk.BOTTOM)
+        nb.add(frame, text='PersonalityTest')
+
+
     def create_taskframe(self):
         frame = tk.LabelFrame(self, text='Tasks', font=('System', 40))
         padx = 50
