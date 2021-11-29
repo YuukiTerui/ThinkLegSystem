@@ -59,30 +59,30 @@ class GoNoFrame(BaseFrame):
         return
 
     def create_s1_frame(self):
-        frame = tk.Frame(self)
+        frame = tk.Frame(self, bg=self.bg)
         self.s1_var = tk.StringVar(value='↑')
-        self.s1_label = tk.Label(frame, textvariable=self.s1_var, font=self.font)
+        self.s1_label = tk.Label(frame, textvariable=self.s1_var, font=self.font, bg=self.bg)
         self.s1_label.pack(anchor=tk.CENTER, expand=True)
         return frame
 
     def create_mid_frame(self):
-        frame = tk.Frame(self)
+        frame = tk.Frame(self, bg=self.bg)
         self.set_bind(frame)
-        label = tk.Label(frame, text='+', font=self.font)
+        label = tk.Label(frame, text='+', font=self.font, bg=self.bg)
         label.pack(anchor=tk.CENTER, expand=True)
         self.set_bind(label)
         return frame
 
     def create_s2_frame(self):
-        frame = tk.Frame(self)
+        frame = tk.Frame(self, bg=self.bg)
         self.set_bind(frame)
-        self.upper_label = tk.Label(frame, bg='red', width=50, height=10)
+        self.upper_label = tk.Label(frame, bg=self.bg, width=50, height=10)
         self.upper_label.pack(anchor=tk.S, expand=True)
         self.set_bind(self.upper_label)
-        self.center_label = tk.Label(frame, text='+', font=self.font)
+        self.center_label = tk.Label(frame, text='+', font=self.font, bg=self.bg)
         self.center_label.pack(anchor=tk.CENTER, expand=True)
         self.set_bind(self.center_label)
-        self.bottom_label = tk.Label(frame, bg='black', width=50, height=10)
+        self.bottom_label = tk.Label(frame, bg=self.bg, width=50, height=10)
         self.bottom_label.pack(anchor=tk.N, expand=True)
         self.set_bind(self.bottom_label)
         return frame
@@ -100,14 +100,15 @@ class GoNoFrame(BaseFrame):
     def process(self):
         self.update()
         self.s1_frame.tkraise()
-        time.sleep(0.2)
-        #time.sleep(1)
+        #time.sleep(0.2)
+        time.sleep(3)
         self.mid_frame.tkraise()
-        time.sleep(1.8)
+        #time.sleep(1.8)
+        time.sleep(3)
         self.s2_frame.tkraise()
         self.s_time = datetime.now()
-        time.sleep(0.2)
-        #time.sleep(2)
+        #time.sleep(0.2)
+        time.sleep(5)
         self.mid_frame.tkraise()
         time.sleep(uniform(2.6, 2.8))
         self.cleanup()
@@ -119,17 +120,17 @@ class GoNoFrame(BaseFrame):
         if self.target_rate <= 0.8: # correct rate: 0.8
             if self.target == '↑':
                 self.upper_label.config(bg='black')
-                self.bottom_label.config(bg='gray94')
+                self.bottom_label.config(bg=self.bg)
             else:
-                self.upper_label.config(bg='gray94')
+                self.upper_label.config(bg=self.bg)
                 self.bottom_label.config(bg='black')
         else:
             if self.target == '↑':
-                self.upper_label.config(bg='gray94')
+                self.upper_label.config(bg=self.bg)
                 self.bottom_label.config(bg='black')
             else:
                 self.upper_label.config(bg='black')
-                self.bottom_label.config(bg='gray94')
+                self.bottom_label.config(bg=self.bg)
         self.record = [self.target, self.target_rate<=0.8]
 
     def cleanup(self):
