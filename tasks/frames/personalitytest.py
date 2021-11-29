@@ -6,10 +6,10 @@ from .baseframe import BaseFrame
 
 
 class PersonalityTestFrame(BaseFrame):
-    def __init__(self, master=None, fname='personalitytest', path='./'):
+    def __init__(self, master=None, fname=None, path='./'):
         super().__init__(master)
         self.path = path
-        self.fname = fname
+        self.fname = fname if fname is not None else 'personalitytest.json'
 
         self.qdata = self.load_json()
         self.title = self.qdata['タイトル']
