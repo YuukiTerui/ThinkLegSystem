@@ -124,20 +124,22 @@ class ThinkLegApp(BaseApp):
             
     def main_exp(self):
         def process():
-            gono = lambda n: ('gono', 180, f'gono{n}') # 180 or 3
-            atmt = lambda n: ('atmt', 7, f'atmt{n}') # 7 or 1
-            math = lambda n: ('math', 180, f'math{n}') # 180 or 3
+            def gono(n):
+                return ('gono', 3, f'{n}_gono') # 180 or 3
+            def atmt(n):
+                return ('atmt', None, f'{n}_atmt') # 7 or 1
+            def math(n):
+                return ('math', 3, f'{n}_math') # 180 or 3
             tasks = [gono, atmt, math]
             ftf = [('personalitytest', None, 'personalitytest'), ('vas', None, 'vas')]
             for i in range(3):
                 for j in range(3):
-                    if i==0 and j==0:
-                        continue
-                    if j!=1:
-	                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
+                    if tasks[j].__name__ == 'atmt':
+                        for k in range(1):
+                            ftf.append(tasks[j](f'{i+1}-{j+1}'))
                     else:
-                        for i in range(7):
-	                        ftf.append(tasks[j](f'{i+1}-{j+1}'))
+	                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
+
                     if i != 2:
                         ftf.append(('vas', None, 'vas'))
                     else:
