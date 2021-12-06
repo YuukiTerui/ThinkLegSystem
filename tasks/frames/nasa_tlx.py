@@ -58,7 +58,7 @@ class NasaTLX(BaseFrame):
         #title.pack(side=tk.LEFT, padx=50, anchor=tk.CENTER)
         title.grid(column=0, row=0, padx=30, sticky=tk.W+tk.E)
         
-        label_l = tk.Label(frame, text=data['min_text'], font=self.font_scale)
+        label_l = tk.Label(frame, text=data['min_text'], font=self.font_scale, width=6)
         #label_l.pack(side=tk.LEFT, anchor=tk.CENTER)
         label_l.grid(column=1, row=0)
         
@@ -69,7 +69,7 @@ class NasaTLX(BaseFrame):
         #scale.pack(side=tk.LEFT, anchor=tk.CENTER)
         scale.grid(column=2, row=0)
         
-        label_r = tk.Label(frame, text=data['max_text'], font=self.font_scale)
+        label_r = tk.Label(frame, text=data['max_text'], font=self.font_scale, width=6)
         #label_r.pack(side=tk.LEFT, anchor=tk.CENTER)
         label_r.grid(column=3, row=0)
         return frame
