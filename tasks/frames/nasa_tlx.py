@@ -54,7 +54,7 @@ class NasaTLX(BaseFrame):
         frame = tk.Frame(self, relief='solid', borderwidth=1)
         title = tk.Button(frame, text=data['name_jp'], font=self.font_scale, 
                           width=15,
-                          command=self.view_explanation(data['name_jp'], data['explanation']))
+                          command=self.view_explanation(data['name_jp'], data['explanation_main']))
         #title.pack(side=tk.LEFT, padx=50, anchor=tk.CENTER)
         title.grid(column=0, row=0, padx=30, sticky=tk.W+tk.E)
         
@@ -180,8 +180,8 @@ class PairWiseComparisons(BaseFrame):
             d1, d2 = self.pair
             self.title1.set(self.tlx[d1]['name_jp'])
             self.title2.set(self.tlx[d2]['name_jp'])
-            self.exp1.set(self.tlx[d1]['explanation'])
-            self.exp2.set(self.tlx[d2]['explanation'])
+            self.exp1.set(self.tlx[d1]['explanation_pair'])
+            self.exp2.set(self.tlx[d2]['explanation_pair'])
     
     def record(self, n):
         idx = int(self.pair[n]) - 1
