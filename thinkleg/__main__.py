@@ -125,11 +125,11 @@ class ThinkLegApp(BaseApp):
     def main_exp(self):
         def process():
             def gono(n):
-                return ('gono', 3, f'{n}_gono') # 180 or 3
+                return ('gono', 180, f'{n}_gono') # 180 or 3
             def atmt(n):
                 return ('atmt', None, f'{n}_atmt')
             def math(n):
-                return ('math', 3, f'{n}_math') # 180 or 3
+                return ('math', 180, f'{n}_math') # 180 or 3
             tasks = [gono, atmt, math]
             ftf = [('personalitytest', None, 'personalitytest'), ('vas', None, 'vas')]
             for i in range(3):
