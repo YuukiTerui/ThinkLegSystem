@@ -136,7 +136,7 @@ class PairWiseComparisons(BaseFrame):
     def create_widgets(self):
         exp_label = tk.Label(self, font=('MS ゴシック', 20, 'bold'),
             pady=50,
-            text='今行った作業についてお聞きします．下に示す2つの項目のうち，作業負荷・負担に関りが深いと思う方をクリックしてください．')
+            text='直前に行った作業についてお聞きします．\n下に示す2つの項目のうち，作業負荷・負担により重要な関りを示していると思う項目をクリックしてください．\nどちらの尺度を大きく感じたかではなく，重要な関りを持つ方の項目を選択して下さい．')
         exp_label.grid(row=0, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S)
         
         self.btn1 = tk.Button(self, textvariable=self.title1, font=('MS ゴシック', 50, 'bold'),
@@ -182,6 +182,7 @@ class PairWiseComparisons(BaseFrame):
             self.title2.set(self.tlx[d2]['name_jp'])
             self.exp1.set(self.tlx[d1]['explanation_pair'])
             self.exp2.set(self.tlx[d2]['explanation_pair'])
+            self.explanation.set('')
     
     def record(self, n):
         idx = int(self.pair[n]) - 1
