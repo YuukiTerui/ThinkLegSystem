@@ -139,10 +139,8 @@ class ThinkLegApp(BaseApp):
                             ftf.append(tasks[j](f'{i+1}-{j+1}'))
                     else:
 	                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
-
-                    if i != 2:
-                        ftf.append(('vas', None, 'vas'))
-                    else:
+                    ftf.append(('vas', None, 'vas'))
+                    if i== 2:
                         ftf.append(('nasa_tlx', None, f'nasa_{tasks[j].__name__}'))
 
             for frame, timelimit, fname in ftf:
