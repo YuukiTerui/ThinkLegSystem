@@ -62,7 +62,7 @@ class ThinkLegApp(BaseApp):
         elif 'nasa_tlx' in to:
             self.frame = NasaTLX(self, path=self.datapath, fname=fname)
         elif 'atmt' in to:
-            self.frame = ATMTFrame(self, path=self.datapath, fname=fname)
+            self.frame = ATMTFrame(self, path=self.datapath, fname=fname)#, startnum=1, endnum=3)
         elif 'math' in to:
             self.frame = MATHFrame(self, path=self.datapath, fname=fname, timelimit=timelimit)
         elif 'gono' in to:
@@ -127,7 +127,7 @@ class ThinkLegApp(BaseApp):
             def gono(n):
                 return ('gono', 3, f'{n}_gono') # 180 or 3
             def atmt(n):
-                return ('atmt', None, f'{n}_atmt') # 7 or 1
+                return ('atmt', None, f'{n}_atmt')
             def math(n):
                 return ('math', 3, f'{n}_math') # 180 or 3
             tasks = [gono, atmt, math]
@@ -135,8 +135,8 @@ class ThinkLegApp(BaseApp):
             for i in range(3):
                 for j in range(3):
                     if tasks[j].__name__ == 'atmt':
-                        for k in range(1):
-                            ftf.append(tasks[j](f'{i+1}-{j+1}'))
+                        for k in range(8):
+                            ftf.append(tasks[j](f'{i+1}-{j+1}-{k+1}'))
                     else:
 	                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
                     ftf.append(('vas', None, 'vas'))
