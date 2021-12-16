@@ -135,7 +135,7 @@ class ThinkLegApp(BaseApp):
             for i in range(3):
                 for j in range(3):
                     if tasks[j].__name__ == 'atmt':
-                        for k in range(8):
+                        for k in range(6): # 1set 6times
                             ftf.append(tasks[j](f'{i+1}-{j+1}-{k+1}'))
                     else:
 	                    ftf.append(tasks[j](f'{i+1}-{j+1}'))
