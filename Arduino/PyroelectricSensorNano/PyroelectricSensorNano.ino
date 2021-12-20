@@ -33,10 +33,7 @@ void send_to_RPi(unsigned long t) {
   data = LPF(data, v);
   String s = String(t);
   s += ",";
-  s += String(raw);
-
-  s += ",";
-  s += String(raw);
+  s += String(v);
   s += ",";
   s += String(data);
   s += '\n';
@@ -46,13 +43,13 @@ void send_to_RPi(unsigned long t) {
 void loop() {
   serialEvent();
   read_v();
-  int tmp_time = millis()-time_read;
+  int tmp_time = millis()-read_time;
   if (tmp_time >= interval) {
     time_ = tmp_time;
     if (send_flag) {
       send_to_RPi(time_);
     }
-    time_read = millis();
+    read_time = millis();
   }
 }
 
