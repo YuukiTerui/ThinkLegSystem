@@ -24,7 +24,7 @@ void read_v() {
 int LPF(int y0, int raw) {
   float alpha = 0.7;
   float y;
-  y = alpha * y0+ (1-alpha) * raw;
+  y = alpha * y0 + (1 - alpha) * raw;
   return int(y);
 }
 
@@ -34,8 +34,8 @@ void send_to_RPi(unsigned long t) {
   String s = String(t);
   s += ",";
   s += String(v);
-  s += ",";
-  s += String(data);
+  //  s += ",";
+  //  s += String(data);
   s += '\n';
   Serial.print(s);
 }
@@ -43,18 +43,19 @@ void send_to_RPi(unsigned long t) {
 void loop() {
   serialEvent();
   read_v();
-  int tmp_time = millis()-read_time;
+  int tmp_time = millis() - read_time;
   if (tmp_time >= interval) {
-    time_ = tmp_time;
+    read_time = millis();
+    time_ = read_time - start_time;
     if (send_flag) {
       send_to_RPi(time_);
     }
-    read_time = millis();
+    
   }
 }
 
 void serialEvent() {
-  if(Serial.available() > 0) { // 内部でloop毎にSerial.available()>0の時呼ばれる関数なはずだから要らないのかもしれない．
+  if (Serial.available() > 0) { // 内部でloop毎にSerial.available()>0の時呼ばれる関数なはずだから要らないのかもしれない．
     char c = Serial.read();
     switch (c) {
       case byte('0'):
