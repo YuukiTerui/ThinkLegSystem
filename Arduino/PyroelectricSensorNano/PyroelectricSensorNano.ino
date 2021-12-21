@@ -18,7 +18,7 @@ void setup() {
 
 
 void read_v() {
-  v = analogRead(A0);
+  v = analogRead(A5);
 }
 
 int LPF(int y0, int raw) {
