@@ -131,7 +131,8 @@ class ThinkLegApp(BaseApp):
             def math(n):
                 return ('math', 180, f'{n}_math') # 180 or 3
             #tasks = [gono, atmt, math]
-            tasks = [atmt, math, gono]
+            #tasks = [atmt, math, gono]
+            tasks = [math, gono, atmt]
             ftf = [('personalitytest', None, 'personalitytest'), ('vas', None, 'vas')]
             for i in range(3):
                 for j in range(3):
