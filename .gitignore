@@ -1,3 +1,9 @@
+# my environmentS
+/.idea/
+#/data/
+/notebook/data/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,10 +133,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-
-# my environment
-/raw/
-/.idea/
-/data/raw/
-/notebook/data/

@@ -1,0 +1,133 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "filters": {},
+
+    "formatters": {
+        "mainFormatter": {
+            "format": "%(asctime)s %(filename)s %(lineno)s %(threadName)s %(funcName)s %(module)s [%(levelname)s]: %(message)s"
+        },
+        "print": {
+            "format": "[%(filename)s:%(lineno)s:%(threadName)s][%(levelname)s]\t%(message)s",
+            "level": "INFO"
+        }
+    },
+
+    "handlers": {
+        "logFileHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/__main__.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        },
+        "printHandler": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "print",
+            "stream": "ext://sys.stdout"
+        },
+        "arduinoHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/arduino.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        },
+        "arduinoDataHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/arduino_data.log",
+            "mode": "a",
+            "encoding":"utf-8"
+        },
+        "guiHandler": {
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/gui.log",
+            "mode": "a",
+            "encoding": "utf-8"
+        },
+        "thinklegHandler": {
+            "class": "logging.FileHandler",
+            "level":"DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/thinkleg.log",
+            "mode": "a",
+            "encoding":"utf-8"
+        },
+        "thinklegServerHandler": {
+            "class": "logging.FileHandler",
+            "level":"DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/thinkleg_server.log",
+            "mode": "a",
+            "encoding":"utf-8"
+        },
+        "thinklegClientHandler": {
+            "class": "logging.FileHandler",
+            "level":"DEBUG",
+            "formatter": "mainFormatter",
+            "filename": "./logs/thinkleg_client.log",
+            "mode": "a",
+            "encoding":"utf-8"
+        }
+    },
+
+    "loggers": {
+        "__main__": {
+            "level": "DEBUG",
+            "handlers": ["logFileHandler", "printHandler"],
+            "propagate": false
+        },
+        "arduino": {
+            "level": "DEBUG",
+            "handlers": ["arduinoHandler", "printHandler"],
+            "propagate": false
+        },
+        "arduino.data": {
+            "level": "DEBUG",
+            "handlers": ["arduinoDataHandler"],
+            "propagate": true
+        },
+        "gui": {
+            "level": "DEBUG",
+            "handlers": ["guiHandler"],
+            "propagate": false
+        },
+        "gui.app": {
+            "level": "DEBUG",
+            "handlers": ["printHandler"],
+            "propagate": true
+        },
+        "gui.frame": {
+            "level": "DEBUG",
+            "handlers": ["printHandler"],
+            "propagate": true
+        },
+        "thinkleg": {
+            "level":"DEBUG",
+            "handlers": ["thinklegHandler"],
+            "propagate": false
+        },
+        "thinkleg.server": {
+            "level":"INFO",
+            "handlers": ["thinklegServerHandler", "printHandler"],
+            "propagate": true
+        },
+        "thinkleg.client": {
+            "level":"INFO",
+            "handlers": ["thinklegClientHandler", "printHandler"],
+            "propagate": true
+        }
+
+    },
+
+    "root": {
+        "level": "DEBUG"
+    }
+}
